@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
@@ -32,8 +37,7 @@
 
         # Theme
         pkief.material-icon-theme
-        enkia.tokyo-night
-        dracula-theme.theme-dracula
+        arcticicestudio.nord-visual-studio-code
       ];
 
       userSettings = {
@@ -48,7 +52,7 @@
         "editor.wordWrap" = "off";
         "editor.bracketPairColorization.enabled" = true;
 
-        "workbench.colorTheme" = "Tokyo Night";
+        "workbench.colorTheme" = "Nord";
         "workbench.iconTheme" = "material-icon-theme";
         "workbench.startupEditor" = "none";
 

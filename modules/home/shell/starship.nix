@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.starship = {
     enable = true;
     enableFishIntegration = true;
@@ -30,18 +35,18 @@
         "[ ](fg:color_bg1)"
         "$line_break$character"
       ];
-      palette = "gruvbox_dark";
-      palettes.gruvbox_dark = {
-        color_fg0 = "#fbf1c7";
-        color_bg1 = "#3c3836";
-        color_bg3 = "#665c54";
-        color_blue = "#458588";
-        color_aqua = "#689d6a";
-        color_green = "#98971a";
-        color_orange = "#d65d0e";
-        color_purple = "#b16286";
-        color_red = "#cc241d";
-        color_yellow = "#d79921";
+      palette = "nord";
+      palettes.nord = {
+        color_fg0 = "#eceff4";
+        color_bg1 = "#3b4252";
+        color_bg3 = "#4c566a";
+        color_blue = "#81a1c1";
+        color_aqua = "#88c0d0";
+        color_green = "#a3be8c";
+        color_orange = "#d08770";
+        color_purple = "#b48ead";
+        color_red = "#bf616a";
+        color_yellow = "#ebcb8b";
       };
       os = {
         disabled = false;
@@ -96,7 +101,7 @@
       docker_context = {
         symbol = " ";
         style = "bg:color_bg3";
-        format = "[[ $symbol $context ](fg:#83a598 bg:color_bg3)]($style)";
+        format = "[[ $symbol $context ](fg:#8fbcbb bg:color_bg3)]($style)";
       };
       time = {
         disabled = false;

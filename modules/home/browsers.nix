@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # Browsers: zen via Flatpak (declarative via nix-flatpak), helium dropped
   # No nix firefox — removed. Zen is default for xdg mime.
 

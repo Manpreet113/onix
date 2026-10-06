@@ -1,50 +1,41 @@
 # onix — Modular NixOS Flake
 
-Host: `onix` (was `nixos`), user `manpreet` — GNOME + PipeWire, Btrfs, systemd-boot.
+Host: `onix`, user `manpreet` — Hyprland (Wayland) + PipeWire, Btrfs, systemd-boot, nixpkgs **unstable**.
 
 ## Structure
-- `flake.nix` — flake-parts + import-tree, inputs: nixpkgs 26.05, unstable, home-manager, sops-nix, disko
-- `hosts/onix/` — host entry + hardware-configuration.nix
-- `hosts/common/` — shared settings
-- `modules/nixos/` — system modules (core, desktop, hardware, networking, etc.) auto-imported via import-tree
-- `modules/home/` — HM modules (fish+starship, ghostty/foot, nvim, vscode, git, gnome)
-- `homes/manpreet@onix.nix` — HM user entry
-- `overlays/` — unstable overlay
+- `flake.nix` — flake-parts; inputs: nixpkgs unstable, home-manager (master), sops-nix, disko, nix-flatpak, stylix, nixvim, nix-index-database, opencode
+- `hosts/onix/` — host entry (`onix.*` module toggles) + hardware-configuration.nix
+- `hosts/common/` — shared settings (timezone, locale, stateVersion)
+- `modules/nixos/` — system modules, auto-imported via import-tree; each is an `onix.<name>.enable` toggle
+- `modules/home/` — HM modules (fish+starship, ghostty, nixvim, vscode, git, hyprland stack) auto-imported via import-tree
+- `homes/manpreet.nix` — HM user entry
 - `disko/` — declarative disk skeleton (not active)
-- `secrets/` — sops-nix placeholder
+- `secrets/` + `.sops.yaml` — sops-nix age-encrypted secrets
 
 ## Usage
 ```bash
-# first bootstrap (flakes not yet enabled in /etc)
-nix --extra-experimental-features "nix-command flakes" flake check
-nix --extra-experimental-features "nix-command flakes" run nixpkgs#nh -- os switch .#onix
-
-# after first rebuild
-nh os switch
-# or
-nixos-rebuild switch --flake .#onix
-nixos-rebuild test --flake .#onix   # safe test
-nixos-rebuild boot --flake .#onix
+nh os switch          # build + activate (works from any directory)
+nixos-rebuild test --flake .#onix   # safe test, no boot entry
+nix flake update      # bump inputs, then rebuild
+nix fmt               # format with alejandra
+nix develop           # dev shell: alejandra, nixd, nil, nom, nh, sops, age
 ```
 
-## Fish best experience
-fish + starship + fzf + zoxide + eza + bat + carapace + direnv + atuin + ripgrep/fd
-
-## Terminal
-ghostty (Wayland, unstable fallback) + foot — ghostty is current community standard; foot as lightweight backup.
-
-## Editors
-nvim (HM, treesitter + lsp) + vscode (extensions). nano removed.
-
-## Git
-Configured for Manpreet113 <manpreet10542@gmail.com>, delta, gh, lazygit.
-
-## Secrets
-See `modules/nixos/security/sops.nix` — generate age key:
+## Secrets (sops-nix)
+Age key lives at `~/.config/sops/age/keys.txt` (back it up!). Edit secrets:
 ```bash
-age-keygen -o ~/.config/sops/age/keys.txt
-# add pubkey to .sops.yaml, then `sops secrets/secrets.yaml`
+sops secrets/secrets.yaml
 ```
+Decrypted secrets land in `/run/secrets/` at activation. Declare new ones in `modules/nixos/security/sops.nix`.
+
+## Snapshots
+btrbk snapshots `/home` hourly into `/btrbk_snapshots` (keep: 24h, 7d, 4w). Restore:
+```bash
+sudo btrfs subvolume snapshot /btrbk_snapshots/home.<timestamp> /home
+```
+
+## Theming
+stylix with the **nord** base16 scheme themes hyprland, waybar, mako, wofi, ghostty, bat, fzf, fish, opencode. GTK stays on adw-gtk3 + Papirus + Bibata (theme.nix). starship uses a hand-ported nord palette. nixvim uses `colorschemes.nord`.
 
 ## Disko
 See `disko/onix.nix` — not enabled until you import + set device.

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, inputs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     # Import-tree: auto-import every module under modules/nixos
@@ -13,6 +19,7 @@
       nix.enable = true;
       boot.enable = true;
       nixpkgs.enable = true;
+      autoUpgrade.enable = true;
     };
     desktop = {
       hyprland.enable = true;
@@ -20,8 +27,10 @@
       flatpak.enable = true;
       nautilus.enable = true;
       audio.enable = true;
+      stylix.enable = true;
     };
     hardware.intel.enable = true;
+    hardware.btrfs.enable = true;
     networking.enable = true;
     printing.enable = true;
     users.enable = true;

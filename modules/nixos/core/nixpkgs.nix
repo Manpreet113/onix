@@ -1,17 +1,17 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib; let
   cfg = config.onix.core.nixpkgs;
 in {
-  options.onix.core.nixpkgs.enable = mkEnableOption "nixpkgs overlays and allowUnfree";
+  options.onix.core.nixpkgs.enable = mkEnableOption "nixpkgs settings";
 
   config = mkIf cfg.enable {
-    nixpkgs = {
-      overlays = [
-        (import ../../../overlays/default.nix {inherit inputs;})
-      ];
-      config = {
-        allowUnfree = true;
-      };
+    nixpkgs.config = {
+      allowUnfree = true;
     };
   };
 }

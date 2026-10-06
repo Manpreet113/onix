@@ -1,8 +1,5 @@
-# SOPS config — replace age key with your own
-# Generate key: age-keygen -o ~/.config/sops/age/keys.txt
-# Then add public key here
 creation_rules:
   - path_regex: secrets/.*\.yaml
     key_groups:
       - age:
-          - age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx # TODO: replace
+          - age1g38xyr8a0ud7fn47u6cvjhe7ucspy28ecap6r88vvez2kny9tehq8q87cd

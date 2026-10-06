@@ -7,7 +7,7 @@ result-*
 # Flake — keep lock committed
 
 # Sops
-secrets/secrets.yaml
+# NOTE: secrets/*.yaml are sops-encrypted and safe to commit (sops-nix requires them tracked)
 .age
 
 # Editor

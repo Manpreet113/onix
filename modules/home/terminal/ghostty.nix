@@ -1,22 +1,13 @@
-{ config, lib, pkgs, ... }: let
-  ghosttyPkg =
-    if pkgs ? ghostty
-    then pkgs.ghostty
-    else if pkgs ? unstable && pkgs.unstable ? ghostty
-    then pkgs.unstable.ghostty
-    else pkgs.ghostty;
-in {
-  home.packages = [];
-
-  programs.ghostty = lib.mkIf (builtins.hasAttr "ghostty" pkgs) {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  programs.ghostty = {
     enable = true;
-    package = ghosttyPkg;
     settings = {
-      font-family = "JetBrainsMono Nerd Font";
-      font-size = 11;
       font-feature = "+calt +liga +ss01";
-      theme = "Gruvbox Dark";
-      background-opacity = 0.95;
       window-decoration = true;
       window-padding-x = 8;
       window-padding-y = 8;

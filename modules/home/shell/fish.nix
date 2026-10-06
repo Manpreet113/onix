@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.fish = {
     enable = true;
     # Use fish as interactive shell with best UX
@@ -59,6 +64,8 @@
   programs.fzf = {
     enable = true;
     enableFishIntegration = true;
+    # Atuin owns Ctrl-R; fzf keeps Ctrl-T / Alt-C
+    historyWidget.fish.command = "";
     defaultCommand = "fd --type f --hidden --follow --exclude .git";
     defaultOptions = ["--height 40%" "--border" "--preview 'bat --color=always {}'"];
   };
@@ -79,7 +86,6 @@
   programs.bat = {
     enable = true;
     config = {
-      theme = "TwoDark";
       style = "numbers,changes,header";
     };
   };

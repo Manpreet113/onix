@@ -1,7 +1,15 @@
-{ config, lib, pkgs, inputs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     # Import-tree for home modules — auto-imports everything under modules/home
     (inputs.import-tree ../modules/home)
+    inputs.nixvim.homeModules.nixvim
+    inputs.nix-index-database.hmModules.nix-index
   ];
 
   home.username = "manpreet";
@@ -16,17 +24,9 @@
 
   home.packages = with pkgs; [
     # Keep minimal — heavy pkgs are in modules/home/shell/cli.nix
-    jetbrains-mono
-    nerd-fonts.jetbrains-mono
-    noto-fonts
-    noto-fonts-color-emoji
+    # Fonts are installed by stylix (modules/nixos/desktop/stylix.nix)
   ];
 
   # XDG
   xdg.enable = true;
-
-  # Session vars
-  home.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-  };
 }

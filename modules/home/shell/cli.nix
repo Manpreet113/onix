@@ -1,4 +1,9 @@
-{ config, pkgs, inputs, ... }: {
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}: {
   home.packages = with pkgs; [
     ripgrep
     fd
@@ -14,8 +19,11 @@
     nix-direnv
     carapace
     fastfetch
+    comma
     inputs.opencode.packages.${pkgs.system}.default
   ];
+
+  programs.nix-index.enable = true;
 
   programs.btop.enable = true;
 

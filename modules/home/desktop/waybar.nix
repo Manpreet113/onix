@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.waybar = {
     enable = true;
     systemd.enable = true;
@@ -71,23 +76,5 @@
         };
       };
     };
-    style = ''
-      * {
-        font-family: JetBrainsMono Nerd Font, monospace;
-        font-size: 13px;
-      }
-      window#waybar {
-        background: rgba(40, 40, 40, 0.95);
-        color: #ebdbb2;
-        border-bottom: 2px solid #458588;
-      }
-      #workspaces button.active {
-        background: #458588;
-        color: #fbf1c7;
-      }
-      #clock, #cpu, #memory, #battery, #pulseaudio, #network {
-        padding: 0 8px;
-      }
-    '';
   };
 }
