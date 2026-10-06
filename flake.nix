@@ -28,11 +28,6 @@
     };
 
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-
-    lucien = {
-      url = "github:wachamuli/lucien";
-      flake = false;
-    };
   };
 
   outputs = inputs @ {flake-parts, ...}:

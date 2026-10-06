@@ -76,22 +76,6 @@
         "type": "github"
       }
     },
-    "lucien": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1773589703,
-        "narHash": "sha256-uhWCw143dg39Pwg5O+8dhXBMrkzIXJakjKD4LcbssVA=",
-        "owner": "wachamuli",
-        "repo": "lucien",
-        "rev": "87e97af4d38d96e3bfacf1c83a9552ae9c385782",
-        "type": "github"
-      },
-      "original": {
-        "owner": "wachamuli",
-        "repo": "lucien",
-        "type": "github"
-      }
-    },
     "nix-flatpak": {
       "locked": {
         "lastModified": 1767983141,
@@ -146,7 +130,6 @@
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "import-tree": "import-tree",
-        "lucien": "lucien",
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
