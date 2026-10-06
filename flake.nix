@@ -28,6 +28,8 @@
     };
 
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+
+    opencode.url = "github:anomalyco/opencode";
   };
 
   outputs = inputs @ {flake-parts, ...}:
