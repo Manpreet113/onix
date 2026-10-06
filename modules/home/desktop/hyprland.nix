@@ -1,140 +1,260 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  raw = lib.generators.mkLuaInline;
+
+  mkBind = keys: dispatcher: opts: {
+    _args = [(raw keys) (raw dispatcher)] ++ lib.optional (opts != null) opts;
+  };
+in {
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
+
     settings = {
-      monitor = ",preferred,auto,1";
-
-      exec-once = [
-        "waybar &"
-        "hyprpaper &"
-        "mako &"
-      ];
-
-      # Environment
-      env = [
-        "XCURSOR_THEME,Bibata-Modern-Classic"
-        "XCURSOR_SIZE,24"
-        "HYPRCURSOR_THEME,Bibata-Modern-Classic"
-        "HYPRCURSOR_SIZE,24"
-        "NIXOS_OZONE_WL,1"
-      ];
-
-      input = {
-        kb_layout = "us";
-        follow_mouse = 1;
-        touchpad = {
-          natural_scroll = true;
-          tap-to-click = true;
-          disable_while_typing = true;
-        };
-        sensitivity = 0;
+      mod = {
+        _var = "SUPER";
       };
 
-      general = {
-        gaps_in = 5;
-        gaps_out = 10;
-        border_size = 2;
-        "col.active_border" = "rgba(88c0d0ff) rgba(5e81acff) 45deg";
-        "col.inactive_border" = "rgba(4c566aff)";
-        layout = "dwindle";
+      monitor = {
+        output = "";
+        mode = "preferred";
+        position = "auto";
+        scale = 1;
       };
 
-      decoration = {
-        rounding = 8;
-        blur = {
-          enabled = true;
-          size = 5;
-          passes = 3;
-        };
-        shadow.enabled = true;
-      };
-
-      animations = {
-        enabled = true;
-        bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
-        animation = [
-          "windows, 1, 7, myBezier"
-          "windowsOut, 1, 7, default, popin 80%"
-          "border, 1, 10, default"
-          "fade, 1, 7, default"
-          "workspaces, 1, 6, default"
+      on = {
+        _args = [
+          "hyprland.start"
+          (raw ''function() hl.exec_cmd("waybar &") hl.exec_cmd("hyprpaper &") hl.exec_cmd("mako &") end'')
         ];
       };
 
-      dwindle = {
-        pseudotile = true;
-        preserve_split = true;
-      };
-
-      master = {
-        new_status = "master";
-      };
-
-      gestures = {
-        workspace_swipe = true;
-      };
-
-      "$mod" = "SUPER";
-      bind = [
-        "$mod, RETURN, exec, ghostty"
-        "$mod, E, exec, code"
-        "$mod, B, exec, flatpak run app.zen_browser.zen"
-        "$mod SHIFT, B, exec, flatpak run app.zen_browser.zen --private-window"
-        "$mod, R, exec, wofi --show drun"
-        "$mod, D, exec, wofi --show drun"
-        "$mod, Q, killactive,"
-        "$mod, F, fullscreen,"
-        "$mod, V, togglefloating,"
-        "$mod, J, togglesplit,"
-        "$mod, left, movefocus, l"
-        "$mod, right, movefocus, r"
-        "$mod, up, movefocus, u"
-        "$mod, down, movefocus, d"
-        "$mod SHIFT, left, movewindow, l"
-        "$mod SHIFT, right, movewindow, r"
-        "$mod SHIFT, up, movewindow, u"
-        "$mod SHIFT, down, movewindow, d"
-        "$mod, 1, workspace, 1"
-        "$mod, 2, workspace, 2"
-        "$mod, 3, workspace, 3"
-        "$mod, 4, workspace, 4"
-        "$mod, 5, workspace, 5"
-        "$mod, 6, workspace, 6"
-        "$mod, 7, workspace, 7"
-        "$mod, 8, workspace, 8"
-        "$mod, 9, workspace, 9"
-        "$mod SHIFT, 1, movetoworkspace, 1"
-        "$mod SHIFT, 2, movetoworkspace, 2"
-        "$mod SHIFT, 3, movetoworkspace, 3"
-        "$mod SHIFT, 4, movetoworkspace, 4"
-        "$mod SHIFT, 5, movetoworkspace, 5"
-        "$mod SHIFT, 6, movetoworkspace, 6"
-        "$mod SHIFT, 7, movetoworkspace, 7"
-        "$mod SHIFT, 8, movetoworkspace, 8"
-        "$mod SHIFT, 9, movetoworkspace, 9"
-        "$mod, mouse_down, workspace, e+1"
-        "$mod, mouse_up, workspace, e-1"
+      env = [
+        {
+          _args = [
+            "XCURSOR_THEME"
+            "Bibata-Modern-Classic"
+          ];
+        }
+        {
+          _args = [
+            "XCURSOR_SIZE"
+            "24"
+          ];
+        }
+        {
+          _args = [
+            "HYPRCURSOR_THEME"
+            "Bibata-Modern-Classic"
+          ];
+        }
+        {
+          _args = [
+            "HYPRCURSOR_SIZE"
+            "24"
+          ];
+        }
+        {
+          _args = [
+            "NIXOS_OZONE_WL"
+            "1"
+          ];
+        }
       ];
 
-      bindm = [
-        "$mod, mouse:272, movewindow"
-        "$mod, mouse:273, resizewindow"
+      config = {
+        input = {
+          kb_layout = "us";
+          follow_mouse = 1;
+          sensitivity = 0;
+          touchpad = {
+            natural_scroll = true;
+            tap_to_click = true;
+            disable_while_typing = true;
+          };
+        };
+
+        general = {
+          gaps_in = 5;
+          gaps_out = 10;
+          border_size = 2;
+          col = {
+            active_border = {
+              colors = [
+                "rgba(88c0d0ff)"
+                "rgba(5e81acff)"
+              ];
+              angle = 45;
+            };
+            inactive_border = "rgba(4c566aff)";
+          };
+          layout = "dwindle";
+        };
+
+        decoration = {
+          rounding = 8;
+          blur = {
+            enabled = true;
+            size = 5;
+            passes = 3;
+          };
+          shadow.enabled = true;
+        };
+
+        animations.enabled = true;
+
+        dwindle = {
+          preserve_split = true;
+        };
+
+        master = {
+          new_status = "master";
+        };
+      };
+
+      curve = [
+        {
+          _args = [
+            "myBezier"
+            {
+              type = "bezier";
+              points = [
+                [
+                  0.05
+                  0.9
+                ]
+                [
+                  0.1
+                  1.05
+                ]
+              ];
+            }
+          ];
+        }
       ];
 
-      binde = [
-        ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-        ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-        ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-        ", XF86MonBrightnessUp, exec, brightnessctl set +5%"
-        ", XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+      animation = [
+        {
+          leaf = "windows";
+          enabled = true;
+          speed = 7;
+          bezier = "myBezier";
+        }
+        {
+          leaf = "windowsOut";
+          enabled = true;
+          speed = 7;
+          bezier = "default";
+          style = "popin 80%";
+        }
+        {
+          leaf = "border";
+          enabled = true;
+          speed = 10;
+          bezier = "default";
+        }
+        {
+          leaf = "fade";
+          enabled = true;
+          speed = 7;
+          bezier = "default";
+        }
+        {
+          leaf = "workspaces";
+          enabled = true;
+          speed = 6;
+          bezier = "default";
+        }
       ];
 
-      windowrulev2 = [
-        "float, class:^(org.gnome.Nautilus)$"
-        "float, class:^(pavucontrol)$"
-        "float, title:^(Picture-in-Picture)$"
+      gesture = [
+        {
+          fingers = 3;
+          direction = "horizontal";
+          action = "workspace";
+        }
+      ];
+
+      bind =
+        [
+          # Apps
+          (mkBind ''mod .. " + RETURN"'' ''hl.dsp.exec_cmd("ghostty")'' null)
+          (mkBind ''mod .. " + E"'' ''hl.dsp.exec_cmd("code")'' null)
+          (mkBind ''mod .. " + B"'' ''hl.dsp.exec_cmd("flatpak run app.zen_browser.zen")'' null)
+          (
+            mkBind ''mod .. " + SHIFT + B"'' ''hl.dsp.exec_cmd("flatpak run app.zen_browser.zen --private-window")'' null
+          )
+          (mkBind ''mod .. " + Return"'' ''hl.dsp.exec_cmd("wofi --show drun")'' null)
+
+          # Window management
+          (mkBind ''mod .. " + Q"'' ''hl.dsp.window.close()'' null)
+          (mkBind ''mod .. " + F"'' ''hl.dsp.window.fullscreen()'' null)
+          (mkBind ''mod .. " + V"'' ''hl.dsp.window.float({ action = "toggle" })'' null)
+          (mkBind ''mod .. " + J"'' ''hl.dsp.layout("togglesplit")'' null)
+
+          # Focus
+          (mkBind ''mod .. " + left"'' ''hl.dsp.focus({ direction = "left" })'' null)
+          (mkBind ''mod .. " + right"'' ''hl.dsp.focus({ direction = "right" })'' null)
+          (mkBind ''mod .. " + up"'' ''hl.dsp.focus({ direction = "up" })'' null)
+          (mkBind ''mod .. " + down"'' ''hl.dsp.focus({ direction = "down" })'' null)
+
+          # Move window
+          (mkBind ''mod .. " + SHIFT + left"'' ''hl.dsp.window.move({ direction = "left" })'' null)
+          (mkBind ''mod .. " + SHIFT + right"'' ''hl.dsp.window.move({ direction = "right" })'' null)
+          (mkBind ''mod .. " + SHIFT + up"'' ''hl.dsp.window.move({ direction = "up" })'' null)
+          (mkBind ''mod .. " + SHIFT + down"'' ''hl.dsp.window.move({ direction = "down" })'' null)
+
+          # Scroll through workspaces
+          (mkBind ''mod .. " + mouse_down"'' ''hl.dsp.focus({ workspace = "e+1" })'' null)
+          (mkBind ''mod .. " + mouse_up"'' ''hl.dsp.focus({ workspace = "e-1" })'' null)
+
+          # Move/resize with mouse (bindm)
+          (mkBind ''mod .. " + mouse:272"'' ''hl.dsp.window.drag()'' {mouse = true;})
+          (mkBind ''mod .. " + mouse:273"'' ''hl.dsp.window.resize()'' {mouse = true;})
+
+          # Media keys (binde)
+          (
+            mkBind ''"XF86AudioRaiseVolume"'' ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")'' {
+              repeating = true;
+            }
+          )
+          (
+            mkBind ''"XF86AudioLowerVolume"'' ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")'' {
+              repeating = true;
+            }
+          )
+          (
+            mkBind ''"XF86AudioMute"'' ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")'' {
+              repeating = true;
+            }
+          )
+          (mkBind ''"XF86MonBrightnessUp"'' ''hl.dsp.exec_cmd("brightnessctl set +5%")'' {repeating = true;})
+          (mkBind ''"XF86MonBrightnessDown"'' ''hl.dsp.exec_cmd("brightnessctl set 5%-")'' {repeating = true;})
+        ]
+        # Workspaces 1-9 and shift-move to them
+        ++ lib.concatMap (i: [
+          (mkBind ''mod .. " + ${toString i}"'' ''hl.dsp.focus({ workspace = ${toString i} })'' null)
+          (mkBind ''mod .. " + SHIFT + ${toString i}"'' ''hl.dsp.window.move({ workspace = ${toString i} })'' null)
+        ]) (lib.range 1 9);
+
+      window_rule = [
+        {
+          match.class = "^(org.gnome.Nautilus)$";
+          float = true;
+        }
+        {
+          match.class = "^(pavucontrol)$";
+          float = true;
+        }
+        {
+          match.title = "^(Picture-in-Picture)$";
+          float = true;
+        }
       ];
     };
   };
