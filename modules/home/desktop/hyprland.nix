@@ -30,7 +30,7 @@ in {
       on = {
         _args = [
           "hyprland.start"
-          (raw ''function() hl.exec_cmd("waybar &") hl.exec_cmd("hyprpaper &") hl.exec_cmd("mako &") end'')
+          (raw ''function() hl.exec_cmd("pkill waybar && waybar &") hl.exec_cmd("hyprpaper &") hl.exec_cmd("mako &") end'')
         ];
       };
 
@@ -189,7 +189,7 @@ in {
           (
             mkBind ''mod .. " + SHIFT + B"'' ''hl.dsp.exec_cmd("flatpak run app.zen_browser.zen --private-window")'' null
           )
-          (mkBind ''mod .. " + Return"'' ''hl.dsp.exec_cmd("wofi --show drun")'' null)
+          (mkBind ''mod .. " + SPACE"'' ''hl.dsp.exec_cmd("wofi --show drun")'' null)
 
           # Window management
           (mkBind ''mod .. " + Q"'' ''hl.dsp.window.close()'' null)
