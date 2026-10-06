@@ -1,0 +1,24 @@
+# Nix
+result
+result-*
+.direnv/
+.envrc.local
+
+# Flake — keep lock committed
+
+# Sops
+secrets/secrets.yaml
+.age
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keep hardware-configuration tracked per host (not ignored)
+!hosts/*/hardware-configuration.nix
