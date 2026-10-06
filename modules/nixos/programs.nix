@@ -5,8 +5,6 @@ in {
   options.onix.programs.enable = mkEnableOption "common system programs";
 
   config = mkIf cfg.enable {
-    programs.firefox.enable = true;
-
     # Remove nano — use nvim instead
     environment.defaultPackages = with pkgs; [
       # keep minimal
@@ -17,7 +15,6 @@ in {
       wget
       curl
       git
-      htop
       nh
       nix-output-monitor
       alejandra
@@ -34,7 +31,6 @@ in {
       enableSSHSupport = true;
     };
 
-    # Enable dconf for GNOME HM integration
     programs.dconf.enable = true;
   };
 }

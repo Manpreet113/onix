@@ -1,14 +1,12 @@
 { config, lib, pkgs, ... }: let
-  # ghostty may be in unstable on 26.05 — overlay provides `unstable`
   ghosttyPkg =
     if pkgs ? ghostty
     then pkgs.ghostty
     else if pkgs ? unstable && pkgs.unstable ? ghostty
     then pkgs.unstable.ghostty
-    else pkgs.foot; # fallback
+    else pkgs.ghostty;
 in {
-  # ghostty is installed via programs.ghostty; foot is fallback/alternative
-  home.packages = [pkgs.foot];
+  home.packages = [];
 
   programs.ghostty = lib.mkIf (builtins.hasAttr "ghostty" pkgs) {
     enable = true;
@@ -31,21 +29,6 @@ in {
       clipboard-write = "allow";
       gtk-single-instance = true;
       gtk-titlebar = true;
-    };
-  };
-
-  programs.foot = {
-    enable = true;
-    settings = {
-      main = {
-        font = "JetBrainsMono Nerd Font:size=11";
-        pad = "8x8";
-      };
-      colors = {
-        alpha = "0.95";
-        background = "282828";
-        foreground = "ebdbb2";
-      };
     };
   };
 

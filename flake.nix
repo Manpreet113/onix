@@ -26,6 +26,13 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+
+    lucien = {
+      url = "github:wachamuli/lucien";
+      flake = false;
+    };
   };
 
   outputs = inputs @ {flake-parts, ...}:
@@ -70,6 +77,7 @@
               inputs.home-manager.nixosModules.home-manager
               inputs.sops-nix.nixosModules.sops
               inputs.disko.nixosModules.disko
+              inputs.nix-flatpak.nixosModules.nix-flatpak
               {
                 home-manager = {
                   useGlobalPkgs = true;

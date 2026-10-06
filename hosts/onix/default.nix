@@ -15,7 +15,10 @@
       nixpkgs.enable = true;
     };
     desktop = {
-      gnome.enable = true;
+      hyprland.enable = true;
+      greetd.enable = true;
+      flatpak.enable = true;
+      nautilus.enable = true;
       audio.enable = true;
     };
     hardware.intel.enable = true;
@@ -25,7 +28,4 @@
     programs.enable = true;
     security.sops.enable = true;
   };
-
-  # Ensure GNOME + GDM are enabled even if module option not yet toggled
-  # The modules themselves provide the actual config gated by onix.*.enable
 }

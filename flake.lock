@@ -76,6 +76,38 @@
         "type": "github"
       }
     },
+    "lucien": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773589703,
+        "narHash": "sha256-uhWCw143dg39Pwg5O+8dhXBMrkzIXJakjKD4LcbssVA=",
+        "owner": "wachamuli",
+        "repo": "lucien",
+        "rev": "87e97af4d38d96e3bfacf1c83a9552ae9c385782",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wachamuli",
+        "repo": "lucien",
+        "type": "github"
+      }
+    },
+    "nix-flatpak": {
+      "locked": {
+        "lastModified": 1767983141,
+        "narHash": "sha256-7ZCulYUD9RmJIDULTRkGLSW1faMpDlPKcbWJLYHoXcs=",
+        "owner": "gmodena",
+        "repo": "nix-flatpak",
+        "rev": "440818969ac2cbd77bfe025e884d0aa528991374",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gmodena",
+        "ref": "latest",
+        "repo": "nix-flatpak",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1791254437,
@@ -114,6 +146,8 @@
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "import-tree": "import-tree",
+        "lucien": "lucien",
+        "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "sops-nix": "sops-nix"
