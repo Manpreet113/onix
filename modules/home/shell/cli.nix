@@ -22,7 +22,6 @@
     procs
     bottom
     helix # handy fallback
-    unstable.ghostty # ensure ghostty via unstable overlay if not in stable
   ];
 
   programs.htop.enable = true;

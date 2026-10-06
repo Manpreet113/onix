@@ -7,11 +7,9 @@
     then pkgs.unstable.ghostty
     else pkgs.foot; # fallback
 in {
-  # programs.ghostty is available in newer HM; fallback to foot if not found
-  # Check availability via lib check
-  home.packages = [ghosttyPkg pkgs.foot];
+  # ghostty is installed via programs.ghostty; foot is fallback/alternative
+  home.packages = [pkgs.foot];
 
-  # Try to configure ghostty if module exists; otherwise configure foot
   programs.ghostty = lib.mkIf (builtins.hasAttr "ghostty" pkgs) {
     enable = true;
     package = ghosttyPkg;
