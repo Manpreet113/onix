@@ -26,13 +26,6 @@ in {
         scale = 1;
       };
 
-      on = {
-        _args = [
-          "hyprland.start"
-          (raw ''function() hl.exec_cmd("hyprpaper &") end'')
-        ];
-      };
-
       env = [
         {
           _args = [
@@ -173,6 +166,8 @@ in {
             mkBind ''mod .. " + SHIFT + B"'' ''hl.dsp.exec_cmd("zen --private-window")'' null
           )
           (mkBind ''mod .. " + SPACE"'' ''hl.dsp.exec_cmd("wofi --show drun")'' null)
+          (mkBind ''mod .. " + SHIFT + F"'' ''hl.dsp.exec_cmd("nautilus")'' null)
+          (mkBind ''mod .. " + SHIFT + W"'' ''hl.dsp.exec_cmd("quickshell ipc call wallpaper toggle")'' null)
 
           # Window management
           (mkBind ''mod .. " + Q"'' ''hl.dsp.window.close()'' null)
