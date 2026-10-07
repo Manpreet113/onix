@@ -25,6 +25,7 @@
     };
     hardware.intel.enable = true;
     hardware.power.enable = true;
+    hardware.bluetooth.enable = true;
     hardware.btrfs.enable = true;
     networking.enable = true;
     printing.enable = true;

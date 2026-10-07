@@ -23,4 +23,14 @@
     BROWSER = "zen";
     DEFAULT_BROWSER = "zen";
   };
+
+  # Chromium-only webapps run on helium (zen stays the default browser)
+  xdg.desktopEntries.whatsapp = {
+    name = "WhatsApp";
+    exec = "helium --app=https://web.whatsapp.com";
+    comment = "WhatsApp Web (Helium app window)";
+    icon = "helium";
+    categories = ["Network" "Chat"];
+    startupNotify = true;
+  };
 }

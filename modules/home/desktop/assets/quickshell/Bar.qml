@@ -5,6 +5,7 @@ import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Services.SystemTray
 import Quickshell.Services.UPower
+import Quickshell.Bluetooth
 
 PanelWindow {
     id: root
@@ -29,6 +30,13 @@ PanelWindow {
     property string network: "Disconnected"
     property string netType: ""
     property bool muted: false
+
+    // UPower reports 0..1, upower CLI reports 0..100 — normalize once
+    property int battPct: {
+        if (!UPower.displayDevice) return -1;
+        var p = UPower.displayDevice.percentage;
+        return p > 1 ? Math.round(p) : Math.round(p * 100);
+    }
 
     component Pill: Rectangle {
         id: pill
@@ -219,6 +227,37 @@ PanelWindow {
 
         Item { Layout.fillWidth: true }
 
+        Rectangle {
+            visible: SystemTray.items.count > 0
+            implicitHeight: 22
+            implicitWidth: trayRow.implicitWidth + 16
+            radius: 6
+            color: "#3b4252"
+            Layout.alignment: Qt.AlignVCenter
+
+            Row {
+                id: trayRow
+                anchors.centerIn: parent
+                spacing: 6
+                Repeater {
+                    model: SystemTray.items
+                    delegate: Image {
+                        required property var modelData
+                        width: 16
+                        height: 16
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: modelData.icon
+                        fillMode: Image.PreserveAspectFit
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.LeftButton
+                            onClicked: modelData.activate()
+                        }
+                    }
+                }
+            }
+        }
+
         Pill {
             iconText: "󰍛"
             iconColor: "#a3be8c"
@@ -232,29 +271,6 @@ PanelWindow {
             iconColor: "#ebcb8b"
             valueText: root.mem + "%"
             valueColor: "#ebcb8b"
-            Layout.alignment: Qt.AlignVCenter
-        }
-
-        Pill {
-            visible: UPower.displayDevice && UPower.displayDevice.isPresent
-            iconText: {
-                if (!UPower.displayDevice) return "󰁹";
-                if (!UPower.onBattery) return "󰂄";
-                var p = UPower.displayDevice.percentage;
-                if (p >= 90) return "󰁹";
-                if (p >= 80) return "󰂂";
-                if (p >= 70) return "󰂁";
-                if (p >= 60) return "󰂀";
-                if (p >= 50) return "󰁿";
-                if (p >= 40) return "󰁾";
-                if (p >= 30) return "󰁽";
-                if (p >= 20) return "󰁼";
-                if (p >= 10) return "󰁻";
-                return "󰁺";
-            }
-            iconColor: (UPower.displayDevice && UPower.displayDevice.percentage <= 15 && UPower.onBattery) ? "#bf616a" : "#d8dee9"
-            valueText: UPower.displayDevice ? Math.round(UPower.displayDevice.percentage) + "%" : ""
-            valueColor: "#d8dee9"
             Layout.alignment: Qt.AlignVCenter
         }
 
@@ -278,45 +294,49 @@ PanelWindow {
             Layout.alignment: Qt.AlignVCenter
         }
 
-        Rectangle {
-            implicitHeight: 22
-            implicitWidth: trayRow.implicitWidth + 16
-            radius: 6
-            color: SystemTray.items.count > 0 ? "#3b4252" : "#2e3440"
-            border.color: SystemTray.items.count > 0 ? "#3b4252" : "#4c566a"
-            border.width: SystemTray.items.count > 0 ? 0 : 1
-            opacity: SystemTray.items.count > 0 ? 1.0 : 0.6
-            Layout.alignment: Qt.AlignVCenter
-
-            Row {
-                id: trayRow
-                anchors.centerIn: parent
-                spacing: 6
-                Repeater {
-                    model: SystemTray.items
-                    delegate: Image {
-                        required property var modelData
-                        width: 16
-                        height: 16
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: modelData.icon
-                        fillMode: Image.PreserveAspectFit
-                        MouseArea {
-                            anchors.fill: parent
-                            acceptedButtons: Qt.LeftButton
-                            onClicked: modelData.activate()
-                        }
-                    }
+        Pill {
+            visible: Bluetooth.defaultAdapter !== null
+            iconText: "󰂯"
+            iconColor: (Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.enabled) ? "#88c0d0" : "#4c566a"
+            valueText: {
+                var a = Bluetooth.defaultAdapter;
+                if (!a) return "";
+                if (!a.enabled) return "off";
+                var n = 0;
+                for (var i = 0; i < Bluetooth.devices.count; i++) {
+                    var d = Bluetooth.devices.get(i);
+                    if (d && d.connected) n++;
                 }
-                Text {
-                    visible: SystemTray.items.count === 0
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "⋯"
-                    color: "#4c566a"
-                    font.family: "JetBrainsMono Nerd Font"
-                    font.pixelSize: 13
-                }
+                return n > 0 ? n + "" : "on";
             }
+            valueColor: "#88c0d0"
+            Layout.alignment: Qt.AlignVCenter
+            onPressed: {
+                var a = Bluetooth.defaultAdapter;
+                if (a) Quickshell.execDetached(["bluetoothctl", "power", a.enabled ? "off" : "on"]);
+            }
+        }
+
+        Pill {
+            visible: UPower.displayDevice && UPower.displayDevice.isPresent && root.battPct >= 0
+            iconText: {
+                if (!UPower.onBattery) return "󰂄";
+                var p = root.battPct;
+                if (p >= 90) return "󰁹";
+                if (p >= 80) return "󰂂";
+                if (p >= 70) return "󰂁";
+                if (p >= 60) return "󰂀";
+                if (p >= 50) return "󰁿";
+                if (p >= 40) return "󰁾";
+                if (p >= 30) return "󰁽";
+                if (p >= 20) return "󰁼";
+                if (p >= 10) return "󰁻";
+                return "󰁺";
+            }
+            iconColor: (root.battPct <= 15 && UPower.onBattery) ? "#bf616a" : "#d8dee9"
+            valueText: root.battPct >= 0 ? root.battPct + "%" : ""
+            valueColor: "#d8dee9"
+            Layout.alignment: Qt.AlignVCenter
         }
     }
 
