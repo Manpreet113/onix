@@ -36,9 +36,6 @@ in {
       variant = "";
     };
 
-    # Graphics
-    hardware.graphics.enable = true;
-
     # For Electron apps / Ozone
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";

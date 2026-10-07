@@ -13,7 +13,7 @@ in {
     users.users.manpreet = {
       isNormalUser = true;
       description = "Manpreet";
-      extraGroups = ["networkmanager" "wheel" "video" "audio"];
+      extraGroups = ["networkmanager" "wheel" "video" "audio" "lp"];
       shell = pkgs.fish;
       # packages moved to home-manager; keep minimal system packages here
       packages = with pkgs; [

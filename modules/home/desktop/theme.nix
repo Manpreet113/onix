@@ -18,11 +18,6 @@
       package = pkgs.adw-gtk3;
       name = "adw-gtk3-dark";
     };
-    cursorTheme = {
-      package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Classic";
-      size = 24;
-    };
     font = {
       name = "Cantarell";
       size = 11;
@@ -36,8 +31,6 @@
   };
 
   home.sessionVariables = {
-    XCURSOR_THEME = "Bibata-Modern-Classic";
-    XCURSOR_SIZE = "24";
     GTK_THEME = "adw-gtk3-dark";
   };
 

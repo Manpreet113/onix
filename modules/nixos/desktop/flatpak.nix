@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib; let
@@ -27,12 +26,6 @@ in {
         enable = true;
         onCalendar = "weekly";
       };
-    };
-
-    # Ensure portals for flatpak
-    xdg.portal = {
-      enable = true;
-      extraPortals = with pkgs; [xdg-desktop-portal-gtk];
     };
 
     # Fonts for flatpak

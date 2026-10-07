@@ -13,12 +13,16 @@ in {
     sops = {
       defaultSopsFile = ../../../secrets/secrets.yaml;
       defaultSopsFormat = "yaml";
-      age.keyFile = "/home/manpreet/.config/sops/age/keys.txt";
+      # Key must be readable at early boot and outside /home.
+      # Install once with: sudo install -m 600 ~/.config/sops/age/keys.txt /var/lib/sops-nix/key.txt
+      age.keyFile = "/var/lib/sops-nix/key.txt";
 
       secrets.example_secret = {
         owner = "manpreet";
       };
     };
+
+    systemd.tmpfiles.rules = ["d /var/lib/sops-nix 0700 root root -"];
 
     environment.systemPackages = with pkgs; [
       sops

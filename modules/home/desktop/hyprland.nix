@@ -26,13 +26,6 @@ in {
         scale = 1;
       };
 
-      on = {
-        _args = [
-          "hyprland.start"
-          (raw ''function() hl.exec_cmd("pkill waybar && waybar &") hl.exec_cmd("hyprpaper &") hl.exec_cmd("mako &") end'')
-        ];
-      };
-
       env = [
         {
           _args = [
@@ -79,13 +72,11 @@ in {
           layout = "dwindle";
         };
 
-        decoration = {
-          rounding = 8;
-          blur = {
-            enabled = true;
-            size = 5;
-            passes = 3;
-          };
+        rounding = 8;
+        blur = {
+          enabled = true;
+          size = 5;
+          passes = 3;
           shadow.enabled = true;
         };
 

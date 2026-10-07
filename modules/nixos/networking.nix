@@ -17,5 +17,6 @@ in {
     # Hostname set in hosts/onix/default.nix
     # Optional: enable mDNS, etc.
     services.resolved.enable = true;
+    networking.networkmanager.dns = "systemd-resolved";
   };
 }

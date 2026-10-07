@@ -16,5 +16,7 @@ _: {
     vscode.enable = false;
     # wofi is used instead of rofi; avoids deprecated HM rofi.font option
     rofi.enable = false;
+    # nixvim manages colorschemes.nord itself
+    neovim.enable = false;
   };
 }

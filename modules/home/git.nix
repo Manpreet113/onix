@@ -9,6 +9,7 @@ _: {
         email = "manpreet10542@gmail.com";
       };
       init.defaultBranch = "main";
+      credential.helper = "libsecret";
       pull.rebase = true;
       push.autoSetupRemote = true;
       fetch.prune = true;
@@ -58,7 +59,7 @@ _: {
       light = false;
       side-by-side = false;
       line-numbers = true;
-      syntax-theme = "TwoDark";
+      syntax-theme = "Nord";
       features = "decorations";
       decorations = {
         commit-decoration-style = "bold yellow box ul";
