@@ -83,6 +83,7 @@ PanelWindow {
         onTriggered: {
             root.clock = Qt.formatDateTime(new Date(), "ddd dd MMM HH:mm");
             cpuProc.running = true;
+            volProc.running = true;
         }
     }
 
@@ -92,13 +93,6 @@ PanelWindow {
         repeat: true
         triggeredOnStart: true
         onTriggered: memProc.running = true
-    }
-
-    Timer {
-        interval: 10000
-        running: true
-        repeat: true
-        onTriggered: volProc.running = true
     }
 
     Timer {
@@ -133,23 +127,6 @@ PanelWindow {
             } else {
                 root.netType = "";
                 root.network = "Disconnected";
-            }
-        } }
-        stderr: StdioCollector {}
-    }
-
-    property int lastVolPoll: 0
-
-    // wpctl events -> instant volume refresh (throttled)
-    Process {
-        id: volMon
-        running: true
-        command: ["pw-mon"]
-        stdout: SplitParser { onRead: data => {
-            var now = Date.now();
-            if (now - root.lastVolPoll > 400) {
-                root.lastVolPoll = now;
-                volProc.running = true;
             }
         } }
         stderr: StdioCollector {}

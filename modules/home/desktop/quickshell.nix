@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   programs.quickshell = {
     enable = true;
     # qtmultimedia enables Video {} for live (mp4) wallpapers

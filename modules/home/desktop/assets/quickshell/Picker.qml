@@ -60,7 +60,6 @@ PanelWindow {
 
     function showPreview(): void {
         previewImage.source = previewIsVideo ? "" : WallpaperState.fileUrl(previewPath);
-        previewVideo.source = previewIsVideo ? WallpaperState.fileUrl(previewPath) : "";
     }
 
     function open(): void {
@@ -208,14 +207,19 @@ PanelWindow {
                         cache: true
                         visible: !root.previewIsVideo
                     }
-                    Video {
-                        id: previewVideo
+                    Loader {
                         anchors.fill: parent
-                        visible: root.previewIsVideo
-                        fillMode: VideoOutput.PreserveAspectCrop
-                        muted: true
-                        loops: MediaPlayer.Infinite
-                        autoPlay: true
+                        active: root.visible && root.previewIsVideo
+                        sourceComponent: Component {
+                            Video {
+                                anchors.fill: parent
+                                source: WallpaperState.fileUrl(root.previewPath)
+                                fillMode: VideoOutput.PreserveAspectCrop
+                                muted: true
+                                loops: MediaPlayer.Infinite
+                                autoPlay: true
+                            }
+                        }
                     }
                 }
 
