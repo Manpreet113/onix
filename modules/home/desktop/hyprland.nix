@@ -79,11 +79,13 @@ in {
           layout = "dwindle";
         };
 
-        rounding = 8;
-        blur = {
-          enabled = true;
-          size = 5;
-          passes = 3;
+        decoration = {
+          rounding = 8;
+          blur = {
+            enabled = true;
+            size = 5;
+            passes = 3;
+          };
           shadow.enabled = true;
         };
 
