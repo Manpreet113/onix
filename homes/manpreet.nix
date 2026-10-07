@@ -8,6 +8,7 @@
     (inputs.import-tree ../modules/home)
     inputs.nixvim.homeModules.nixvim
     inputs.nix-index-database.homeModules.nix-index
+    inputs.nixcord.homeModules.nixcord
   ];
 
   home.username = "manpreet";
