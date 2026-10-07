@@ -29,7 +29,7 @@ in {
       on = {
         _args = [
           "hyprland.start"
-          (raw ''function() hl.exec_cmd("pkill waybar && waybar &") hl.exec_cmd("hyprpaper &") hl.exec_cmd("mako &") end'')
+          (raw ''function() hl.exec_cmd("hyprpaper &") end'')
         ];
       };
 
