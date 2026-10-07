@@ -94,9 +94,8 @@ PanelWindow {
     }
 
     RowLayout {
-        anchors.fill: parent
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
+        anchors.centerIn: parent
+        width: Math.max(0, parent.width - 20)
         spacing: 12
 
         Row {
@@ -129,16 +128,7 @@ PanelWindow {
             text: Hyprland.activeToplevel ? Hyprland.activeToplevel.title : ""
             color: "#d8dee9"
             elide: Text.ElideRight
-            Layout.fillWidth: true
             Layout.maximumWidth: 400
-        }
-
-        Item { Layout.fillWidth: true }
-
-        Text {
-            font.family: "JetBrainsMono Nerd Font"; font.pixelSize: 13;
-            text: root.clock;
-            color: "#eceff4";
         }
 
         Item { Layout.fillWidth: true }
@@ -195,5 +185,13 @@ PanelWindow {
                 }
             }
         }
+    }
+
+    Text {
+        anchors.centerIn: parent
+        z: 2
+        font.family: "JetBrainsMono Nerd Font"; font.pixelSize: 13;
+        text: root.clock;
+        color: "#eceff4";
     }
 }
