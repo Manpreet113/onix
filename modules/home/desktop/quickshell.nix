@@ -1,6 +1,4 @@
-{
-  ...
-}: {
+_: {
   programs.quickshell = {
     enable = true;
     configs.shell = ./assets/quickshell;
