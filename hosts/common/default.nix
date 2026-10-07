@@ -1,10 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  ...
-}: {
+{lib, ...}: {
   # Common host configuration — shared between all hosts.
   # Uses import-tree to auto-import modules under modules/nixos if needed,
   # but we explicitly import via hosts/onix for clarity.

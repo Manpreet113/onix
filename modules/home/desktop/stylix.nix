@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
+_: {
   # Inherits base16Scheme/fonts/opacity from the NixOS stylix module
   stylix.targets = {
     # Keep adw-gtk3 + Papirus + Bibata from theme.nix

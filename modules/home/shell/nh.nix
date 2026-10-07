@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
+_: {
   programs.nh = {
     enable = true;
     flake = "/home/manpreet/onix";

@@ -56,12 +56,24 @@
 
       systems = ["x86_64-linux"];
 
-      perSystem = {
-        config,
-        pkgs,
-        ...
-      }: {
-        formatter = pkgs.alejandra;
+      perSystem = {pkgs, ...}: {
+        formatter = pkgs.writeShellApplication {
+          name = "onix-fmt";
+          runtimeInputs = [pkgs.alejandra];
+          text = "alejandra .";
+        };
+
+        checks.statix = pkgs.runCommand "statix-check" {nativeBuildInputs = [pkgs.statix];} ''
+          cd ${./.}
+          statix check .
+          touch $out
+        '';
+
+        checks.deadnix = pkgs.runCommand "deadnix-check" {nativeBuildInputs = [pkgs.deadnix];} ''
+          cd ${./.}
+          deadnix --fail .
+          touch $out
+        '';
 
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
@@ -73,6 +85,8 @@
             git
             sops
             age
+            statix
+            deadnix
           ];
           shellHook = ''
             echo "onix devShell — nh, nom, alejandra ready"

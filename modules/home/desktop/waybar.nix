@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
+_: {
   programs.waybar = {
     enable = true;
     systemd.enable = true;

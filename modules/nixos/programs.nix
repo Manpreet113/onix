@@ -10,13 +10,8 @@ in {
   options.onix.programs.enable = mkEnableOption "common system programs";
 
   config = mkIf cfg.enable {
-    # Remove nano — use nvim instead
-    environment.defaultPackages = with pkgs; [
-      # keep minimal
-    ];
-
     environment.systemPackages = with pkgs; [
-      vim # keep vim as fallback, nvim is HM; nano explicitly removed
+      vim # keep vim as fallback, nvim is HM
       wget
       curl
       git
@@ -27,13 +22,10 @@ in {
       nil
     ];
 
-    # Disable nano if it sneaks via defaultPackages
-    # We override via environment.defaultPackages = [] is not safe, so ensure nano not installed
-    # programs.nano.enable is not an option — just not listing it
-
     programs.gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
+      pinentryPackage = pkgs.pinentry-qt;
     };
 
     programs.dconf.enable = true;

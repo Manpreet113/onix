@@ -1,10 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  ...
-}: {
+{inputs, ...}: {
   imports = [
     ./hardware-configuration.nix
     # Import-tree: auto-import every module under modules/nixos

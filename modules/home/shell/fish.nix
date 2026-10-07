@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   programs.fish = {
     enable = true;
     # Use fish as interactive shell with best UX
@@ -48,15 +43,15 @@
       # Add useful plugins
       {
         name = "autopair";
-        src = autopair.src;
+        inherit (autopair) src;
       }
       {
         name = "puffer";
-        src = puffer.src;
+        inherit (puffer) src;
       }
       {
         name = "fzf-fish";
-        src = fzf-fish.src;
+        inherit (fzf-fish) src;
       }
     ];
   };

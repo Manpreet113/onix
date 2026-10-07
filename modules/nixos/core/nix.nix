@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 with lib; let
@@ -31,7 +30,5 @@ in {
 
       optimise.automatic = true;
     };
-
-    nixpkgs.config.allowUnfree = true;
   };
 }

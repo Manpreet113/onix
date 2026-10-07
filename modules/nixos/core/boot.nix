@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib; let
@@ -13,5 +12,8 @@ in {
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     boot.loader.systemd-boot.configurationLimit = 10;
+    boot.loader.systemd-boot.editor = false;
+    boot.kernelParams = ["i915.enable_guc=2"];
+    zramSwap.enable = true;
   };
 }
