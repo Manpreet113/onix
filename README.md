@@ -3,7 +3,8 @@
 Host: `onix`, user `manpreet` — Hyprland (Wayland) + PipeWire, Btrfs, systemd-boot, nixpkgs **unstable**.
 
 ## Structure
-- `flake.nix` — flake-parts; inputs: nixpkgs unstable, home-manager (master), sops-nix, disko, nix-flatpak, stylix, nixvim, nix-index-database, opencode
+- `flake.nix` — flake-parts; inputs: nixpkgs unstable, home-manager (master), sops-nix, disko, stylix, nixvim, nix-index-database, nixcord, opencode
+- `pkgs/` — in-tree packages (zen-browser, helium-browser) exposed via the `onix.core.overlay` overlay; bump with `./pkgs/update-browsers.sh`
 - `hosts/onix/` — host entry (`onix.*` module toggles) + hardware-configuration.nix
 - `hosts/common/` — shared settings (timezone, locale, stateVersion)
 - `modules/nixos/` — system modules, auto-imported via import-tree; each is an `onix.<name>.enable` toggle

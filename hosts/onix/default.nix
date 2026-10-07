@@ -13,12 +13,12 @@
       nix.enable = true;
       boot.enable = true;
       nixpkgs.enable = true;
+      overlay.enable = true;
       autoUpgrade.enable = true;
     };
     desktop = {
       hyprland.enable = true;
       greetd.enable = true;
-      flatpak.enable = true;
       nautilus.enable = true;
       audio.enable = true;
       stylix.enable = true;

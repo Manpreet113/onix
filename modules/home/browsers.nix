@@ -1,31 +1,26 @@
-_: {
-  # Browsers: zen via Flatpak (declarative via nix-flatpak), helium dropped
-  # No nix firefox — removed. Zen is default for xdg mime.
+{pkgs, ...}: {
+  # Browsers, packaged in-tree (pkgs/): zen stable is the default,
+  # helium (Chromium) exists for Chromium-only webapps: `helium --app=<url>`.
+  home.packages = with pkgs; [
+    zen-browser
+    helium-browser
+  ];
 
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/html" = "app.zen_browser.zen.desktop";
-      "x-scheme-handler/http" = "app.zen_browser.zen.desktop";
-      "x-scheme-handler/https" = "app.zen_browser.zen.desktop";
-      "x-scheme-handler/about" = "app.zen_browser.zen.desktop";
-      "x-scheme-handler/unknown" = "app.zen_browser.zen.desktop";
-      "application/xhtml+xml" = "app.zen_browser.zen.desktop";
-      "application/pdf" = "app.zen_browser.zen.desktop";
+      "text/html" = "zen.desktop";
+      "x-scheme-handler/http" = "zen.desktop";
+      "x-scheme-handler/https" = "zen.desktop";
+      "x-scheme-handler/about" = "zen.desktop";
+      "x-scheme-handler/unknown" = "zen.desktop";
+      "application/xhtml+xml" = "zen.desktop";
+      "application/pdf" = "zen.desktop";
     };
   };
 
   home.sessionVariables = {
-    BROWSER = "flatpak run app.zen_browser.zen";
-    DEFAULT_BROWSER = "flatpak run app.zen_browser.zen";
-  };
-
-  # Helper desktop entry to launch zen via flatpak easily from hyprland bind
-  xdg.desktopEntries.zen-browser = {
-    name = "Zen Browser";
-    exec = "flatpak run app.zen_browser.zen %U";
-    comment = "Zen Browser (Flatpak)";
-    categories = ["Network" "WebBrowser"];
-    mimeType = ["text/html" "x-scheme-handler/http" "x-scheme-handler/https"];
+    BROWSER = "zen";
+    DEFAULT_BROWSER = "zen";
   };
 }

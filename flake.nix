@@ -26,8 +26,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-
     opencode = {
       url = "github:anomalyco/opencode";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -110,7 +108,6 @@
               inputs.home-manager.nixosModules.home-manager
               inputs.sops-nix.nixosModules.sops
               inputs.disko.nixosModules.disko
-              inputs.nix-flatpak.nixosModules.nix-flatpak
               inputs.stylix.nixosModules.stylix
               {
                 home-manager = {

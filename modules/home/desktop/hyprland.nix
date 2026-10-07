@@ -168,9 +168,9 @@ in {
           # Apps
           (mkBind ''mod .. " + RETURN"'' ''hl.dsp.exec_cmd("ghostty")'' null)
           (mkBind ''mod .. " + E"'' ''hl.dsp.exec_cmd("code")'' null)
-          (mkBind ''mod .. " + B"'' ''hl.dsp.exec_cmd("flatpak run app.zen_browser.zen")'' null)
+          (mkBind ''mod .. " + B"'' ''hl.dsp.exec_cmd("zen")'' null)
           (
-            mkBind ''mod .. " + SHIFT + B"'' ''hl.dsp.exec_cmd("flatpak run app.zen_browser.zen --private-window")'' null
+            mkBind ''mod .. " + SHIFT + B"'' ''hl.dsp.exec_cmd("zen --private-window")'' null
           )
           (mkBind ''mod .. " + SPACE"'' ''hl.dsp.exec_cmd("wofi --show drun")'' null)
 
