@@ -19,7 +19,7 @@
     carapace
     fastfetch
     comma
-    inputs.opencode.packages.${pkgs.system}.default
+    inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   programs.nix-index.enable = true;
