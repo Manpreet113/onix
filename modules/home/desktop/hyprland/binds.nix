@@ -42,7 +42,7 @@ in {
           (mkBind ''mod .. " + Q"'' ''hl.dsp.window.close()'' null)
           (mkBind ''mod .. " + F"'' ''hl.dsp.window.fullscreen()'' null)
           (mkBind ''mod .. " + V"'' ''hl.dsp.window.float({ action = "toggle" })'' null)
-          (mkBind ''mod .. " + P"'' ''hl.dsp.pin()'' null)
+          (mkBind ''mod .. " + P"'' ''hl.dsp.window.pin()'' null)
           (mkBind ''mod .. " + J"'' ''hl.dsp.layout("togglesplit")'' null)
           (mkBind ''mod .. " + R"'' ''hl.dsp.submap("resize")'' null)
 
