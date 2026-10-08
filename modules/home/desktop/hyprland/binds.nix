@@ -221,21 +221,21 @@
 
     {
       keys = ''"XF86AudioRaiseVolume"'';
-      run = ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")'';
+      run = ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+; quickshell --config shell ipc call osd volume")'';
       desc = "Volume up";
       group = "Media";
       opts = {repeating = true;};
     }
     {
       keys = ''"XF86AudioLowerVolume"'';
-      run = ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")'';
+      run = ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-; quickshell --config shell ipc call osd volume")'';
       desc = "Volume down";
       group = "Media";
       opts = {repeating = true;};
     }
     {
       keys = ''"XF86AudioMute"'';
-      run = ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")'';
+      run = ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; quickshell --config shell ipc call osd volume")'';
       desc = "Mute";
       group = "Media";
       opts = {repeating = true;};
@@ -260,14 +260,14 @@
     }
     {
       keys = ''"XF86MonBrightnessUp"'';
-      run = ''hl.dsp.exec_cmd("brightnessctl set +5%")'';
+      run = ''hl.dsp.exec_cmd("brightnessctl set +5%; quickshell --config shell ipc call osd brightness")'';
       desc = "Brightness up";
       group = "Media";
       opts = {repeating = true;};
     }
     {
       keys = ''"XF86MonBrightnessDown"'';
-      run = ''hl.dsp.exec_cmd("brightnessctl set 5%-")'';
+      run = ''hl.dsp.exec_cmd("brightnessctl set 5%-; quickshell --config shell ipc call osd brightness")'';
       desc = "Brightness down";
       group = "Media";
       opts = {repeating = true;};

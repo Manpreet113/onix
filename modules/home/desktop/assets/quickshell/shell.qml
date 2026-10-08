@@ -6,4 +6,5 @@ Scope {
     Notifications {}
     Wallpaper {}
     Overlay {}
+    Osd {}
 }
