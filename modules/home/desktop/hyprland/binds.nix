@@ -10,151 +10,10 @@
   };
 in {
   wayland.windowManager.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-    systemd.enable = true;
-
     settings = {
       mod = {
         _var = "SUPER";
       };
-
-      monitor = {
-        output = "";
-        mode = "preferred";
-        position = "auto";
-        scale = 1;
-      };
-
-      env = [
-        {
-          _args = [
-            "XCURSOR_THEME"
-            "Bibata-Modern-Classic"
-          ];
-        }
-        {
-          _args = [
-            "XCURSOR_SIZE"
-            "24"
-          ];
-        }
-        {
-          _args = [
-            "HYPRCURSOR_THEME"
-            "Bibata-Modern-Classic"
-          ];
-        }
-        {
-          _args = [
-            "HYPRCURSOR_SIZE"
-            "24"
-          ];
-        }
-      ];
-
-      config = {
-        input = {
-          kb_layout = "us";
-          follow_mouse = 1;
-          sensitivity = 0;
-          touchpad = {
-            natural_scroll = true;
-            tap_to_click = true;
-            disable_while_typing = true;
-          };
-        };
-
-        general = {
-          gaps_in = 5;
-          gaps_out = 10;
-          border_size = 2;
-          layout = "dwindle";
-        };
-
-        decoration = {
-          rounding = 8;
-          blur = {
-            enabled = true;
-            size = 5;
-            passes = 3;
-          };
-          shadow.enabled = true;
-        };
-
-        animations.enabled = true;
-
-        dwindle = {
-          preserve_split = true;
-        };
-
-        master = {
-          new_status = "master";
-        };
-      };
-
-      curve = [
-        {
-          _args = [
-            "myBezier"
-            {
-              type = "bezier";
-              points = [
-                [
-                  0.05
-                  0.9
-                ]
-                [
-                  0.1
-                  1.05
-                ]
-              ];
-            }
-          ];
-        }
-      ];
-
-      animation = [
-        {
-          leaf = "windows";
-          enabled = true;
-          speed = 7;
-          bezier = "myBezier";
-        }
-        {
-          leaf = "windowsOut";
-          enabled = true;
-          speed = 7;
-          bezier = "default";
-          style = "popin 80%";
-        }
-        {
-          leaf = "border";
-          enabled = true;
-          speed = 10;
-          bezier = "default";
-        }
-        {
-          leaf = "fade";
-          enabled = true;
-          speed = 7;
-          bezier = "default";
-        }
-        {
-          leaf = "workspaces";
-          enabled = true;
-          speed = 6;
-          bezier = "default";
-        }
-      ];
-
-      gesture = [
-        {
-          fingers = 3;
-          direction = "horizontal";
-          action = "workspace";
-        }
-      ];
 
       bind =
         [
@@ -167,13 +26,32 @@ in {
           )
           (mkBind ''mod .. " + SPACE"'' ''hl.dsp.exec_cmd("wofi --show drun")'' null)
           (mkBind ''mod .. " + SHIFT + F"'' ''hl.dsp.exec_cmd("nautilus")'' null)
-          (mkBind ''mod .. " + SHIFT + W"'' ''hl.dsp.exec_cmd("quickshell ipc call wallpaper toggle")'' null)
+          (mkBind ''mod .. " + SHIFT + W"'' ''hl.dsp.exec_cmd("quickshell --config shell ipc call wallpaper toggle")'' null)
+
+          # Screenshots (grim + slurp)
+          (mkBind ''"Print"'' ''hl.dsp.exec_cmd("mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png")'' null)
+          (mkBind ''mod .. " + SHIFT + S"'' ''hl.dsp.exec_cmd("grim -g \\"$(slurp)\\" - | wl-copy")'' null)
+
+          # Clipboard history
+          (mkBind ''mod .. " + SHIFT + V"'' ''hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy")'' null)
+
+          # Power menu
+          (mkBind ''mod .. " + SHIFT + Q"'' ''hl.dsp.exec_cmd("onix-power-menu")'' null)
 
           # Window management
           (mkBind ''mod .. " + Q"'' ''hl.dsp.window.close()'' null)
           (mkBind ''mod .. " + F"'' ''hl.dsp.window.fullscreen()'' null)
           (mkBind ''mod .. " + V"'' ''hl.dsp.window.float({ action = "toggle" })'' null)
+          (mkBind ''mod .. " + P"'' ''hl.dsp.pin()'' null)
           (mkBind ''mod .. " + J"'' ''hl.dsp.layout("togglesplit")'' null)
+          (mkBind ''mod .. " + R"'' ''hl.dsp.submap("resize")'' null)
+
+          # Scratchpad
+          (mkBind ''mod .. " + S"'' ''hl.dsp.workspace.toggle_special()'' null)
+          (mkBind ''mod .. " + SHIFT + T"'' ''hl.dsp.window.move({ workspace = "special" })'' null)
+
+          # Lock
+          (mkBind ''mod .. " + SHIFT + L"'' ''hl.dsp.exec_cmd("hyprlock")'' null)
 
           # Focus
           (mkBind ''mod .. " + left"'' ''hl.dsp.focus({ direction = "left" })'' null)
@@ -211,6 +89,9 @@ in {
               repeating = true;
             }
           )
+          (mkBind ''"XF86AudioPlay"'' ''hl.dsp.exec_cmd("playerctl play-pause")'' null)
+          (mkBind ''"XF86AudioNext"'' ''hl.dsp.exec_cmd("playerctl next")'' null)
+          (mkBind ''"XF86AudioPrevious"'' ''hl.dsp.exec_cmd("playerctl previous")'' null)
           (mkBind ''"XF86MonBrightnessUp"'' ''hl.dsp.exec_cmd("brightnessctl set +5%")'' {repeating = true;})
           (mkBind ''"XF86MonBrightnessDown"'' ''hl.dsp.exec_cmd("brightnessctl set 5%-")'' {repeating = true;})
         ]
@@ -219,32 +100,19 @@ in {
           (mkBind ''mod .. " + ${toString i}"'' ''hl.dsp.focus({ workspace = ${toString i} })'' null)
           (mkBind ''mod .. " + SHIFT + ${toString i}"'' ''hl.dsp.window.move({ workspace = ${toString i} })'' null)
         ]) (lib.range 1 9);
-
-      window_rule = [
-        {
-          match.class = "^(org.gnome.Nautilus)$";
-          float = true;
-        }
-        {
-          match.class = "^(pavucontrol)$";
-          float = true;
-        }
-        {
-          match.title = "^(Picture-in-Picture)$";
-          float = true;
-        }
-      ];
     };
   };
 
-  # Required packages for Hyprland
+  # Wofi power menu (Lock/Suspend/Reboot/Shutdown)
   home.packages = with pkgs; [
-    brightnessctl
-    playerctl
-    wl-clipboard
-    cliphist
-    grim
-    slurp
-    hyprpicker
+    (writeShellScriptBin "onix-power-menu" ''
+      choice=$(printf "Lock\nSuspend\nReboot\nShutdown" | ${wofi}/bin/wofi --dmenu --prompt "Power")
+      case "$choice" in
+        Lock) ${hyprlock}/bin/hyprlock ;;
+        Suspend) ${systemd}/bin/systemctl suspend ;;
+        Reboot) ${systemd}/bin/systemctl reboot ;;
+        Shutdown) ${systemd}/bin/systemctl poweroff ;;
+      esac
+    '')
   ];
 }
