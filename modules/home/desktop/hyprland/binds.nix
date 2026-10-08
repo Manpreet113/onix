@@ -5,9 +5,314 @@
 }: let
   raw = lib.generators.mkLuaInline;
 
-  mkBind = keys: dispatcher: opts: {
-    _args = [(raw keys) (raw dispatcher)] ++ lib.optional (opts != null) opts;
+  # Single source of truth for every keybind: the lua in `settings.bind`
+  # AND ~/.config/quickshell/keybinds.json (for the Keybinds.qml cheatsheet)
+  # are both generated from this list. Fields: lua key expr, lua dispatcher
+  # expr, human description, group, optional bind flags (e.g. repeating).
+  bindDefs = [
+    {
+      keys = ''mod .. " + RETURN"'';
+      run = ''hl.dsp.exec_cmd("ghostty")'';
+      desc = "Terminal";
+      group = "Apps";
+    }
+    {
+      keys = ''mod .. " + E"'';
+      run = ''hl.dsp.exec_cmd("code")'';
+      desc = "Editor";
+      group = "Apps";
+    }
+    {
+      keys = ''mod .. " + B"'';
+      run = ''hl.dsp.exec_cmd("zen")'';
+      desc = "Browser";
+      group = "Apps";
+    }
+    {
+      keys = ''mod .. " + SHIFT + B"'';
+      run = ''hl.dsp.exec_cmd("zen --private-window")'';
+      desc = "Private window";
+      group = "Apps";
+    }
+    {
+      keys = ''mod .. " + SPACE"'';
+      run = ''hl.dsp.exec_cmd("wofi --show drun")'';
+      desc = "Launcher";
+      group = "Apps";
+    }
+    {
+      keys = ''mod .. " + SHIFT + F"'';
+      run = ''hl.dsp.exec_cmd("nautilus")'';
+      desc = "Files";
+      group = "Apps";
+    }
+    {
+      keys = ''mod .. " + SHIFT + W"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call wallpaper toggle")'';
+      desc = "Wallpaper picker";
+      group = "Apps";
+    }
+    {
+      keys = ''mod .. " + slash"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call keybinds toggle")'';
+      desc = "Keybind cheatsheet";
+      group = "Apps";
+    }
+
+    {
+      keys = ''"Print"'';
+      run = ''hl.dsp.exec_cmd("mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png")'';
+      desc = "Screenshot to file";
+      group = "Screenshots";
+    }
+    {
+      keys = ''mod .. " + SHIFT + S"'';
+      run = ''hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy")'';
+      desc = "Screenshot region to clipboard";
+      group = "Screenshots";
+    }
+
+    {
+      keys = ''mod .. " + SHIFT + V"'';
+      run = ''hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy")'';
+      desc = "Clipboard history";
+      group = "Clipboard";
+    }
+
+    {
+      keys = ''mod .. " + SHIFT + Q"'';
+      run = ''hl.dsp.exec_cmd("onix-power-menu")'';
+      desc = "Power menu";
+      group = "System";
+    }
+    {
+      keys = ''mod .. " + SHIFT + L"'';
+      run = ''hl.dsp.exec_cmd("hyprlock")'';
+      desc = "Lock screen";
+      group = "System";
+    }
+
+    {
+      keys = ''mod .. " + Q"'';
+      run = ''hl.dsp.window.close()'';
+      desc = "Close window";
+      group = "Window";
+    }
+    {
+      keys = ''mod .. " + F"'';
+      run = ''hl.dsp.window.fullscreen()'';
+      desc = "Toggle fullscreen";
+      group = "Window";
+    }
+    {
+      keys = ''mod .. " + V"'';
+      run = ''hl.dsp.window.float({ action = "toggle" })'';
+      desc = "Toggle floating";
+      group = "Window";
+    }
+    {
+      keys = ''mod .. " + P"'';
+      run = ''hl.dsp.window.pin()'';
+      desc = "Pin window";
+      group = "Window";
+    }
+    {
+      keys = ''mod .. " + J"'';
+      run = ''hl.dsp.layout("togglesplit")'';
+      desc = "Toggle split";
+      group = "Window";
+    }
+    {
+      keys = ''mod .. " + R"'';
+      run = ''hl.dsp.submap("resize")'';
+      desc = "Resize mode";
+      group = "Window";
+    }
+
+    {
+      keys = ''mod .. " + S"'';
+      run = ''hl.dsp.workspace.toggle_special()'';
+      desc = "Scratchpad";
+      group = "Window";
+    }
+    {
+      keys = ''mod .. " + SHIFT + T"'';
+      run = ''hl.dsp.window.move({ workspace = "special" })'';
+      desc = "Send to scratchpad";
+      group = "Window";
+    }
+
+    {
+      keys = ''mod .. " + left"'';
+      run = ''hl.dsp.focus({ direction = "left" })'';
+      desc = "Focus left";
+      group = "Focus";
+    }
+    {
+      keys = ''mod .. " + right"'';
+      run = ''hl.dsp.focus({ direction = "right" })'';
+      desc = "Focus right";
+      group = "Focus";
+    }
+    {
+      keys = ''mod .. " + up"'';
+      run = ''hl.dsp.focus({ direction = "up" })'';
+      desc = "Focus up";
+      group = "Focus";
+    }
+    {
+      keys = ''mod .. " + down"'';
+      run = ''hl.dsp.focus({ direction = "down" })'';
+      desc = "Focus down";
+      group = "Focus";
+    }
+
+    {
+      keys = ''mod .. " + SHIFT + left"'';
+      run = ''hl.dsp.window.move({ direction = "left" })'';
+      desc = "Move left";
+      group = "Move";
+    }
+    {
+      keys = ''mod .. " + SHIFT + right"'';
+      run = ''hl.dsp.window.move({ direction = "right" })'';
+      desc = "Move right";
+      group = "Move";
+    }
+    {
+      keys = ''mod .. " + SHIFT + up"'';
+      run = ''hl.dsp.window.move({ direction = "up" })'';
+      desc = "Move up";
+      group = "Move";
+    }
+    {
+      keys = ''mod .. " + SHIFT + down"'';
+      run = ''hl.dsp.window.move({ direction = "down" })'';
+      desc = "Move down";
+      group = "Move";
+    }
+
+    {
+      keys = ''mod .. " + mouse_down"'';
+      run = ''hl.dsp.focus({ workspace = "e+1" })'';
+      desc = "Next workspace";
+      group = "Mouse";
+    }
+    {
+      keys = ''mod .. " + mouse_up"'';
+      run = ''hl.dsp.focus({ workspace = "e-1" })'';
+      desc = "Previous workspace";
+      group = "Mouse";
+    }
+    {
+      keys = ''mod .. " + mouse:272"'';
+      run = ''hl.dsp.window.drag()'';
+      desc = "Drag window";
+      group = "Mouse";
+      opts = {mouse = true;};
+    }
+    {
+      keys = ''mod .. " + mouse:273"'';
+      run = ''hl.dsp.window.resize()'';
+      desc = "Resize window";
+      group = "Mouse";
+      opts = {mouse = true;};
+    }
+
+    {
+      keys = ''"XF86AudioRaiseVolume"'';
+      run = ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")'';
+      desc = "Volume up";
+      group = "Media";
+      opts = {repeating = true;};
+    }
+    {
+      keys = ''"XF86AudioLowerVolume"'';
+      run = ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")'';
+      desc = "Volume down";
+      group = "Media";
+      opts = {repeating = true;};
+    }
+    {
+      keys = ''"XF86AudioMute"'';
+      run = ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")'';
+      desc = "Mute";
+      group = "Media";
+      opts = {repeating = true;};
+    }
+    {
+      keys = ''"XF86AudioPlay"'';
+      run = ''hl.dsp.exec_cmd("playerctl play-pause")'';
+      desc = "Play / pause";
+      group = "Media";
+    }
+    {
+      keys = ''"XF86AudioNext"'';
+      run = ''hl.dsp.exec_cmd("playerctl next")'';
+      desc = "Next track";
+      group = "Media";
+    }
+    {
+      keys = ''"XF86AudioPrev"'';
+      run = ''hl.dsp.exec_cmd("playerctl previous")'';
+      desc = "Previous track";
+      group = "Media";
+    }
+    {
+      keys = ''"XF86MonBrightnessUp"'';
+      run = ''hl.dsp.exec_cmd("brightnessctl set +5%")'';
+      desc = "Brightness up";
+      group = "Media";
+      opts = {repeating = true;};
+    }
+    {
+      keys = ''"XF86MonBrightnessDown"'';
+      run = ''hl.dsp.exec_cmd("brightnessctl set 5%-")'';
+      desc = "Brightness down";
+      group = "Media";
+      opts = {repeating = true;};
+    }
+  ];
+
+  workspaceBindDefs = lib.concatMap (i: [
+    {
+      keys = ''mod .. " + ${toString i}"'';
+      run = ''hl.dsp.focus({ workspace = ${toString i} })'';
+      desc = "Workspace ${toString i}";
+      group = "Workspaces";
+    }
+    {
+      keys = ''mod .. " + SHIFT + ${toString i}"'';
+      run = ''hl.dsp.window.move({ workspace = ${toString i} })'';
+      desc = "Move to ${toString i}";
+      group = "Workspaces";
+    }
+  ]) (lib.range 1 9);
+
+  allBindDefs = bindDefs ++ workspaceBindDefs;
+
+  mkBindEntry = b: {
+    _args = [(raw b.keys) (raw b.run)] ++ lib.optional ((b.opts or null) != null) b.opts;
   };
+
+  # `mod .. " + X"` -> "SUPER + X" for human display
+  displayKeys = k:
+    lib.concatStringsSep " + " (
+      lib.filter (p: p != "") (
+        map lib.trim (
+          lib.splitString "+" (
+            lib.replaceStrings ["mod" "\"" ".."] ["SUPER" "" ""] k
+          )
+        )
+      )
+    );
+
+  toDoc = b: {
+    keys = displayKeys b.keys;
+    inherit (b) run desc;
+  };
+
+  groupNames = lib.unique (map (b: b.group) allBindDefs);
 in {
   wayland.windowManager.hyprland = {
     settings = {
@@ -15,92 +320,47 @@ in {
         _var = "SUPER";
       };
 
-      bind =
-        [
-          # Apps
-          (mkBind ''mod .. " + RETURN"'' ''hl.dsp.exec_cmd("ghostty")'' null)
-          (mkBind ''mod .. " + E"'' ''hl.dsp.exec_cmd("code")'' null)
-          (mkBind ''mod .. " + B"'' ''hl.dsp.exec_cmd("zen")'' null)
-          (
-            mkBind ''mod .. " + SHIFT + B"'' ''hl.dsp.exec_cmd("zen --private-window")'' null
-          )
-          (mkBind ''mod .. " + SPACE"'' ''hl.dsp.exec_cmd("wofi --show drun")'' null)
-          (mkBind ''mod .. " + SHIFT + F"'' ''hl.dsp.exec_cmd("nautilus")'' null)
-          (mkBind ''mod .. " + SHIFT + W"'' ''hl.dsp.exec_cmd("quickshell --config shell ipc call wallpaper toggle")'' null)
-
-          # Screenshots (grim + slurp)
-          (mkBind ''"Print"'' ''hl.dsp.exec_cmd("mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png")'' null)
-          (mkBind ''mod .. " + SHIFT + S"'' ''hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy")'' null)
-
-          # Clipboard history
-          (mkBind ''mod .. " + SHIFT + V"'' ''hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy")'' null)
-
-          # Power menu
-          (mkBind ''mod .. " + SHIFT + Q"'' ''hl.dsp.exec_cmd("onix-power-menu")'' null)
-
-          # Window management
-          (mkBind ''mod .. " + Q"'' ''hl.dsp.window.close()'' null)
-          (mkBind ''mod .. " + F"'' ''hl.dsp.window.fullscreen()'' null)
-          (mkBind ''mod .. " + V"'' ''hl.dsp.window.float({ action = "toggle" })'' null)
-          (mkBind ''mod .. " + P"'' ''hl.dsp.window.pin()'' null)
-          (mkBind ''mod .. " + J"'' ''hl.dsp.layout("togglesplit")'' null)
-          (mkBind ''mod .. " + R"'' ''hl.dsp.submap("resize")'' null)
-
-          # Scratchpad
-          (mkBind ''mod .. " + S"'' ''hl.dsp.workspace.toggle_special()'' null)
-          (mkBind ''mod .. " + SHIFT + T"'' ''hl.dsp.window.move({ workspace = "special" })'' null)
-
-          # Lock
-          (mkBind ''mod .. " + SHIFT + L"'' ''hl.dsp.exec_cmd("hyprlock")'' null)
-
-          # Focus
-          (mkBind ''mod .. " + left"'' ''hl.dsp.focus({ direction = "left" })'' null)
-          (mkBind ''mod .. " + right"'' ''hl.dsp.focus({ direction = "right" })'' null)
-          (mkBind ''mod .. " + up"'' ''hl.dsp.focus({ direction = "up" })'' null)
-          (mkBind ''mod .. " + down"'' ''hl.dsp.focus({ direction = "down" })'' null)
-
-          # Move window
-          (mkBind ''mod .. " + SHIFT + left"'' ''hl.dsp.window.move({ direction = "left" })'' null)
-          (mkBind ''mod .. " + SHIFT + right"'' ''hl.dsp.window.move({ direction = "right" })'' null)
-          (mkBind ''mod .. " + SHIFT + up"'' ''hl.dsp.window.move({ direction = "up" })'' null)
-          (mkBind ''mod .. " + SHIFT + down"'' ''hl.dsp.window.move({ direction = "down" })'' null)
-
-          # Scroll through workspaces
-          (mkBind ''mod .. " + mouse_down"'' ''hl.dsp.focus({ workspace = "e+1" })'' null)
-          (mkBind ''mod .. " + mouse_up"'' ''hl.dsp.focus({ workspace = "e-1" })'' null)
-
-          # Move/resize with mouse (bindm)
-          (mkBind ''mod .. " + mouse:272"'' ''hl.dsp.window.drag()'' {mouse = true;})
-          (mkBind ''mod .. " + mouse:273"'' ''hl.dsp.window.resize()'' {mouse = true;})
-
-          # Media keys (binde)
-          (
-            mkBind ''"XF86AudioRaiseVolume"'' ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")'' {
-              repeating = true;
-            }
-          )
-          (
-            mkBind ''"XF86AudioLowerVolume"'' ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")'' {
-              repeating = true;
-            }
-          )
-          (
-            mkBind ''"XF86AudioMute"'' ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")'' {
-              repeating = true;
-            }
-          )
-          (mkBind ''"XF86AudioPlay"'' ''hl.dsp.exec_cmd("playerctl play-pause")'' null)
-          (mkBind ''"XF86AudioNext"'' ''hl.dsp.exec_cmd("playerctl next")'' null)
-          (mkBind ''"XF86AudioPrev"'' ''hl.dsp.exec_cmd("playerctl previous")'' null)
-          (mkBind ''"XF86MonBrightnessUp"'' ''hl.dsp.exec_cmd("brightnessctl set +5%")'' {repeating = true;})
-          (mkBind ''"XF86MonBrightnessDown"'' ''hl.dsp.exec_cmd("brightnessctl set 5%-")'' {repeating = true;})
-        ]
-        # Workspaces 1-9 and shift-move to them
-        ++ lib.concatMap (i: [
-          (mkBind ''mod .. " + ${toString i}"'' ''hl.dsp.focus({ workspace = ${toString i} })'' null)
-          (mkBind ''mod .. " + SHIFT + ${toString i}"'' ''hl.dsp.window.move({ workspace = ${toString i} })'' null)
-        ]) (lib.range 1 9);
+      bind = map mkBindEntry allBindDefs;
     };
+  };
+
+  # Machine-readable cheatsheet for the Keybinds.qml overlay.
+  # Mirror of submaps.nix lives here so QML needs no lua parsing.
+  xdg.configFile."quickshell/keybinds.json".text = builtins.toJSON {
+    groups =
+      map (g: {
+        name = g;
+        binds = map toDoc (lib.filter (b: b.group == g) allBindDefs);
+      })
+      groupNames;
+    submaps = [
+      {
+        name = "resize";
+        keys = "SUPER + R";
+        binds = [
+          {
+            keys = "h / left";
+            desc = "Resize left";
+          }
+          {
+            keys = "j / down";
+            desc = "Resize down";
+          }
+          {
+            keys = "k / up";
+            desc = "Resize up";
+          }
+          {
+            keys = "l / right";
+            desc = "Resize right";
+          }
+          {
+            keys = "escape";
+            desc = "Exit resize mode";
+          }
+        ];
+      }
+    ];
   };
 
   # Wofi power menu (Lock/Suspend/Reboot/Shutdown)

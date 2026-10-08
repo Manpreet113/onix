@@ -59,12 +59,10 @@ with lib; let
   });
   resolveIcon = app:
     if app.iconUrl != null
-    then
-      assert lib.assertMsg (app.iconSha256 != null) "onix.webapps: iconSha256 required with iconUrl";
-      "${pkgs.fetchurl {
-        url = app.iconUrl;
-        sha256 = app.iconSha256;
-      }}"
+    then assert lib.assertMsg (app.iconSha256 != null) "onix.webapps: iconSha256 required with iconUrl"; "${pkgs.fetchurl {
+      url = app.iconUrl;
+      sha256 = app.iconSha256;
+    }}"
     else app.icon;
 in {
   options.onix.webapps = mkOption {
@@ -74,16 +72,18 @@ in {
   };
 
   config = mkIf (cfg != {}) {
-    xdg.desktopEntries = mapAttrs (_: app: {
-      name = app.displayName;
-      exec = "helium --app=${app.url}";
-      comment =
-        if app.comment != ""
-        then app.comment
-        else "${app.displayName} Web (Helium app window)";
-      icon = resolveIcon app;
-      inherit (app) categories;
-      startupNotify = true;
-    }) cfg;
+    xdg.desktopEntries =
+      mapAttrs (_: app: {
+        name = app.displayName;
+        exec = "helium --app=${app.url}";
+        comment =
+          if app.comment != ""
+          then app.comment
+          else "${app.displayName} Web (Helium app window)";
+        icon = resolveIcon app;
+        inherit (app) categories;
+        startupNotify = true;
+      })
+      cfg;
   };
 }
