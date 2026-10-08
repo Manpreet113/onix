@@ -91,7 +91,7 @@ in {
           )
           (mkBind ''"XF86AudioPlay"'' ''hl.dsp.exec_cmd("playerctl play-pause")'' null)
           (mkBind ''"XF86AudioNext"'' ''hl.dsp.exec_cmd("playerctl next")'' null)
-          (mkBind ''"XF86AudioPrevious"'' ''hl.dsp.exec_cmd("playerctl previous")'' null)
+          (mkBind ''"XF86AudioPrev"'' ''hl.dsp.exec_cmd("playerctl previous")'' null)
           (mkBind ''"XF86MonBrightnessUp"'' ''hl.dsp.exec_cmd("brightnessctl set +5%")'' {repeating = true;})
           (mkBind ''"XF86MonBrightnessDown"'' ''hl.dsp.exec_cmd("brightnessctl set 5%-")'' {repeating = true;})
         ]
