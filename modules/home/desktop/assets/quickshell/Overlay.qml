@@ -32,6 +32,8 @@ PanelWindow {
             return { w: 760, h: 600 };
         if (name === "notifs")
             return { w: 760, h: 600 };
+        if (name === "power")
+            return { w: 560, h: 430 };
         return { w: 980, h: 780 };
     }
 
@@ -96,6 +98,9 @@ PanelWindow {
         function notifs(): void {
             root.show("notifs");
         }
+        function power(): void {
+            root.show("power");
+        }
         function hide(): void {
             root.hide();
         }
@@ -118,6 +123,12 @@ PanelWindow {
         target: "notifs"
         function toggle(): void {
             root.toggleView("notifs");
+        }
+    }
+    IpcHandler {
+        target: "power"
+        function toggle(): void {
+            root.toggleView("power");
         }
     }
 
@@ -148,6 +159,38 @@ PanelWindow {
         onActivated: {
             if (contentLoader.item)
                 contentLoader.item.apply();
+        }
+    }
+    Shortcut {
+        sequence: "1"
+        enabled: root.visible && root.view === "power"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.runIndex(0);
+        }
+    }
+    Shortcut {
+        sequence: "2"
+        enabled: root.visible && root.view === "power"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.runIndex(1);
+        }
+    }
+    Shortcut {
+        sequence: "3"
+        enabled: root.visible && root.view === "power"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.runIndex(2);
+        }
+    }
+    Shortcut {
+        sequence: "4"
+        enabled: root.visible && root.view === "power"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.runIndex(3);
         }
     }
 
@@ -225,6 +268,8 @@ PanelWindow {
                         return keybindsComp;
                     if (root.view === "notifs")
                         return notifsComp;
+                    if (root.view === "power")
+                        return powerComp;
                     return null;
                 }
                 onLoaded: {
@@ -244,6 +289,10 @@ PanelWindow {
                 Component {
                     id: notifsComp
                     NotifsView {}
+                }
+                Component {
+                    id: powerComp
+                    PowerView {}
                 }
             }
         }

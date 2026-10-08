@@ -1,8 +1,4 @@
-{
-  lib,
-  pkgs,
-  ...
-}: let
+{lib, ...}: let
   raw = lib.generators.mkLuaInline;
 
   # Single source of truth for every keybind: the lua in `settings.bind`
@@ -81,7 +77,7 @@
 
     {
       keys = ''mod .. " + SHIFT + Q"'';
-      run = ''hl.dsp.exec_cmd("onix-power-menu")'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call power toggle")'';
       desc = "Power menu";
       group = "System";
     }
@@ -368,17 +364,4 @@ in {
       }
     ];
   };
-
-  # Wofi power menu (Lock/Suspend/Reboot/Shutdown)
-  home.packages = with pkgs; [
-    (writeShellScriptBin "onix-power-menu" ''
-      choice=$(printf "Lock\nSuspend\nReboot\nShutdown" | ${wofi}/bin/wofi --dmenu --prompt "Power")
-      case "$choice" in
-        Lock) ${hyprlock}/bin/hyprlock ;;
-        Suspend) ${systemd}/bin/systemctl suspend ;;
-        Reboot) ${systemd}/bin/systemctl reboot ;;
-        Shutdown) ${systemd}/bin/systemctl poweroff ;;
-      esac
-    '')
-  ];
 }
