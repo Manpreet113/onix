@@ -30,7 +30,7 @@ in {
 
           # Screenshots (grim + slurp)
           (mkBind ''"Print"'' ''hl.dsp.exec_cmd("mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png")'' null)
-          (mkBind ''mod .. " + SHIFT + S"'' ''hl.dsp.exec_cmd("grim -g \\"$(slurp)\\" - | wl-copy")'' null)
+          (mkBind ''mod .. " + SHIFT + S"'' ''hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy")'' null)
 
           # Clipboard history
           (mkBind ''mod .. " + SHIFT + V"'' ''hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy")'' null)
