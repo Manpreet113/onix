@@ -5,6 +5,5 @@ Scope {
     Bar {}
     Notifications {}
     Wallpaper {}
-    Picker {}
-    Keybinds {}
+    Overlay {}
 }

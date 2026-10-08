@@ -59,10 +59,11 @@ with lib; let
   });
   resolveIcon = app:
     if app.iconUrl != null
-    then assert lib.assertMsg (app.iconSha256 != null) "onix.webapps: iconSha256 required with iconUrl"; "${pkgs.fetchurl {
-      url = app.iconUrl;
-      sha256 = app.iconSha256;
-    }}"
+    then
+      assert lib.assertMsg (app.iconSha256 != null) "onix.webapps: iconSha256 required with iconUrl"; "${pkgs.fetchurl {
+        url = app.iconUrl;
+        sha256 = app.iconSha256;
+      }}"
     else app.icon;
 in {
   options.onix.webapps = mkOption {
