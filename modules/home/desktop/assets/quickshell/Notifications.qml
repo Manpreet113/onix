@@ -24,7 +24,10 @@ PanelWindow {
         bodyMarkupSupported: true
         imageSupported: true
         persistenceSupported: true
-        onNotification: notification => { notification.tracked = true; }
+        onNotification: notification => {
+            NotifHistory.push(notification);
+            notification.tracked = true;
+        }
     }
 
     Column {
@@ -35,9 +38,10 @@ PanelWindow {
             model: server.trackedNotifications
             delegate: Rectangle {
                 required property var modelData
+                visible: !Prefs.dnd
                 implicitWidth: 340
                 implicitHeight: body.implicitHeight + 20
-                color: "#3b4252"
+                color: Theme.surface
                 radius: 8
 
                 ColumnLayout {
@@ -48,18 +52,18 @@ PanelWindow {
 
                     Text {
                         text: modelData.summary
-                        color: "#eceff4"
-                        font.pixelSize: 13
+                        color: Theme.text
+                        font.pixelSize: Theme.fontMed
                         font.bold: true
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: Theme.fontFamily
                         elide: Text.ElideRight
                         Layout.fillWidth: true
                     }
                     Text {
                         text: modelData.body
-                        color: "#d8dee9"
-                        font.pixelSize: 12
-                        font.family: "JetBrainsMono Nerd Font"
+                        color: Theme.subtext
+                        font.pixelSize: Theme.fontSmall
+                        font.family: Theme.fontFamily
                         wrapMode: Text.WordWrap
                         Layout.fillWidth: true
                     }

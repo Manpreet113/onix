@@ -91,6 +91,12 @@
       desc = "Lock screen";
       group = "System";
     }
+    {
+      keys = ''mod .. " + N"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call notifs toggle")'';
+      desc = "Notification center";
+      group = "System";
+    }
 
     {
       keys = ''mod .. " + Q"'';

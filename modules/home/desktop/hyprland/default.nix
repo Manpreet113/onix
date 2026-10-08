@@ -41,6 +41,7 @@
   };
 
   # Tools referenced by binds
+  # Tools referenced by binds and scripts
   home.packages = with pkgs; [
     brightnessctl
     playerctl
@@ -49,5 +50,6 @@
     grim
     slurp
     hyprpicker
+    libnotify
   ];
 }

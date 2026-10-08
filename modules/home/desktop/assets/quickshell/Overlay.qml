@@ -30,6 +30,8 @@ PanelWindow {
     function dimsFor(name: string): var {
         if (name === "keybinds")
             return { w: 760, h: 600 };
+        if (name === "notifs")
+            return { w: 760, h: 600 };
         return { w: 980, h: 780 };
     }
 
@@ -91,6 +93,9 @@ PanelWindow {
         function keybinds(): void {
             root.show("keybinds");
         }
+        function notifs(): void {
+            root.show("notifs");
+        }
         function hide(): void {
             root.hide();
         }
@@ -107,6 +112,12 @@ PanelWindow {
         target: "keybinds"
         function toggle(): void {
             root.toggleView("keybinds");
+        }
+    }
+    IpcHandler {
+        target: "notifs"
+        function toggle(): void {
+            root.toggleView("notifs");
         }
     }
 
@@ -212,6 +223,8 @@ PanelWindow {
                         return pickerComp;
                     if (root.view === "keybinds")
                         return keybindsComp;
+                    if (root.view === "notifs")
+                        return notifsComp;
                     return null;
                 }
                 onLoaded: {
@@ -227,6 +240,10 @@ PanelWindow {
                 Component {
                     id: keybindsComp
                     KeybindsView {}
+                }
+                Component {
+                    id: notifsComp
+                    NotifsView {}
                 }
             }
         }
