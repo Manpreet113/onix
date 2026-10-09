@@ -1,4 +1,4 @@
-{...}: {
+_: {
   # Wallpaper-driven theming: skeind extracts a 12-role palette from the
   # current wallpaper and snapshots it to ~/.cache/skein/theme.json, which
   # Theme.qml reads. The shell pushes explicit selections via `skeinc set`

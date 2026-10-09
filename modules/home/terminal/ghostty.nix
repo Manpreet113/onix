@@ -15,6 +15,9 @@ _: {
       clipboard-write = "allow";
       gtk-single-instance = true;
       gtk-titlebar = true;
+      # Live wallpaper-driven colors (skein renders this on every theme
+      # change; stylix ghostty target stays off so they never fight)
+      config-file = "/home/manpreet/.cache/skein/ghostty.conf";
     };
   };
 

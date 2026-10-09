@@ -22,6 +22,15 @@
       name = "Cantarell";
       size = 11;
     };
+    # Live wallpaper-driven color overlay (skein renders gtk.css on every
+    # theme change; plain adw-gtk3-dark underneath). Missing file at first
+    # boot is a silent no-op.
+    gtk3.extraCss = ''
+      @import url("file:///home/manpreet/.cache/skein/gtk.css");
+    '';
+    gtk4.extraCss = ''
+      @import url("file:///home/manpreet/.cache/skein/gtk.css");
+    '';
   };
 
   qt = {

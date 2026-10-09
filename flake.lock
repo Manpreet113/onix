@@ -457,11 +457,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791564360,
-        "narHash": "sha256-L39Sp7X2+vTR7GG8S96dKit/OD2GJxogngFayMf00aQ=",
+        "lastModified": 1791574327,
+        "narHash": "sha256-Ozalye8dZScXicP1pTKtrLwoaCgmdOzF2pRGPyUGyJ0=",
         "owner": "manpreet113",
         "repo": "skein",
-        "rev": "84b82a80ae9d28e0cc2ab843e808a8cd895b7cba",
+        "rev": "c13dd5be935e64d8388d8f5ecdebc89b54508f0a",
         "type": "github"
       },
       "original": {

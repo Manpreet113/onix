@@ -1,5 +1,18 @@
 _: {
   wayland.windowManager.hyprland = {
+    # Live wallpaper colors: skein rewrites ~/.cache/skein/hyprland.lua on
+    # every theme change and the shell runs `hyprctl reload` right after.
+    # Guarded so a fresh boot without the daemon keeps the static colors.
+    # Appended after all settings; later hl.config() calls win per-key.
+    extraConfig = ''
+      -- skein live colors
+      do
+        local p = os.getenv("HOME") .. "/.cache/skein/hyprland.lua"
+        local f = io.open(p, "r")
+        if f then f:close() dofile(p) end
+      end
+    '';
+
     settings = {
       config = {
         general = {

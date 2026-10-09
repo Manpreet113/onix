@@ -37,6 +37,15 @@
       # Hydro-style prompt via starship, so no tide needed
       # fzf key bindings added via programs.fzf
       # zoxide init handled by programs.zoxide
+
+      # Live wallpaper-driven colors (skein renders these on every theme
+      # change; guarded so a fresh boot without the daemon still works)
+      if test -f ~/.cache/skein/fish-theme.fish
+        source ~/.cache/skein/fish-theme.fish
+      end
+      if test -f ~/.cache/skein/fzf.fish
+        source ~/.cache/skein/fzf.fish
+      end
     '';
     plugins = with pkgs.fishPlugins; [
       # Keep plugins minimal — tide conflicts with starship, so skip tide

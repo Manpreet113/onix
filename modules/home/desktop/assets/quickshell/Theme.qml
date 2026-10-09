@@ -17,7 +17,7 @@ Singleton {
 
     property var data: ({})
 
-    // skein roles (12) -> shell tokens (11); surface_variant unused
+    // skein roles -> shell tokens (11); surface_variant/orange/purple/ansi unused here
     readonly property color bg: data.background || "#2e3440"
     readonly property color surface: data.surface || "#3b4252"
     readonly property color border: data.border || "#4c566a"
@@ -60,6 +60,32 @@ Singleton {
             root.data = ({});
         }
     }
+
+    // Hyprland borders live in ~/.cache/skein/hyprland.lua (dofile'd from
+    // the generated config). The lua parser rejects `hyprctl keyword`, so
+    // theme switches apply via a config reload instead. Only fires on real
+    // switches, never on initial load (fresh parse already picked it up)
+    // and never unthemed (stylix owns the borders then, we don't fight it).
+    property string lastJson: ""
+    property bool primed: false
+
+    function maybeReloadHyprland(): void {
+        var keys = Object.keys(root.data);
+        if (keys.length === 0)
+            return;
+        var cur = JSON.stringify(root.data);
+        if (!root.primed) {
+            root.lastJson = cur;
+            root.primed = true;
+            return;
+        }
+        if (cur !== root.lastJson) {
+            root.lastJson = cur;
+            Quickshell.execDetached(["hyprctl", "reload"]);
+        }
+    }
+
+    onDataChanged: root.maybeReloadHyprland()
 
     property FileView themeFile: FileView {
         path: Quickshell.env("HOME") + "/.cache/skein/theme.json"

@@ -24,7 +24,15 @@
 
   programs.nix-index.enable = true;
 
-  programs.btop.enable = true;
+  programs.btop = {
+    enable = true;
+    # Live wallpaper-driven theme (skein renders it on every theme change;
+    # absolute path since btop does not expand ~ here). Missing file falls
+    # back to the default theme. stylix btop target stays off.
+    settings = {
+      color_theme = "/home/manpreet/.cache/skein/btop.theme";
+    };
+  };
 
   # Less pager with colors
   programs.lesspipe.enable = true;
