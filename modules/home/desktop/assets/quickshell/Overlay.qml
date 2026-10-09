@@ -34,6 +34,8 @@ PanelWindow {
             return { w: 760, h: 600 };
         if (name === "power")
             return { w: 560, h: 430 };
+        if (name === "launcher")
+            return { w: 640, h: 560 };
         return { w: 980, h: 780 };
     }
 
@@ -101,6 +103,9 @@ PanelWindow {
         function power(): void {
             root.show("power");
         }
+        function launcher(): void {
+            root.show("launcher");
+        }
         function hide(): void {
             root.hide();
         }
@@ -129,6 +134,12 @@ PanelWindow {
         target: "power"
         function toggle(): void {
             root.toggleView("power");
+        }
+    }
+    IpcHandler {
+        target: "launcher"
+        function toggle(): void {
+            root.toggleView("launcher");
         }
     }
 
@@ -270,12 +281,18 @@ PanelWindow {
                         return notifsComp;
                     if (root.view === "power")
                         return powerComp;
+                    if (root.view === "launcher")
+                        return launcherComp;
                     return null;
                 }
                 onLoaded: {
                     root.focusCurrent();
                     if (item && item.onShown)
                         item.onShown();
+                    // views signal this when an action completes
+                    // (launch app, apply wallpaper, run power action…)
+                    if (item && item.requestClose)
+                        item.requestClose.connect(root.hide);
                 }
 
                 Component {
@@ -293,6 +310,10 @@ PanelWindow {
                 Component {
                     id: powerComp
                     PowerView {}
+                }
+                Component {
+                    id: launcherComp
+                    LauncherView {}
                 }
             }
         }

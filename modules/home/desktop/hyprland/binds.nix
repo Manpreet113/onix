@@ -32,7 +32,7 @@
     }
     {
       keys = ''mod .. " + SPACE"'';
-      run = ''hl.dsp.exec_cmd("wofi --show drun")'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call launcher toggle")'';
       desc = "Launcher";
       group = "Apps";
     }
