@@ -70,9 +70,52 @@
 
     {
       keys = ''mod .. " + SHIFT + V"'';
-      run = ''hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy")'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call clipboard toggle")'';
       desc = "Clipboard history";
       group = "Clipboard";
+    }
+
+    {
+      keys = ''mod .. " + C"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call calendar toggle")'';
+      desc = "Calendar";
+      group = "Panels";
+    }
+    {
+      keys = ''mod .. " + M"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call sound toggle")'';
+      desc = "Sound mixer";
+      group = "Panels";
+    }
+    {
+      keys = ''mod .. " + SHIFT + M"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call media toggle")'';
+      desc = "Now playing";
+      group = "Panels";
+    }
+    {
+      keys = ''mod .. " + SHIFT + N"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call network toggle")'';
+      desc = "Network";
+      group = "Panels";
+    }
+    {
+      keys = ''mod .. " + Y"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call battery toggle")'';
+      desc = "Battery";
+      group = "Panels";
+    }
+    {
+      keys = ''mod .. " + D"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call bluetooth toggle")'';
+      desc = "Bluetooth";
+      group = "Panels";
+    }
+    {
+      keys = ''mod .. " + SHIFT + I"'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call system toggle")'';
+      desc = "System monitor";
+      group = "Panels";
     }
 
     {

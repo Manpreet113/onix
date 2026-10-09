@@ -36,6 +36,22 @@ PanelWindow {
             return { w: 560, h: 430 };
         if (name === "launcher")
             return { w: 640, h: 560 };
+        if (name === "battery")
+            return { w: 520, h: 600 };
+        if (name === "bluetooth")
+            return { w: 560, h: 520 };
+        if (name === "network")
+            return { w: 600, h: 560 };
+        if (name === "sound")
+            return { w: 620, h: 600 };
+        if (name === "calendar")
+            return { w: 480, h: 560 };
+        if (name === "clipboard")
+            return { w: 640, h: 560 };
+        if (name === "media")
+            return { w: 560, h: 480 };
+        if (name === "system")
+            return { w: 560, h: 580 };
         return { w: 980, h: 780 };
     }
 
@@ -106,6 +122,30 @@ PanelWindow {
         function launcher(): void {
             root.show("launcher");
         }
+        function battery(): void {
+            root.show("battery");
+        }
+        function bluetooth(): void {
+            root.show("bluetooth");
+        }
+        function network(): void {
+            root.show("network");
+        }
+        function sound(): void {
+            root.show("sound");
+        }
+        function calendar(): void {
+            root.show("calendar");
+        }
+        function clipboard(): void {
+            root.show("clipboard");
+        }
+        function media(): void {
+            root.show("media");
+        }
+        function system(): void {
+            root.show("system");
+        }
         function hide(): void {
             root.hide();
         }
@@ -140,6 +180,54 @@ PanelWindow {
         target: "launcher"
         function toggle(): void {
             root.toggleView("launcher");
+        }
+    }
+    IpcHandler {
+        target: "battery"
+        function toggle(): void {
+            root.toggleView("battery");
+        }
+    }
+    IpcHandler {
+        target: "bluetooth"
+        function toggle(): void {
+            root.toggleView("bluetooth");
+        }
+    }
+    IpcHandler {
+        target: "network"
+        function toggle(): void {
+            root.toggleView("network");
+        }
+    }
+    IpcHandler {
+        target: "sound"
+        function toggle(): void {
+            root.toggleView("sound");
+        }
+    }
+    IpcHandler {
+        target: "calendar"
+        function toggle(): void {
+            root.toggleView("calendar");
+        }
+    }
+    IpcHandler {
+        target: "clipboard"
+        function toggle(): void {
+            root.toggleView("clipboard");
+        }
+    }
+    IpcHandler {
+        target: "media"
+        function toggle(): void {
+            root.toggleView("media");
+        }
+    }
+    IpcHandler {
+        target: "system"
+        function toggle(): void {
+            root.toggleView("system");
         }
     }
 
@@ -202,6 +290,54 @@ PanelWindow {
         onActivated: {
             if (contentLoader.item)
                 contentLoader.item.runIndex(3);
+        }
+    }
+    Shortcut {
+        sequence: "Left"
+        enabled: root.visible && root.view === "calendar"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.prevMonth();
+        }
+    }
+    Shortcut {
+        sequence: "Right"
+        enabled: root.visible && root.view === "calendar"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.nextMonth();
+        }
+    }
+    Shortcut {
+        sequence: "t"
+        enabled: root.visible && root.view === "calendar"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.goToday();
+        }
+    }
+    Shortcut {
+        sequence: "Space"
+        enabled: root.visible && root.view === "media"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.toggle(null);
+        }
+    }
+    Shortcut {
+        sequence: "n"
+        enabled: root.visible && root.view === "media"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.step(true);
+        }
+    }
+    Shortcut {
+        sequence: "p"
+        enabled: root.visible && root.view === "media"
+        onActivated: {
+            if (contentLoader.item)
+                contentLoader.item.step(false);
         }
     }
 
@@ -283,6 +419,22 @@ PanelWindow {
                         return powerComp;
                     if (root.view === "launcher")
                         return launcherComp;
+                    if (root.view === "battery")
+                        return batteryComp;
+                    if (root.view === "bluetooth")
+                        return bluetoothComp;
+                    if (root.view === "network")
+                        return networkComp;
+                    if (root.view === "sound")
+                        return soundComp;
+                    if (root.view === "calendar")
+                        return calendarComp;
+                    if (root.view === "clipboard")
+                        return clipboardComp;
+                    if (root.view === "media")
+                        return mediaComp;
+                    if (root.view === "system")
+                        return systemComp;
                     return null;
                 }
                 onLoaded: {
@@ -314,6 +466,38 @@ PanelWindow {
                 Component {
                     id: launcherComp
                     LauncherView {}
+                }
+                Component {
+                    id: batteryComp
+                    BatteryView {}
+                }
+                Component {
+                    id: bluetoothComp
+                    BluetoothView {}
+                }
+                Component {
+                    id: networkComp
+                    NetworkView {}
+                }
+                Component {
+                    id: soundComp
+                    SoundView {}
+                }
+                Component {
+                    id: calendarComp
+                    CalendarView {}
+                }
+                Component {
+                    id: clipboardComp
+                    ClipboardView {}
+                }
+                Component {
+                    id: mediaComp
+                    MediaView {}
+                }
+                Component {
+                    id: systemComp
+                    SystemView {}
                 }
             }
         }

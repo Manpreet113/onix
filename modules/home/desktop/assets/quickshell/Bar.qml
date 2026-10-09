@@ -241,6 +241,7 @@ PanelWindow {
             valueText: root.cpu + "%"
             valueColor: "#a3be8c"
             Layout.alignment: Qt.AlignVCenter
+            onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "system", "toggle"])
         }
 
         Pill {
@@ -249,6 +250,7 @@ PanelWindow {
             valueText: root.mem + "%"
             valueColor: "#ebcb8b"
             Layout.alignment: Qt.AlignVCenter
+            onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "system", "toggle"])
         }
 
         Pill {
@@ -257,10 +259,7 @@ PanelWindow {
             valueText: root.muted ? "muted" : root.volume
             valueColor: "#81a1c1"
             Layout.alignment: Qt.AlignVCenter
-            onPressed: {
-                Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"]);
-                volProc.running = true;
-            }
+            onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "sound", "toggle"])
         }
 
         Pill {
@@ -269,6 +268,7 @@ PanelWindow {
             valueText: root.network
             valueColor: "#bf616a"
             Layout.alignment: Qt.AlignVCenter
+            onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "network", "toggle"])
         }
 
         Pill {
@@ -288,10 +288,7 @@ PanelWindow {
             }
             valueColor: "#88c0d0"
             Layout.alignment: Qt.AlignVCenter
-            onPressed: {
-                var a = Bluetooth.defaultAdapter;
-                if (a) Quickshell.execDetached(["bluetoothctl", "power", a.enabled ? "off" : "on"]);
-            }
+            onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "bluetooth", "toggle"])
         }
 
         Pill {
@@ -314,6 +311,7 @@ PanelWindow {
             valueText: root.battPct >= 0 ? root.battPct + "%" : ""
             valueColor: "#d8dee9"
             Layout.alignment: Qt.AlignVCenter
+            onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "battery", "toggle"])
         }
     }
 
@@ -324,5 +322,10 @@ PanelWindow {
         font.pixelSize: 13
         text: root.clock
         color: "#eceff4"
+        MouseArea {
+            anchors.fill: parent
+            anchors.margins: -6
+            onClicked: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "calendar", "toggle"])
+        }
     }
 }
