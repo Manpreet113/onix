@@ -48,8 +48,8 @@ PanelWindow {
 
         implicitHeight: 22
         implicitWidth: pillRow.implicitWidth + 16
-        radius: 6
-        color: "#3b4252"
+        radius: Theme.radiusSmall
+        color: Theme.surface
 
         Row {
             id: pillRow
@@ -59,14 +59,14 @@ PanelWindow {
             Text {
                 id: pillIcon
                 anchors.verticalCenter: parent.verticalCenter
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 13
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontMed
             }
             Text {
                 id: pillValue
                 anchors.verticalCenter: parent.verticalCenter
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 13
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontMed
             }
         }
         MouseArea {
@@ -157,8 +157,8 @@ PanelWindow {
 
     Rectangle {
         anchors.fill: parent
-        color: "#2e3440"
-        radius: 8
+        color: Theme.bg
+        radius: Theme.radiusMed
     }
 
     RowLayout {
@@ -176,13 +176,13 @@ PanelWindow {
                     implicitWidth: 22
                     implicitHeight: 22
                     radius: 6
-                    color: modelData.focused ? "#81a1c1" : "#3b4252"
+                    color: modelData.focused ? Theme.blue : Theme.surface
                     Text {
-                        font.family: "JetBrainsMono Nerd Font"
-                        font.pixelSize: 13
+                        font.family: Theme.fontFamily
+                        font.pixelSize: Theme.fontMed
                         anchors.centerIn: parent
                         text: modelData.id
-                        color: modelData.focused ? "#2e3440" : "#eceff4"
+                        color: modelData.focused ? Theme.bg : Theme.text
                     }
                     MouseArea {
                         anchors.fill: parent
@@ -193,10 +193,10 @@ PanelWindow {
         }
 
         Text {
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 13
+            font.family: Theme.fontFamily
+            font.pixelSize: Theme.fontMed
             text: Hyprland.activeToplevel ? Hyprland.activeToplevel.title : ""
-            color: "#d8dee9"
+            color: Theme.subtext
             elide: Text.ElideRight
             Layout.maximumWidth: 400
             Layout.alignment: Qt.AlignVCenter
@@ -208,8 +208,8 @@ PanelWindow {
             visible: SystemTray.items.count > 0
             implicitHeight: 22
             implicitWidth: trayRow.implicitWidth + 16
-            radius: 6
-            color: "#3b4252"
+            radius: Theme.radiusSmall
+            color: Theme.surface
             Layout.alignment: Qt.AlignVCenter
 
             Row {
@@ -237,36 +237,36 @@ PanelWindow {
 
         Pill {
             iconText: "󰍛"
-            iconColor: "#a3be8c"
+            iconColor: Theme.green
             valueText: root.cpu + "%"
-            valueColor: "#a3be8c"
+            valueColor: Theme.green
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "system", "toggle"])
         }
 
         Pill {
             iconText: "󰳲"
-            iconColor: "#ebcb8b"
+            iconColor: Theme.yellow
             valueText: root.mem + "%"
-            valueColor: "#ebcb8b"
+            valueColor: Theme.yellow
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "system", "toggle"])
         }
 
         Pill {
             iconText: root.muted ? "" : "󰕾"
-            iconColor: "#81a1c1"
+            iconColor: Theme.blue
             valueText: root.muted ? "muted" : root.volume
-            valueColor: "#81a1c1"
+            valueColor: Theme.blue
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "sound", "toggle"])
         }
 
         Pill {
             iconText: root.netType.indexOf("wireless") >= 0 ? "󰖩" : (root.netType.length > 0 ? "󰈀" : "󰖪")
-            iconColor: "#bf616a"
+            iconColor: Theme.red
             valueText: root.network
-            valueColor: "#bf616a"
+            valueColor: Theme.red
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "network", "toggle"])
         }
@@ -274,7 +274,7 @@ PanelWindow {
         Pill {
             visible: Bluetooth.defaultAdapter !== null
             iconText: "󰂯"
-            iconColor: (Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.enabled) ? "#88c0d0" : "#4c566a"
+            iconColor: (Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.enabled) ? Theme.cyan : Theme.border
             valueText: {
                 var a = Bluetooth.defaultAdapter;
                 if (!a) return "";
@@ -286,7 +286,7 @@ PanelWindow {
                 }
                 return n > 0 ? n + "" : "on";
             }
-            valueColor: "#88c0d0"
+            valueColor: Theme.cyan
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "bluetooth", "toggle"])
         }
@@ -307,9 +307,9 @@ PanelWindow {
                 if (p >= 10) return "󰁻";
                 return "󰁺";
             }
-            iconColor: (root.battPct <= 15 && UPower.onBattery) ? "#bf616a" : "#d8dee9"
+            iconColor: (root.battPct <= 15 && UPower.onBattery) ? Theme.red : Theme.subtext
             valueText: root.battPct >= 0 ? root.battPct + "%" : ""
-            valueColor: "#d8dee9"
+            valueColor: Theme.subtext
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "battery", "toggle"])
         }
@@ -318,10 +318,10 @@ PanelWindow {
     Text {
         anchors.centerIn: parent
         z: 2
-        font.family: "JetBrainsMono Nerd Font"
-        font.pixelSize: 13
+        font.family: Theme.fontFamily
+        font.pixelSize: Theme.fontMed
         text: root.clock
-        color: "#eceff4"
+        color: Theme.text
         MouseArea {
             anchors.fill: parent
             anchors.margins: -6

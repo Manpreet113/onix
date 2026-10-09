@@ -29,7 +29,7 @@ Scope {
                 WlrLayershell.layer: WlrLayer.Background
                 WlrLayershell.exclusionMode: ExclusionMode.Ignore
                 aboveWindows: false
-                color: "#282828"
+                color: Theme.bg
 
                 property string wallSource: {
                     var mapped = WallpaperState.perScreen[modelData.name];

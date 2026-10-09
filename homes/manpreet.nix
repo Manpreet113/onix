@@ -9,6 +9,7 @@
     inputs.nixvim.homeModules.nixvim
     inputs.nix-index-database.homeModules.nix-index
     inputs.nixcord.homeModules.nixcord
+    inputs.skein.homeModules.default
   ];
 
   home.username = "manpreet";

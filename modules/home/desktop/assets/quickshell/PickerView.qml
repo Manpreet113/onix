@@ -94,7 +94,7 @@ Item {
 
             Rectangle {
                 anchors.fill: parent
-                color: "#1a1d24"
+                color: Theme.preview
                 radius: Theme.radiusMed
             }
 

@@ -445,8 +445,29 @@
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",
         "opencode": "opencode",
+        "skein": "skein",
         "sops-nix": "sops-nix",
         "stylix": "stylix"
+      }
+    },
+    "skein": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791564360,
+        "narHash": "sha256-L39Sp7X2+vTR7GG8S96dKit/OD2GJxogngFayMf00aQ=",
+        "owner": "manpreet113",
+        "repo": "skein",
+        "rev": "84b82a80ae9d28e0cc2ab843e808a8cd895b7cba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "manpreet113",
+        "repo": "skein",
+        "type": "github"
       }
     },
     "sops-nix": {

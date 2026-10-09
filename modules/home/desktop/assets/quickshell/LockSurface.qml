@@ -53,7 +53,7 @@ Item {
     }
     Rectangle {
         anchors.fill: parent
-        color: "#000000"
+        color: Theme.backdrop
         opacity: 0.55
     }
 
@@ -104,7 +104,7 @@ Item {
             Rectangle {
                 anchors.fill: parent
                 anchors.margins: -10
-                color: root.context.showFailure ? "#4a2f38" : Theme.surface
+                color: root.context.showFailure ? Theme.failure : Theme.surface
                 radius: Theme.radiusMed
                 border.color: root.context.showFailure ? Theme.red : Theme.border
                 border.width: 1

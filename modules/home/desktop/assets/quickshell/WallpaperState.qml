@@ -40,6 +40,11 @@ Singleton {
     function set(path: string): void {
         root.current = path;
         saver.setText(path + "\n");
+        // push stills to skein so the shell palette follows the wallpaper
+        // (videos keep the last still-derived theme); missing skeinc is
+        // a silent no-op.
+        if (!root.isVideo(path))
+            Quickshell.execDetached(["skeinc", "set", path]);
     }
 
     property FolderListModel files: FolderListModel {
