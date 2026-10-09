@@ -3,8 +3,8 @@ _: {
     enable = true;
     settings = {
       general = {
-        lock_cmd = "pidof hyprlock || hyprlock";
-        before_sleep_cmd = "loginctl lock-session";
+        lock_cmd = "quickshell --config shell ipc call lock lock";
+        before_sleep_cmd = "quickshell --config shell ipc call lock lock";
         after_sleep_cmd = "hyprctl dispatch dpms on";
       };
       listener = [

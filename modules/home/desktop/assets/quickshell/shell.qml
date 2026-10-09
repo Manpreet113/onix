@@ -7,4 +7,5 @@ Scope {
     Wallpaper {}
     Overlay {}
     Osd {}
+    Lock {}
 }

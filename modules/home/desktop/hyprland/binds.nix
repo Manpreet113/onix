@@ -83,7 +83,7 @@
     }
     {
       keys = ''mod .. " + SHIFT + L"'';
-      run = ''hl.dsp.exec_cmd("hyprlock")'';
+      run = ''hl.dsp.exec_cmd("quickshell --config shell ipc call lock lock")'';
       desc = "Lock screen";
       group = "System";
     }

@@ -11,7 +11,7 @@ Item {
     signal requestClose()
 
     property var actions: [
-        { label: "Lock", key: "1", cmd: ["hyprlock"] },
+        { label: "Lock", key: "1", cmd: ["quickshell", "--config", "shell", "ipc", "call", "lock", "lock"] },
         { label: "Suspend", key: "2", cmd: ["systemctl", "suspend"] },
         { label: "Reboot", key: "3", cmd: ["systemctl", "reboot"] },
         { label: "Shutdown", key: "4", cmd: ["systemctl", "poweroff"] }
