@@ -1,4 +1,23 @@
 {pkgs, ...}: {
+  # Extension shell for the live skein theme: the daemon deploys
+  # skein-color-theme.json next to this (see services.skein deploy
+  # targets). Theme content updates need a window reload to show.
+  home.file.".vscode/extensions/skein-theme/package.json".text = builtins.toJSON {
+    name = "skein-theme";
+    displayName = "Skein";
+    version = "0.1.0";
+    publisher = "skein";
+    engines.vscode = "^1.80.0";
+    categories = ["Themes"];
+    contributes.themes = [
+      {
+        label = "Skein";
+        uiTheme = "vs-dark";
+        path = "./skein-color-theme.json";
+      }
+    ];
+  };
+
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
@@ -47,7 +66,7 @@
         "editor.wordWrap" = "off";
         "editor.bracketPairColorization.enabled" = true;
 
-        "workbench.colorTheme" = "Nord";
+        "workbench.colorTheme" = "Skein";
         "workbench.iconTheme" = "material-icon-theme";
         "workbench.startupEditor" = "none";
 

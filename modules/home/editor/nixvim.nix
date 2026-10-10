@@ -26,7 +26,13 @@ _: {
       clipboard = "unnamedplus";
     };
 
-    colorschemes.nord.enable = true;
+    # Live wallpaper-driven colorscheme: skein deploys skein.lua into
+    # colors/ on every theme change (see services.skein deploy targets).
+    # pcall so a fresh boot without the daemon still opens cleanly.
+    colorschemes.nord.enable = false;
+    extraConfigLua = ''
+      pcall(vim.cmd, "colorscheme skein")
+    '';
 
     plugins = {
       web-devicons.enable = true;

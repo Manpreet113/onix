@@ -24,6 +24,19 @@
     DEFAULT_BROWSER = "zen";
   };
 
+  # Live wallpaper-driven chrome: skein deploys zen-userChrome.css into the
+  # profile's chrome dir on every theme change (see services.skein deploy
+  # targets). userChrome.css just imports it; the stylesheets pref enables
+  # the whole mechanism. Profile dir has a random suffix — stable absent a
+  # profile refresh. Startup-only: restart Zen after a theme switch.
+  # (Filenames with spaces/dots are fine as single attr names.)
+  home.file.".config/zen/ejbelto2.Default Profile/user.js".text = ''
+    user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+  '';
+  home.file.".config/zen/ejbelto2.Default Profile/chrome/userChrome.css".text = ''
+    @import url("zen-userChrome.css");
+  '';
+
   # Chromium-only webapps run on helium (zen stays the default browser).
   # See modules/home/webapps.nix for the 5-line recipe to add more.
   onix.webapps.whatsapp = {
