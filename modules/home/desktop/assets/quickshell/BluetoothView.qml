@@ -147,12 +147,22 @@ Item {
                     anchors.rightMargin: 12
                     spacing: 10
 
-                    Text {
-                        text: modelData.connected ? "󰂯" : "󰂲"
-                        color: modelData.connected ? Theme.primary : Theme.dim
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 20
+                    Rectangle {
+                        implicitWidth: 40
+                        implicitHeight: 40
+                        radius: 10
+                        color: modelData.connected ? Theme.primary : Theme.bg
+                        border.color: Theme.border
+                        border.width: 1
                         Layout.alignment: Qt.AlignVCenter
+                        Text {
+                            anchors.centerIn: parent
+                            text: root.devName(modelData).charAt(0).toUpperCase()
+                            color: modelData.connected ? Theme.bg : Theme.accent
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 16
+                            font.bold: true
+                        }
                     }
                     Column {
                         Layout.fillWidth: true

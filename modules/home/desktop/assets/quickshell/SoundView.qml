@@ -131,6 +131,154 @@ Item {
         }
     }
 
+    // channel fader: vertical mixer strip for one device
+    component Fader: Column {
+        id: fader
+        required property var node
+        property bool isDefault: false
+        property bool canDefault: false
+        property bool wantSink: true
+        width: 110
+        spacing: 6
+
+        property real ratio: {
+            if (!node || !node.audio)
+                return 0;
+            var v = node.audio.volume;
+            return Math.max(0, Math.min(1, isNaN(v) ? 0 : v));
+        }
+
+        function setAt(y: real, h: real): void {
+            if (!fader.node || !fader.node.audio || h <= 0)
+                return;
+            var r = Math.max(0, Math.min(1, 1 - y / h));
+            fader.node.audio.volume = r;
+            if (fader.node.audio.muted && r > 0)
+                fader.node.audio.muted = false;
+        }
+
+        function nudge(d: real): void {
+            if (!fader.node || !fader.node.audio)
+                return;
+            var r = Math.max(0, Math.min(1, fader.ratio + d));
+            fader.node.audio.volume = r;
+            if (fader.node.audio.muted && r > 0)
+                fader.node.audio.muted = false;
+        }
+
+        function toggleMute(): void {
+            if (fader.node && fader.node.audio)
+                fader.node.audio.muted = !fader.node.audio.muted;
+        }
+
+        function makeDefault(): void {
+            if (!fader.node || !fader.canDefault)
+                return;
+            if (fader.wantSink)
+                Pipewire.preferredDefaultAudioSink = fader.node;
+            else
+                Pipewire.preferredDefaultAudioSource = fader.node;
+        }
+
+        Text {
+            width: parent.width
+            horizontalAlignment: Text.AlignHCenter
+            text: root.label(fader.node)
+            color: Theme.text
+            font.family: Theme.fontFamily
+            font.pixelSize: Theme.fontSmall
+            font.bold: true
+            elide: Text.ElideRight
+            maximumLineCount: 1
+
+            MouseArea {
+                anchors.fill: parent
+                enabled: fader.canDefault
+                onDoubleClicked: fader.makeDefault()
+            }
+        }
+        Text {
+            width: parent.width
+            horizontalAlignment: Text.AlignHCenter
+            text: fader.isDefault ? "default" : (fader.node && fader.node.audio && fader.node.audio.muted ? "muted" : Math.round(fader.ratio * 100) + "%")
+            color: fader.isDefault ? Theme.success : Theme.dim
+            font.family: Theme.fontFamily
+            font.pixelSize: Theme.fontSmall
+        }
+
+        Item {
+            id: channel
+            width: 30
+            height: 130
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                anchors.fill: parent
+                radius: 7
+                color: Theme.bg
+                border.color: Theme.border
+                border.width: 1
+            }
+            Rectangle {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.margins: 3
+                height: Math.max(0, (parent.height - 6) * fader.ratio)
+                radius: 5
+                color: (fader.node && fader.node.audio && fader.node.audio.muted) ? Theme.dim : Theme.primary
+            }
+            Rectangle {
+                anchors.left: parent.left
+                anchors.leftMargin: -7
+                anchors.right: parent.right
+                anchors.rightMargin: -7
+                y: (parent.height - 6) * (1 - fader.ratio) - 1
+                height: 10
+                radius: 3
+                color: Theme.text
+                border.color: Theme.border
+                border.width: 1
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onPressed: mouse => fader.setAt(mouse.y, channel.height)
+                onPositionChanged: mouse => {
+                    if (mouse.buttons & Qt.LeftButton)
+                        fader.setAt(mouse.y, channel.height);
+                }
+                onWheel: wheel => {
+                    fader.nudge(wheel.angleDelta.y > 0 ? 0.05 : -0.05);
+                }
+                onDoubleClicked: fader.makeDefault()
+            }
+        }
+
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            implicitWidth: 56
+            implicitHeight: 24
+            radius: Theme.radiusSmall
+            color: (fader.node && fader.node.audio && fader.node.audio.muted) ? Theme.error : Theme.surface
+            border.color: Theme.border
+            border.width: 1
+            Text {
+                anchors.centerIn: parent
+                text: (fader.node && fader.node.audio && fader.node.audio.muted) ? "mut" : "mute"
+                color: (fader.node && fader.node.audio && fader.node.audio.muted) ? Theme.bg : Theme.subtext
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontSmall
+                font.bold: true
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: fader.toggleMute()
+            }
+        }
+    }
+
     // one device row: name + default dot + mute + slider + pct
     component DevRow: Column {
         id: row
@@ -260,38 +408,53 @@ Item {
             }
 
             Text {
-                text: "output · double-click to set default"
+                text: "output · double-click a fader to set default"
                 color: Theme.dim
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSmall
             }
-            Repeater {
-                model: root.devs(true)
-                delegate: DevRow {
-                    required property var modelData
-                    node: modelData
-                    isDefault: modelData === Pipewire.defaultAudioSink
-                    sub: isDefault ? "default" : ""
-                    canDefault: true
-                    wantSink: true
+            Item {
+                width: parent.width
+                implicitHeight: 250
+                Row {
+                    anchors.centerIn: parent
+                    spacing: 20
+                    Repeater {
+                        model: root.devs(true)
+                        delegate: Fader {
+                            required property var modelData
+                            node: modelData
+                            isDefault: modelData === Pipewire.defaultAudioSink
+                            canDefault: true
+                            wantSink: true
+                        }
+                    }
                 }
             }
 
             Text {
-                text: "input · double-click to set default"
+                text: "input · double-click a fader to set default"
                 color: Theme.dim
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSmall
             }
-            Repeater {
-                model: root.devs(false)
-                delegate: DevRow {
-                    required property var modelData
-                    node: modelData
-                    isDefault: modelData === Pipewire.defaultAudioSource
-                    sub: isDefault ? "default" : ""
-                    canDefault: true
-                    wantSink: false
+            Item {
+                width: parent.width
+                implicitHeight: root.devs(false).length > 0 ? 250 : 0
+                visible: root.devs(false).length > 0
+                Row {
+                    anchors.centerIn: parent
+                    spacing: 20
+                    Repeater {
+                        model: root.devs(false)
+                        delegate: Fader {
+                            required property var modelData
+                            node: modelData
+                            isDefault: modelData === Pipewire.defaultAudioSource
+                            canDefault: true
+                            wantSink: false
+                        }
+                    }
                 }
             }
 
@@ -312,7 +475,7 @@ Item {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "drag slider · wheel ±5 · click speaker to mute · esc close"
+                text: "drag fader · wheel ±5 · double-click sets default · esc close"
                 color: Theme.dim
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSmall
