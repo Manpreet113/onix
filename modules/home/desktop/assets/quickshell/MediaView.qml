@@ -70,7 +70,7 @@ Item {
                 implicitHeight: 84
                 color: modelData.isPlaying ? Theme.bg : Theme.surface
                 radius: Theme.radiusMed
-                border.color: modelData.isPlaying ? Theme.blue : Theme.border
+                border.color: modelData.isPlaying ? Theme.primary : Theme.border
                 border.width: modelData.isPlaying ? 1 : 0
 
                 RowLayout {
@@ -84,7 +84,7 @@ Item {
                         implicitWidth: 44
                         implicitHeight: 44
                         radius: 22
-                        color: modelData.isPlaying ? Theme.blue : Theme.surface
+                        color: modelData.isPlaying ? Theme.primary : Theme.surface
                         border.color: Theme.border
                         border.width: 1
                         Layout.alignment: Qt.AlignVCenter

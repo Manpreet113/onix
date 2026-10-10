@@ -36,11 +36,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -113,7 +108,6 @@
               inputs.home-manager.nixosModules.home-manager
               inputs.sops-nix.nixosModules.sops
               inputs.disko.nixosModules.disko
-              inputs.stylix.nixosModules.stylix
               {
                 home-manager = {
                   useGlobalPkgs = true;

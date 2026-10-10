@@ -106,7 +106,7 @@ Item {
         id: meter
         property string label: ""
         property string value: "?"
-        property color accent: Theme.blue
+        property color meterColor: Theme.primary
         width: parent.width
         spacing: 4
 
@@ -122,7 +122,7 @@ Item {
             }
             Text {
                 text: meter.value + "%"
-                color: meter.accent
+                color: meter.meterColor
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontMed
                 font.bold: true
@@ -137,7 +137,7 @@ Item {
                 width: parent.width * Math.max(0, Math.min(1, parseFloat(meter.value) / 100 || 0))
                 height: parent.height
                 radius: 4
-                color: meter.accent
+                color: meter.meterColor
                 Behavior on width {
                     NumberAnimation {
                         duration: Theme.fadeMed
@@ -171,17 +171,17 @@ Item {
         Meter {
             label: "cpu"
             value: root.cpu
-            accent: Theme.green
+            meterColor: Theme.success
         }
         Meter {
             label: "memory"
             value: root.mem
-            accent: Theme.yellow
+            meterColor: Theme.warning
         }
         Meter {
             label: "disk /"
             value: root.disk
-            accent: Theme.cyan
+            meterColor: Theme.accent
         }
 
         Text {
@@ -223,7 +223,7 @@ Item {
                     }
                     Text {
                         text: modelData.cpu + "%"
-                        color: Theme.green
+                        color: Theme.success
                         font.family: Theme.fontFamily
                         font.pixelSize: Theme.fontSmall
                         font.bold: true

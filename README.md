@@ -3,12 +3,12 @@
 Host: `onix`, user `manpreet` — Hyprland (Wayland) + PipeWire, Btrfs, systemd-boot, nixpkgs **unstable**.
 
 ## Structure
-- `flake.nix` — flake-parts; inputs: nixpkgs unstable, home-manager (master), sops-nix, disko, stylix, nixvim, nix-index-database, nixcord, opencode
+- `flake.nix` — flake-parts; inputs: nixpkgs unstable, home-manager (master), sops-nix, disko, skein, nixvim, nix-index-database, nixcord, opencode
 - `pkgs/` — in-tree packages (zen-browser, helium-browser) exposed via the `onix.core.overlay` overlay; bump with `./pkgs/update-browsers.sh`
 - `hosts/onix/` — host entry (`onix.*` module toggles) + hardware-configuration.nix
 - `hosts/common/` — shared settings (timezone, locale, stateVersion)
 - `modules/nixos/` — system modules, auto-imported via import-tree; each is an `onix.<name>.enable` toggle
-- `modules/home/` — HM modules (fish+starship, ghostty, nixvim, vscode, git, hyprland stack) auto-imported via import-tree
+- `modules/home/` — HM modules (fish+tide, ghostty, nixvim, vscode, git, hyprland stack) auto-imported via import-tree
 - `homes/manpreet.nix` — HM user entry
 - `disko/` — declarative disk skeleton (not active)
 - `secrets/` + `.sops.yaml` — sops-nix age-encrypted secrets
@@ -47,7 +47,7 @@ sudo btrfs subvolume snapshot /btrbk_snapshots/home.<timestamp> /home
 Safer: do this from a live USB, and keep `/home.broken` until you're sure. btrbk is local-only — copy `/btrbk_snapshots` off-disk for disaster recovery.
 
 ## Theming
-stylix (nord) themes: hyprland waybar/mako/wofi/hyprlock, ghostty, bat, fzf, fish, btop, delta via HM defaults. Managed manually instead: GTK (adw-gtk3-dark + Papirus + Bibata in `modules/home/desktop/theme.nix`), starship (hand-ported nord palette), nixvim (`colorschemes.nord`), vscode (manual Nord extension), Qt (adwaita-dark).
+skein (wallpaper-driven) themes: quickshell, hyprland borders, ghostty, fish, fzf, btop, discord. Tide prompt is static lean until skein grows a tide template. Static Nord where no live source exists: GTK (adw-gtk3-dark + Papirus + Bibata in `modules/home/desktop/theme.nix`), nixvim (`colorschemes.nord`), vscode (manual Nord extension), Qt (adwaita-dark). No stylix — deliberately removed, one theming system only.
 
 ## Disko
 See `disko/onix.nix` — not enabled until you import + set device.

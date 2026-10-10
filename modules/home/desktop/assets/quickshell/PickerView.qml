@@ -178,7 +178,7 @@ Item {
 
                     Rectangle {
                         anchors.fill: parent
-                        color: selected ? Theme.blue : Theme.border
+                        color: selected ? Theme.primary : Theme.border
                         Behavior on color {
                             ColorAnimation {
                                 duration: Theme.fadeMed
@@ -202,7 +202,7 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: ""
-                            color: Theme.cyan
+                            color: Theme.accent
                             font.family: Theme.fontFamily
                             font.pixelSize: 22
                         }

@@ -17,18 +17,18 @@ Singleton {
 
     property var data: ({})
 
-    // skein roles -> shell tokens (11); surface_variant/orange/purple/ansi unused here
+    // skein roles -> shell tokens; surface_variant/ansi unused here
     readonly property color bg: data.background || "#2e3440"
     readonly property color surface: data.surface || "#3b4252"
     readonly property color border: data.border || "#4c566a"
     readonly property color text: data.text || "#eceff4"
     readonly property color subtext: data.subtext || "#d8dee9"
     readonly property color dim: data.dim || "#6c7a96"
-    readonly property color blue: data.primary || "#81a1c1"
-    readonly property color cyan: data.accent || "#88c0d0"
-    readonly property color red: data.red || "#bf616a"
-    readonly property color green: data.green || "#a3be8c"
-    readonly property color yellow: data.yellow || "#ebcb8b"
+    readonly property color primary: data.primary || "#81a1c1"
+    readonly property color accent: data.accent || "#88c0d0"
+    readonly property color error: data.error || "#bf616a"
+    readonly property color success: data.success || "#a3be8c"
+    readonly property color warning: data.warning || "#ebcb8b"
     readonly property color backdrop: "#000000"
 
     // neutral one-offs (not wallpaper-driven)
@@ -65,7 +65,7 @@ Singleton {
     // the generated config). The lua parser rejects `hyprctl keyword`, so
     // theme switches apply via a config reload instead. Only fires on real
     // switches, never on initial load (fresh parse already picked it up)
-    // and never unthemed (stylix owns the borders then, we don't fight it).
+    // and never unthemed (static config owns the borders then).
     property string lastJson: ""
     property bool primed: false
 

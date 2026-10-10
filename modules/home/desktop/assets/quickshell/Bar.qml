@@ -176,7 +176,7 @@ PanelWindow {
                     implicitWidth: 22
                     implicitHeight: 22
                     radius: 6
-                    color: modelData.focused ? Theme.blue : Theme.surface
+                    color: modelData.focused ? Theme.primary : Theme.surface
                     Text {
                         font.family: Theme.fontFamily
                         font.pixelSize: Theme.fontMed
@@ -237,36 +237,36 @@ PanelWindow {
 
         Pill {
             iconText: "󰍛"
-            iconColor: Theme.green
+            iconColor: Theme.success
             valueText: root.cpu + "%"
-            valueColor: Theme.green
+            valueColor: Theme.success
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "system", "toggle"])
         }
 
         Pill {
             iconText: "󰳲"
-            iconColor: Theme.yellow
+            iconColor: Theme.warning
             valueText: root.mem + "%"
-            valueColor: Theme.yellow
+            valueColor: Theme.warning
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "system", "toggle"])
         }
 
         Pill {
             iconText: root.muted ? "" : "󰕾"
-            iconColor: Theme.blue
+            iconColor: Theme.primary
             valueText: root.muted ? "muted" : root.volume
-            valueColor: Theme.blue
+            valueColor: Theme.primary
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "sound", "toggle"])
         }
 
         Pill {
             iconText: root.netType.indexOf("wireless") >= 0 ? "󰖩" : (root.netType.length > 0 ? "󰈀" : "󰖪")
-            iconColor: Theme.red
+            iconColor: Theme.error
             valueText: root.network
-            valueColor: Theme.red
+            valueColor: Theme.error
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "network", "toggle"])
         }
@@ -274,7 +274,7 @@ PanelWindow {
         Pill {
             visible: Bluetooth.defaultAdapter !== null
             iconText: "󰂯"
-            iconColor: (Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.enabled) ? Theme.cyan : Theme.border
+            iconColor: (Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.enabled) ? Theme.accent : Theme.border
             valueText: {
                 var a = Bluetooth.defaultAdapter;
                 if (!a) return "";
@@ -286,7 +286,7 @@ PanelWindow {
                 }
                 return n > 0 ? n + "" : "on";
             }
-            valueColor: Theme.cyan
+            valueColor: Theme.accent
             Layout.alignment: Qt.AlignVCenter
             onPressed: Quickshell.execDetached(["quickshell", "--config", "shell", "ipc", "call", "bluetooth", "toggle"])
         }
@@ -307,7 +307,7 @@ PanelWindow {
                 if (p >= 10) return "󰁻";
                 return "󰁺";
             }
-            iconColor: (root.battPct <= 15 && UPower.onBattery) ? Theme.red : Theme.subtext
+            iconColor: (root.battPct <= 15 && UPower.onBattery) ? Theme.error : Theme.subtext
             valueText: root.battPct >= 0 ? root.battPct + "%" : ""
             valueColor: Theme.subtext
             Layout.alignment: Qt.AlignVCenter

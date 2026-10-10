@@ -131,7 +131,7 @@ Item {
                     var p = root.pctOf(d);
                     return root.battIcon(p, !UPower.onBattery);
                 }
-                color: Theme.green
+                color: Theme.success
                 font.family: Theme.fontFamily
                 font.pixelSize: 44
                 Layout.alignment: Qt.AlignVCenter
@@ -178,7 +178,7 @@ Item {
                 width: parent.width * Math.max(0, Math.min(1, root.pctOf(UPower.displayDevice) / 100))
                 height: parent.height
                 radius: 4
-                color: Theme.green
+                color: Theme.success
                 Behavior on width {
                     NumberAnimation {
                         duration: Theme.fadeMed
@@ -206,7 +206,7 @@ Item {
                     Text {
                         width: parent.width
                         text: (modelData.model || modelData.vendor || "battery") + " · health " + Math.round(modelData.capacity || 100) + "%"
-                        color: Theme.cyan
+                        color: Theme.accent
                         font.family: Theme.fontFamily
                         font.pixelSize: Theme.fontMed
                         font.bold: true
@@ -246,7 +246,7 @@ Item {
                     implicitWidth: 120
                     implicitHeight: 32
                     radius: Theme.radiusSmall
-                    color: root.profile === modelData ? Theme.blue : Theme.surface
+                    color: root.profile === modelData ? Theme.primary : Theme.surface
                     border.color: Theme.border
                     border.width: 1
 

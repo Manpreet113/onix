@@ -106,7 +106,7 @@ Item {
 
                 Text {
                     text: modelData.name
-                    color: Theme.cyan
+                    color: Theme.accent
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontMed
                     font.bold: true
@@ -130,7 +130,7 @@ Item {
 
                             Text {
                                 text: modelData.keys || ""
-                                color: Theme.blue
+                                color: Theme.primary
                                 font.family: Theme.fontFamily
                                 font.pixelSize: Theme.fontMed
                                 font.bold: true

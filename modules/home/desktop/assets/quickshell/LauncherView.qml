@@ -168,7 +168,7 @@ Item {
                 required property int index
                 width: list.width
                 implicitHeight: 44
-                color: index === root.selected ? Theme.blue : Theme.surface
+                color: index === root.selected ? Theme.primary : Theme.surface
                 radius: Theme.radiusSmall
                 border.color: Theme.border
                 border.width: 1

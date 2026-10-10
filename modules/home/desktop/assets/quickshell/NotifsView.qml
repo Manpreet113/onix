@@ -30,7 +30,7 @@ Item {
                 implicitWidth: 86
                 implicitHeight: 26
                 radius: 13
-                color: Prefs.dnd ? Theme.red : Theme.surface
+                color: Prefs.dnd ? Theme.error : Theme.surface
                 border.color: Theme.border
                 border.width: 1
                 Behavior on color {
@@ -115,7 +115,7 @@ Item {
 
                         Text {
                             text: modelData.app || "app"
-                            color: Theme.cyan
+                            color: Theme.accent
                             font.family: Theme.fontFamily
                             font.pixelSize: Theme.fontSmall
                             font.bold: true

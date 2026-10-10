@@ -86,7 +86,7 @@ Item {
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter
                 text: Qt.formatDateTime(new Date(), "dddd")
-                color: Theme.cyan
+                color: Theme.accent
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontLarge
                 font.bold: true
@@ -119,7 +119,7 @@ Item {
                 implicitWidth: 34
                 implicitHeight: 28
                 radius: Theme.radiusSmall
-                color: navPrev.containsMouse ? Theme.blue : Theme.surface
+                color: navPrev.containsMouse ? Theme.primary : Theme.surface
                 Behavior on color {
                     ColorAnimation {
                         duration: Theme.fadeFast
@@ -153,7 +153,7 @@ Item {
                 implicitWidth: 66
                 implicitHeight: 28
                 radius: Theme.radiusSmall
-                color: navToday.containsMouse ? Theme.blue : Theme.surface
+                color: navToday.containsMouse ? Theme.primary : Theme.surface
                 Behavior on color {
                     ColorAnimation {
                         duration: Theme.fadeFast
@@ -178,7 +178,7 @@ Item {
                 implicitWidth: 34
                 implicitHeight: 28
                 radius: Theme.radiusSmall
-                color: navNext.containsMouse ? Theme.blue : Theme.surface
+                color: navNext.containsMouse ? Theme.primary : Theme.surface
                 Behavior on color {
                     ColorAnimation {
                         duration: Theme.fadeFast
@@ -239,7 +239,7 @@ Item {
                         if (modelData === 0)
                             return "transparent";
                         if (root.isToday(root.year, root.month, modelData))
-                            return Theme.blue;
+                            return Theme.primary;
                         if (root.selected === root.year + "-" + root.month + "-" + modelData)
                             return Theme.surface;
                         return dayMouse.containsMouse ? Theme.surface : "transparent";

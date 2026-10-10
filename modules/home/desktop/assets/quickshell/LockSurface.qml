@@ -106,7 +106,7 @@ Item {
                 anchors.margins: -10
                 color: root.context.showFailure ? Theme.failure : Theme.surface
                 radius: Theme.radiusMed
-                border.color: root.context.showFailure ? Theme.red : Theme.border
+                border.color: root.context.showFailure ? Theme.error : Theme.border
                 border.width: 1
                 z: -1
             }
@@ -123,7 +123,7 @@ Item {
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
             text: root.context.unlockInProgress ? "checking…" : root.context.showFailure ? "incorrect password" : "enter password to unlock"
-            color: root.context.showFailure ? Theme.red : Theme.dim
+            color: root.context.showFailure ? Theme.error : Theme.dim
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSmall
         }
@@ -139,7 +139,7 @@ Item {
 
         Text {
             text: root.player && root.player.isPlaying ? "⏸" : "▶"
-            color: Theme.blue
+            color: Theme.primary
             font.family: Theme.fontFamily
             font.pixelSize: 22
             Layout.alignment: Qt.AlignVCenter
@@ -204,7 +204,7 @@ Item {
                     return "󰁻";
                 return "󰁺";
             }
-            color: (root.battPct <= 15 && UPower.onBattery) ? Theme.red : Theme.subtext
+            color: (root.battPct <= 15 && UPower.onBattery) ? Theme.error : Theme.subtext
             font.family: Theme.fontFamily
             font.pixelSize: 20
         }

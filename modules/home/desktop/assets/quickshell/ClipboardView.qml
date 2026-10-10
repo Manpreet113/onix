@@ -110,7 +110,7 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     text: "wipe"
-                    color: Theme.red
+                    color: Theme.error
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSmall
                     font.bold: true
@@ -206,7 +206,7 @@ Item {
                     }
                     Text {
                         text: "✕"
-                        color: entryMouse.containsMouse ? Theme.red : Theme.dim
+                        color: entryMouse.containsMouse ? Theme.error : Theme.dim
                         font.family: Theme.fontFamily
                         font.pixelSize: Theme.fontSmall
                         font.bold: true

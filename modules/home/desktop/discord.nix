@@ -21,9 +21,9 @@ _: {
         --text-link: var(--skein-accent);
         --brand-500: var(--skein-primary);
         --brand-560: var(--skein-accent);
-        --red-400: var(--skein-red);
-        --green-360: var(--skein-green);
-        --yellow-300: var(--skein-yellow);
+        --red-400: var(--skein-error);
+        --green-360: var(--skein-success);
+        --yellow-300: var(--skein-warning);
       }
     '';
     config = {

@@ -134,7 +134,7 @@ PanelWindow {
                         return "";
                     return root.muted ? "" : "󰕾";
                 }
-                color: root.kind === "brightness" ? Theme.yellow : Theme.blue
+                color: root.kind === "brightness" ? Theme.warning : Theme.primary
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontLarge
                 font.bold: true
@@ -156,7 +156,7 @@ PanelWindow {
                     width: parent.width * root.level
                     height: 6
                     radius: 3
-                    color: root.kind === "brightness" ? Theme.yellow : Theme.blue
+                    color: root.kind === "brightness" ? Theme.warning : Theme.primary
                     Behavior on width {
                         NumberAnimation {
                             duration: Theme.fadeFast

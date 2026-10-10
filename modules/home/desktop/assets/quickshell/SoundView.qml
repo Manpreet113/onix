@@ -88,7 +88,7 @@ Item {
             width: parent.width * slider.ratio
             height: 6
             radius: 3
-            color: slider.node && slider.node.audio && slider.node.audio.muted ? Theme.dim : Theme.blue
+            color: slider.node && slider.node.audio && slider.node.audio.muted ? Theme.dim : Theme.primary
         }
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
@@ -150,7 +150,7 @@ Item {
                 width: 8
                 height: 8
                 radius: 4
-                color: row.isDefault ? Theme.green : Theme.bg
+                color: row.isDefault ? Theme.success : Theme.bg
                 border.color: Theme.border
                 border.width: 1
                 Layout.alignment: Qt.AlignVCenter
@@ -204,7 +204,7 @@ Item {
                 implicitWidth: 30
                 implicitHeight: 24
                 radius: Theme.radiusSmall
-                color: (row.node && row.node.audio && row.node.audio.muted) ? Theme.red : Theme.surface
+                color: (row.node && row.node.audio && row.node.audio.muted) ? Theme.error : Theme.surface
                 border.color: Theme.border
                 border.width: 1
                 Layout.alignment: Qt.AlignVCenter

@@ -200,7 +200,7 @@ Item {
                 implicitWidth: 76
                 implicitHeight: 26
                 radius: 13
-                color: root.wifiOn ? Theme.blue : Theme.surface
+                color: root.wifiOn ? Theme.primary : Theme.surface
                 border.color: Theme.border
                 border.width: 1
                 Behavior on color {
@@ -259,7 +259,7 @@ Item {
 
                 Text {
                     text: root.activeType === "wireless" ? "󰖩" : (root.activeType === "ethernet" ? "󰈀" : "󰖪")
-                    color: root.activeName !== "" ? Theme.green : Theme.dim
+                    color: root.activeName !== "" ? Theme.success : Theme.dim
                     font.family: Theme.fontFamily
                     font.pixelSize: 20
                     Layout.alignment: Qt.AlignVCenter
@@ -286,7 +286,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: "disconnect"
-                        color: Theme.red
+                        color: Theme.error
                         font.family: Theme.fontFamily
                         font.pixelSize: Theme.fontSmall
                         font.bold: true
@@ -304,7 +304,7 @@ Item {
             width: parent.width
             horizontalAlignment: Text.AlignHCenter
             text: root.error
-            color: Theme.red
+            color: Theme.error
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSmall
         }
@@ -325,7 +325,7 @@ Item {
                 implicitHeight: 44
                 color: modelData.active ? Theme.bg : Theme.surface
                 radius: Theme.radiusSmall
-                border.color: modelData.active ? Theme.blue : Theme.border
+                border.color: modelData.active ? Theme.primary : Theme.border
                 border.width: modelData.active ? 1 : 0
 
                 RowLayout {
@@ -336,7 +336,7 @@ Item {
 
                     Text {
                         text: root.sigIcon(modelData.signal)
-                        color: modelData.active ? Theme.blue : Theme.subtext
+                        color: modelData.active ? Theme.primary : Theme.subtext
                         font.family: Theme.fontFamily
                         font.pixelSize: 16
                         Layout.alignment: Qt.AlignVCenter
@@ -366,7 +366,7 @@ Item {
                     Text {
                         visible: modelData.active
                         text: "active"
-                        color: Theme.green
+                        color: Theme.success
                         font.family: Theme.fontFamily
                         font.pixelSize: Theme.fontSmall
                         font.bold: true
@@ -408,7 +408,7 @@ Item {
 
                 Text {
                     text: "󰌆 " + root.joinSsid
-                    color: Theme.cyan
+                    color: Theme.accent
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontMed
                     font.bold: true
@@ -434,7 +434,7 @@ Item {
                     implicitWidth: 60
                     implicitHeight: 26
                     radius: Theme.radiusSmall
-                    color: Theme.blue
+                    color: Theme.primary
                     Text {
                         anchors.centerIn: parent
                         text: "join"

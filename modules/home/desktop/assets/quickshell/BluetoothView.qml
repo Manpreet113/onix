@@ -65,7 +65,7 @@ Item {
                 implicitWidth: 76
                 implicitHeight: 26
                 radius: 13
-                color: (Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.enabled) ? Theme.blue : Theme.surface
+                color: (Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.enabled) ? Theme.primary : Theme.surface
                 border.color: Theme.border
                 border.width: 1
                 Behavior on color {
@@ -96,7 +96,7 @@ Item {
                 implicitWidth: 76
                 implicitHeight: 26
                 radius: 13
-                color: root.scanning ? Theme.cyan : Theme.surface
+                color: root.scanning ? Theme.accent : Theme.surface
                 border.color: Theme.border
                 border.width: 1
                 Text {
@@ -138,7 +138,7 @@ Item {
                 implicitHeight: 62
                 color: Theme.surface
                 radius: Theme.radiusMed
-                border.color: modelData.connected ? Theme.blue : Theme.border
+                border.color: modelData.connected ? Theme.primary : Theme.border
                 border.width: modelData.connected ? 1 : 0
 
                 RowLayout {
@@ -149,7 +149,7 @@ Item {
 
                     Text {
                         text: modelData.connected ? "󰂯" : "󰂲"
-                        color: modelData.connected ? Theme.blue : Theme.dim
+                        color: modelData.connected ? Theme.primary : Theme.dim
                         font.family: Theme.fontFamily
                         font.pixelSize: 20
                         Layout.alignment: Qt.AlignVCenter
@@ -189,7 +189,7 @@ Item {
                         implicitWidth: 86
                         implicitHeight: 28
                         radius: Theme.radiusSmall
-                        color: modelData.connected ? Theme.bg : Theme.blue
+                        color: modelData.connected ? Theme.bg : Theme.primary
                         border.color: Theme.border
                         border.width: 1
                         Layout.alignment: Qt.AlignVCenter
@@ -218,7 +218,7 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: "✕"
-                            color: Theme.red
+                            color: Theme.error
                             font.family: Theme.fontFamily
                             font.pixelSize: Theme.fontSmall
                             font.bold: true

@@ -21,7 +21,6 @@
       greetd.enable = true;
       nautilus.enable = true;
       audio.enable = true;
-      stylix.enable = true;
     };
     hardware.intel.enable = true;
     hardware.power.enable = true;

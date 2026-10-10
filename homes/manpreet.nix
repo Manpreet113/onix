@@ -27,7 +27,11 @@
 
   home.packages = with pkgs; [
     # Keep minimal — heavy pkgs are in modules/home/shell/cli.nix
-    # Fonts are installed by stylix (modules/nixos/desktop/stylix.nix)
+    # Font packages (availability only — stylix is gone, so nothing
+    # provides these anymore; font theming left for later)
+    nerd-fonts.jetbrains-mono
+    noto-fonts
+    noto-fonts-color-emoji
   ];
 
   # XDG

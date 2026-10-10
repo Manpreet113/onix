@@ -34,7 +34,15 @@
       # Vi mode optional — keep emacs for now
       # fish_vi_key_bindings
 
-      # Hydro-style prompt via starship, so no tide needed
+      # Tide lean prompt (static colors until skein grows a tide template,
+      # then a guarded source like the ones below). Configured once via
+      # sentinel so user tweaks survive; delete the sentinel to re-run.
+      if not test -f ~/.local/share/onix-shell/tide-lean-configured
+        tide configure --auto --style=Lean --prompt_colors='True color' --show_time='24-hour format' --prompt_spacing=Compact --icons='Many icons' --transient=Yes
+        and mkdir -p ~/.local/share/onix-shell
+        and touch ~/.local/share/onix-shell/tide-lean-configured
+      end
+
       # fzf key bindings added via programs.fzf
       # zoxide init handled by programs.zoxide
 
@@ -48,8 +56,10 @@
       end
     '';
     plugins = with pkgs.fishPlugins; [
-      # Keep plugins minimal — tide conflicts with starship, so skip tide
-      # Add useful plugins
+      {
+        name = "tide";
+        inherit (tide) src;
+      }
       {
         name = "autopair";
         inherit (autopair) src;

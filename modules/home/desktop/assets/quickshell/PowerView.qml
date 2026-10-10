@@ -55,7 +55,7 @@ Item {
                     required property var modelData
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: btnMouse.containsMouse ? Theme.blue : Theme.surface
+                    color: btnMouse.containsMouse ? Theme.primary : Theme.surface
                     radius: Theme.radiusMed
                     border.color: Theme.border
                     border.width: 1
