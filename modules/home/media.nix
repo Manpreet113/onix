@@ -1,9 +1,7 @@
 {pkgs, ...}: {
-  # Media apps, packaged in-tree (pkgs/): nuvio (video library) and
-  # bitchord (YouTube Music client). Both ship upstream AppImages,
-  # wrapped with the host graphics/audio stack.
+  # Media apps, packaged in-tree (pkgs/): nuvio (video library) ships an
+  # upstream AppImage, wrapped with the host graphics/audio stack.
   home.packages = with pkgs; [
     nuvio
-    bitchord
   ];
 }
