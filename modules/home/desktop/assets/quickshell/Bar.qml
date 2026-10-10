@@ -7,6 +7,8 @@ import Quickshell.Services.SystemTray
 import Quickshell.Services.UPower
 import Quickshell.Bluetooth
 
+// Bar: persistent dock. Workspace chips + status pills are skewed
+// parallelograms with level content; hover floods the accent.
 PanelWindow {
     id: root
 
@@ -38,18 +40,35 @@ PanelWindow {
         return p > 1 ? Math.round(p) : Math.round(p * 100);
     }
 
-    component Pill: Rectangle {
+    component Pill: Item {
         id: pill
         signal pressed
         property alias iconText: pillIcon.text
         property alias iconColor: pillIcon.color
         property alias valueText: pillValue.text
         property alias valueColor: pillValue.color
+        property color baseColor: Theme.surface
+        property color hoverColor: Theme.primary
+        property bool hovered: pillMouse.containsMouse
 
         implicitHeight: 22
-        implicitWidth: pillRow.implicitWidth + 16
-        radius: Theme.radiusSmall
-        color: Theme.surface
+        implicitWidth: pillRow.implicitWidth + 22
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.leftMargin: 3
+            anchors.rightMargin: 3
+            rotation: -8
+            radius: 4
+            color: pill.hovered ? pill.hoverColor : pill.baseColor
+            border.color: Theme.border
+            border.width: 1
+            Behavior on color {
+                ColorAnimation {
+                    duration: Theme.fadeFast
+                }
+            }
+        }
 
         Row {
             id: pillRow
@@ -70,7 +89,9 @@ PanelWindow {
             }
         }
         MouseArea {
+            id: pillMouse
             anchors.fill: parent
+            hoverEnabled: true
             onClicked: pill.pressed()
         }
     }
@@ -158,7 +179,10 @@ PanelWindow {
     Rectangle {
         anchors.fill: parent
         color: Theme.bg
+        opacity: 0.96
         radius: Theme.radiusMed
+        border.color: Theme.border
+        border.width: 1
     }
 
     RowLayout {
@@ -167,19 +191,28 @@ PanelWindow {
         spacing: 8
 
         Row {
-            spacing: 4
+            spacing: 6
             Layout.alignment: Qt.AlignVCenter
             Repeater {
                 model: Hyprland.workspaces
-                delegate: Rectangle {
+                delegate: Item {
                     required property HyprlandWorkspace modelData
-                    implicitWidth: 22
-                    implicitHeight: 22
-                    radius: 6
-                    color: modelData.focused ? Theme.primary : Theme.surface
+                    implicitWidth: 40
+                    implicitHeight: 26
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.leftMargin: 3
+                        anchors.rightMargin: 3
+                        rotation: -8
+                        radius: 4
+                        color: modelData.focused ? Theme.primary : Theme.surface
+                        border.color: Theme.border
+                        border.width: 1
+                    }
                     Text {
                         font.family: Theme.fontFamily
                         font.pixelSize: Theme.fontMed
+                        font.bold: modelData.focused
                         anchors.centerIn: parent
                         text: modelData.id
                         color: modelData.focused ? Theme.bg : Theme.text
@@ -210,6 +243,8 @@ PanelWindow {
             implicitWidth: trayRow.implicitWidth + 16
             radius: Theme.radiusSmall
             color: Theme.surface
+            border.color: Theme.border
+            border.width: 1
             Layout.alignment: Qt.AlignVCenter
 
             Row {
@@ -320,6 +355,7 @@ PanelWindow {
         z: 2
         font.family: Theme.fontFamily
         font.pixelSize: Theme.fontMed
+        font.bold: true
         text: root.clock
         color: Theme.text
         MouseArea {
