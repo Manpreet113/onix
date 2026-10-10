@@ -6,13 +6,15 @@
 with lib; let
   cfg = config.onix.core.overlay;
 in {
-  options.onix.core.overlay.enable = mkEnableOption "onix package overlay (zen-browser, helium-browser)";
+  options.onix.core.overlay.enable = mkEnableOption "onix package overlay (zen-browser, helium-browser, nuvio, bitchord)";
 
   config = mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: _: {
         zen-browser = final.callPackage ../../../pkgs/zen-browser {};
         helium-browser = final.callPackage ../../../pkgs/helium-browser {};
+        nuvio = final.callPackage ../../../pkgs/nuvio {};
+        bitchord = final.callPackage ../../../pkgs/bitchord {};
       })
     ];
   };
