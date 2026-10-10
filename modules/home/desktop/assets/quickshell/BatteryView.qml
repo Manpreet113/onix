@@ -4,8 +4,9 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.UPower
 
-// Battery panel for the Overlay host: charge, state, time estimates,
-// health per battery plus power-profile switching.
+// Battery hero panel: giant numeral, ticked charge rail, stat table,
+// segmented power profiles, ghost watermark. Success green means
+// healthy charge — the only place it appears here.
 Item {
     id: root
     anchors.fill: parent
@@ -75,16 +76,18 @@ Item {
         profileTimer.restart();
     }
 
-    function batteries(): var {
-        var out = [];
+    function firstBattery(): var {
         var vals = UPower.devices.values;
         for (var i = 0; i < vals.length; i++) {
             var d = vals[i];
             if (d && d.isPresent && d.powerSupply)
-                out.push(d);
+                return d;
         }
-        return out;
+        return null;
     }
+
+    property int pct: root.pctOf(UPower.displayDevice)
+    property string state: root.stateText(UPower.displayDevice)
 
     Process {
         id: profileProc
@@ -108,159 +111,281 @@ Item {
         profileProc.running = true;
     }
 
+    // ghost watermark
+    Text {
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: -10
+        anchors.bottomMargin: 60
+        text: root.pct >= 0 ? root.pct : ""
+        color: Theme.text
+        opacity: 0.04
+        font.family: Theme.fontFamily
+        font.pixelSize: 150
+        font.bold: true
+    }
+
+    // ticked charge rail
+    Item {
+        id: rail
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 90
+        width: 10
+
+        Rectangle {
+            anchors.fill: parent
+            radius: 5
+            color: Theme.bg
+        }
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            height: parent.height * Math.max(0, Math.min(1, root.pct / 100))
+            radius: 5
+            color: Theme.success
+            Behavior on height {
+                NumberAnimation {
+                    duration: Theme.fadeMed
+                }
+            }
+        }
+        Repeater {
+            model: 10
+            delegate: Rectangle {
+                required property int index
+                width: index % 2 === 0 ? 18 : 12
+                height: 2
+                radius: 1
+                color: Theme.border
+                x: 0
+                y: parent.height - (index + 1) * (parent.height / 10)
+            }
+        }
+    }
+
     Column {
-        anchors.fill: parent
-        spacing: 12
+        anchors.left: rail.right
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 24
+        spacing: 10
+
+        // hero numeral + state
+        Item {
+            width: parent.width
+            implicitHeight: 112
+
+            Text {
+                id: heroNum
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+                text: root.pct >= 0 ? root.pct : "—"
+                color: Theme.text
+                font.family: Theme.fontFamily
+                font.pixelSize: 96
+                font.bold: true
+                renderType: Text.NativeRendering
+            }
+            Text {
+                anchors.left: heroNum.right
+                anchors.leftMargin: 10
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 14
+                text: "%"
+                color: Theme.dim
+                font.family: Theme.fontFamily
+                font.pixelSize: 36
+                font.bold: true
+            }
+        }
 
         Text {
-            text: "Battery"
-            color: Theme.text
+            text: {
+                if (root.state === "discharging")
+                    return ("DISCHARGING · " + root.fmtSecs(UPower.displayDevice.timeToEmpty) + " LEFT").toUpperCase();
+                if (root.state === "charging")
+                    return ("CHARGING · " + root.fmtSecs(UPower.displayDevice.timeToFull) + " TO FULL").toUpperCase();
+                return root.state.toUpperCase();
+            }
+            color: Theme.dim
             font.family: Theme.fontFamily
-            font.pixelSize: Theme.fontLarge
+            font.pixelSize: Theme.fontSmall
             font.bold: true
         }
 
-        // headline: icon + pct + state
-        RowLayout {
-            width: parent.width
-            spacing: 14
+        // drawn battery instrument
+        Row {
+            spacing: 12
+
+            Item {
+                width: 64
+                height: 32
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.rightMargin: 6
+                    radius: 8
+                    color: "transparent"
+                    border.color: Theme.subtext
+                    border.width: 2
+                }
+                Rectangle {
+                    x: 5
+                    y: 9
+                    width: 6
+                    height: 14
+                    radius: 2
+                    color: Theme.subtext
+                }
+                Rectangle {
+                    x: 6
+                    y: 6
+                    width: Math.max(0, 46 * Math.max(0, Math.min(1, root.pct / 100)))
+                    height: 20
+                    radius: 5
+                    color: Theme.success
+                }
+            }
 
             Text {
+                anchors.verticalCenter: parent.verticalCenter
                 text: {
-                    var d = UPower.displayDevice;
-                    var p = root.pctOf(d);
-                    return root.battIcon(p, !UPower.onBattery);
+                    var b = root.firstBattery();
+                    if (!b || !(b.energyRate > 0))
+                        return "";
+                    return (b.energyRate.toFixed(1) + " W DRAW").toUpperCase();
                 }
-                color: Theme.success
+                color: Theme.subtext
                 font.family: Theme.fontFamily
-                font.pixelSize: 44
-                Layout.alignment: Qt.AlignVCenter
+                font.pixelSize: Theme.fontSmall
             }
-            Column {
-                Layout.fillWidth: true
-                spacing: 2
+        }
 
+        // stat table with dividers
+        Row {
+            width: parent.width
+            spacing: 0
+
+            Column {
+                width: (parent.width - 2) / 3
+                spacing: 2
                 Text {
-                    text: {
-                        var d = UPower.displayDevice;
-                        var p = root.pctOf(d);
-                        return p >= 0 ? p + "%" : "—";
-                    }
-                    color: Theme.text
+                    text: "ENERGY"
+                    color: Theme.dim
                     font.family: Theme.fontFamily
-                    font.pixelSize: Theme.fontTitle
+                    font.pixelSize: 11
                     font.bold: true
                 }
                 Text {
                     text: {
-                        var d = UPower.displayDevice;
-                        var st = root.stateText(d);
-                        if (st === "discharging")
-                            return "discharging · " + root.fmtSecs(d.timeToEmpty) + " left";
-                        if (st === "charging")
-                            return "charging · " + root.fmtSecs(d.timeToFull) + " to full";
-                        return st;
+                        var b = root.firstBattery();
+                        return (b && b.energy > 0) ? b.energy.toFixed(1) + " Wh" : "—";
                     }
+                    color: Theme.text
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontLarge
+                    font.bold: true
+                }
+            }
+            Rectangle {
+                width: 1
+                height: 44
+                color: Theme.border
+            }
+            Column {
+                width: (parent.width - 2) / 3
+                spacing: 2
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 16
+                    text: "HEALTH"
                     color: Theme.dim
                     font.family: Theme.fontFamily
-                    font.pixelSize: Theme.fontMed
+                    font.pixelSize: 11
+                    font.bold: true
+                }
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 16
+                    text: {
+                        var b = root.firstBattery();
+                        return Math.round((b && b.capacity) || 100) + "%";
+                    }
+                    color: Theme.text
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontLarge
+                    font.bold: true
+                }
+            }
+            Rectangle {
+                width: 1
+                height: 44
+                color: Theme.border
+            }
+            Column {
+                width: (parent.width - 2) / 3
+                spacing: 2
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 16
+                    text: "PROFILE"
+                    color: Theme.dim
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 11
+                    font.bold: true
+                }
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 16
+                    text: root.profile
+                    color: Theme.accent
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontLarge
+                    font.bold: true
+                    elide: Text.ElideRight
+                    width: parent.width - 16
                 }
             }
         }
 
-        // charge bar
+        // segmented profiles
         Rectangle {
             width: parent.width
-            height: 8
-            radius: 4
-            color: Theme.surface
-            Rectangle {
-                width: parent.width * Math.max(0, Math.min(1, root.pctOf(UPower.displayDevice) / 100))
-                height: parent.height
-                radius: 4
-                color: Theme.success
-                Behavior on width {
-                    NumberAnimation {
-                        duration: Theme.fadeMed
-                    }
-                }
-            }
-        }
+            implicitHeight: 36
+            radius: 9
+            color: Theme.bg
+            border.color: Theme.border
+            border.width: 1
 
-        // per-battery details
-        Repeater {
-            model: root.batteries()
-            delegate: Rectangle {
-                required property var modelData
-                width: parent.width
-                implicitHeight: detailCol.implicitHeight + 20
-                color: Theme.surface
-                radius: Theme.radiusMed
-
-                Column {
-                    id: detailCol
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 2
-
-                    Text {
-                        width: parent.width
-                        text: (modelData.model || modelData.vendor || "battery") + " · health " + Math.round(modelData.capacity || 100) + "%"
-                        color: Theme.accent
-                        font.family: Theme.fontFamily
-                        font.pixelSize: Theme.fontMed
-                        font.bold: true
-                        elide: Text.ElideRight
-                    }
-                    Text {
-                        width: parent.width
-                        text: {
-                            var e = modelData.energy, ef = modelData.energyFull;
-                            var wh = (e > 0 && ef > 0) ? e.toFixed(1) + " / " + ef.toFixed(1) + " Wh · " : "";
-                            var rate = modelData.energyRate > 0 ? modelData.energyRate.toFixed(1) + " W" : "— W";
-                            return wh + rate + " · " + root.stateText(modelData);
+            Row {
+                anchors.fill: parent
+                Repeater {
+                    model: ["power-saver", "balanced", "performance"]
+                    delegate: Item {
+                        required property string modelData
+                        width: parent.width / 3
+                        height: parent.height
+                        Rectangle {
+                            anchors.fill: parent
+                            anchors.margins: 3
+                            radius: 6
+                            color: root.profile === modelData ? Theme.primary : "transparent"
                         }
-                        color: Theme.subtext
-                        font.family: Theme.fontFamily
-                        font.pixelSize: Theme.fontSmall
-                    }
-                }
-            }
-        }
-
-        // power profiles
-        Text {
-            text: "power profile · " + root.profile
-            color: Theme.dim
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.fontSmall
-        }
-        Row {
-            width: parent.width
-            spacing: 8
-
-            Repeater {
-                model: ["power-saver", "balanced", "performance"]
-                delegate: Rectangle {
-                    required property string modelData
-                    implicitWidth: 120
-                    implicitHeight: 32
-                    radius: Theme.radiusSmall
-                    color: root.profile === modelData ? Theme.primary : Theme.surface
-                    border.color: Theme.border
-                    border.width: 1
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: modelData === "power-saver" ? "saver" : modelData
-                        color: root.profile === modelData ? Theme.bg : Theme.text
-                        font.family: Theme.fontFamily
-                        font.pixelSize: Theme.fontMed
-                        font.bold: true
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: root.setProfile(modelData)
+                        Text {
+                            anchors.centerIn: parent
+                            text: modelData === "power-saver" ? "saver" : modelData
+                            color: root.profile === modelData ? Theme.bg : Theme.dim
+                            font.family: Theme.fontFamily
+                            font.pixelSize: Theme.fontSmall
+                            font.bold: true
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: root.setProfile(modelData)
+                        }
                     }
                 }
             }
@@ -269,13 +394,6 @@ Item {
         Item {
             width: 1
             height: 1
-        }
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "esc close"
-            color: Theme.dim
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.fontSmall
         }
     }
 }
