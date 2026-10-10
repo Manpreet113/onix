@@ -21,11 +21,11 @@ Item {
     readonly property string stateDir: Quickshell.env("HOME") + "/.local/share/onix-shell"
 
     function focusView(): void {
-        searchBox.forceActiveFocus();
+        searchInput.forceActiveFocus();
     }
 
     function onShown(): void {
-        searchBox.text = "";
+        searchInput.text = "";
         root.query = "";
         root.selected = 0;
     }
@@ -125,32 +125,75 @@ Item {
         anchors.fill: parent
         spacing: 12
 
-        TextInput {
+        Item {
             id: searchBox
             width: parent.width
-            color: Theme.text
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.fontLarge
-            selectByMouse: true
-            onTextChanged: root.query = text
-            Keys.onUpPressed: root.moveSelection(-1)
-            Keys.onDownPressed: root.moveSelection(1)
-            Keys.onReturnPressed: root.launchSelected()
-            Keys.onEnterPressed: root.launchSelected()
+            implicitHeight: 44
+
             Rectangle {
                 anchors.fill: parent
-                anchors.margins: -8
                 color: Theme.surface
                 radius: Theme.radiusMed
-                z: -1
+                border.color: Theme.primary
+                border.width: 1
             }
+
             Text {
-                anchors.fill: parent
-                text: "type to launch…"
-                color: Theme.dim
+                id: promptGlyph
+                anchors.left: parent.left
+                anchors.leftMargin: 12
+                anchors.verticalCenter: parent.verticalCenter
+                text: "❯"
+                color: Theme.primary
+                font.family: Theme.fontFamily
+                font.pixelSize: 16
+                font.bold: true
+            }
+
+            TextInput {
+                id: searchInput
+                anchors.left: promptGlyph.right
+                anchors.right: escHint.left
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.leftMargin: 10
+                anchors.rightMargin: 10
+                color: Theme.text
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontLarge
-                visible: searchBox.text.length === 0
+                selectByMouse: true
+                onTextChanged: root.query = text
+                Keys.onUpPressed: root.moveSelection(-1)
+                Keys.onDownPressed: root.moveSelection(1)
+                Keys.onReturnPressed: root.launchSelected()
+                Keys.onEnterPressed: root.launchSelected()
+                Text {
+                    anchors.fill: parent
+                    text: "type to launch…"
+                    color: Theme.dim
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontLarge
+                    visible: searchInput.text.length === 0
+                }
+            }
+
+            Rectangle {
+                id: escHint
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                implicitWidth: 34
+                implicitHeight: 24
+                radius: Theme.radiusSmall
+                color: Theme.bg
+                border.color: Theme.border
+                border.width: 1
+                Text {
+                    anchors.centerIn: parent
+                    text: "esc"
+                    color: Theme.dim
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontSmall
+                }
             }
         }
 
@@ -167,10 +210,10 @@ Item {
                 required property var modelData
                 required property int index
                 width: list.width
-                implicitHeight: 44
-                color: index === root.selected ? Theme.primary : Theme.surface
+                implicitHeight: 56
+                color: index === root.selected ? Theme.bg : Theme.surface
                 radius: Theme.radiusSmall
-                border.color: Theme.border
+                border.color: index === root.selected ? Theme.primary : Theme.border
                 border.width: 1
 
                 RowLayout {
@@ -179,10 +222,21 @@ Item {
                     anchors.rightMargin: 10
                     spacing: 12
 
-                    IconImage {
-                        implicitSize: 26
-                        source: "image://icon/" + (modelData.icon || "application-x-executable")
-                        asynchronous: true
+                    Rectangle {
+                        implicitWidth: 36
+                        implicitHeight: 36
+                        radius: 9
+                        color: index === root.selected ? Theme.primary : Theme.bg
+                        border.color: Theme.border
+                        border.width: 1
+                        Layout.alignment: Qt.AlignVCenter
+
+                        IconImage {
+                            anchors.centerIn: parent
+                            implicitSize: 22
+                            source: "image://icon/" + (modelData.icon || "application-x-executable")
+                            asynchronous: true
+                        }
                     }
                     Column {
                         Layout.fillWidth: true
@@ -191,7 +245,7 @@ Item {
                         Text {
                             width: parent.width
                             text: modelData.name || modelData.id
-                            color: index === root.selected ? Theme.bg : Theme.text
+                            color: Theme.text
                             font.family: Theme.fontFamily
                             font.pixelSize: Theme.fontMed
                             font.bold: true
@@ -200,7 +254,7 @@ Item {
                         Text {
                             width: parent.width
                             text: modelData.genericName || modelData.comment || ""
-                            color: index === root.selected ? Theme.bg : Theme.dim
+                            color: Theme.dim
                             font.family: Theme.fontFamily
                             font.pixelSize: Theme.fontSmall
                             elide: Text.ElideRight

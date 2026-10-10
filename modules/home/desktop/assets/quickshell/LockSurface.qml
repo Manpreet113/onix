@@ -111,6 +111,17 @@ Item {
                 z: -1
             }
 
+            Rectangle {
+                visible: root.context.showFailure
+                anchors.left: parent.left
+                anchors.leftMargin: -10
+                anchors.verticalCenter: parent.verticalCenter
+                width: 6
+                height: parent.height + 6
+                radius: 2
+                color: Theme.error
+            }
+
             Connections {
                 target: root.context
                 function onCurrentTextChanged() {
