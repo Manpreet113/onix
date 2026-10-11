@@ -1,7 +1,11 @@
 # Nuvio: upstream linux AppImage, wrapped nixpkgs-style.
 # JVM Compose Multiplatform media app bundling its own JRE; the wrap only
 # supplies the host graphics/audio/video stack it cannot carry (GTK, X11,
-# GL, ALSA, VAAPI). Desktop entry + icons come from inside the AppImage.
+# GL, ALSA, VAAPI). The JNI player bridge (libplayer_bridge.so, extracted
+# to ~/.cache at runtime) additionally dlopens libmpv + WebKitGTK + cairo,
+# which must be on the wrapper's library path or class init fails with
+# "Could not initialize class ... NativePlayerBridge".
+# Desktop entry + icons come from inside the AppImage.
 {
   lib,
   appimageTools,
@@ -14,6 +18,7 @@
   freetype,
   glib,
   gtk3,
+  cairo,
   libGL,
   libdrm,
   libgbm,
@@ -29,6 +34,8 @@
   libXcomposite,
   libXdamage,
   libxcb,
+  mpv,
+  webkitgtk_4_1,
   zlib,
   wayland,
   version,
@@ -58,6 +65,7 @@ in
         freetype
         glib
         gtk3
+        cairo
         libGL
         libdrm
         libgbm
@@ -73,6 +81,8 @@ in
         libXcomposite
         libXdamage
         libxcb
+        mpv
+        webkitgtk_4_1
         zlib
         wayland
       ];
