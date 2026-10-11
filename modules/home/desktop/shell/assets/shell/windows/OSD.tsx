@@ -2,15 +2,21 @@
 import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
 import { createState, createComputed } from "ags";
-import { timeout } from "ags/time";
 import { createBinding } from "ags";
 import Wp from "gi://AstalWp";
+import GLib from "gi://GLib?version=2.0";
 
 const [visible, setVisible] = createState(false);
+let hideSrc = 0;
 
 function poke() {
   setVisible(true);
-  timeout(1600, () => setVisible(false));
+  if (hideSrc) GLib.source_remove(hideSrc);
+  hideSrc = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1600, () => {
+    setVisible(false);
+    hideSrc = 0;
+    return GLib.SOURCE_REMOVE;
+  });
 }
 
 export default function OSD() {

@@ -80,6 +80,12 @@ scrollbar slider:hover {
 }
 .clock-island { padding: 5px 10px; }
 
+.wtitle {
+  color: var(--onix-muted, $muted);
+  font-size: 12px;
+  padding: 0 8px 0 2px;
+}
+
 /* workspace switcher */
 .ws-btn {
   min-width: 24px;
@@ -223,8 +229,9 @@ entry:focus {
 .cc-toggle:hover { border-color: var(--onix-primary, $primary); }
 .cc-toggle.on {
   border-color: var(--onix-primary, $primary);
-  background-color: color-mix(in srgb, var(--onix-primary, $primary) 20%, transparent);
-  color: var(--onix-primary, $primary);
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 26%, transparent);
+  color: var(--onix-fg, $fg);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--onix-primary, $primary) 30%, transparent);
 }
 .cc-row { padding: 2px 0; }
 .cc-btn {

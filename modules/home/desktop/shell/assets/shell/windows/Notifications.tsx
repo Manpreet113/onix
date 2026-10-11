@@ -2,17 +2,22 @@
 import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
-import { createBinding, createComputed, For } from "ags";
-import { timeout } from "ags/time";
+import { createBinding } from "ags";
+import { useNotifications } from "../services/notifications";
 import Notifd from "gi://AstalNotifd";
+import GLib from "gi://GLib?version=2.0";
 
 function Toast({ n }: { n: Notifd.Notification }) {
-  timeout(6000, () => {
+  // NOTE: ags/time timeout() return must be retained (GC cancels it),
+  // so use a raw GLib source id here instead.
+  GLib.timeout_add(GLib.PRIORITY_DEFAULT, 6000, () => {
+    console.log(`[onix] toast timeout id=${n.id}`);
     try {
       n.dismiss();
     } catch {
       /* already gone */
     }
+    return GLib.SOURCE_REMOVE;
   });
   return (
     <box class="toast" spacing={10} widthRequest={380}>
@@ -46,11 +51,36 @@ function Toast({ n }: { n: Notifd.Notification }) {
 
 export default function Notifications() {
   const { TOP, RIGHT } = Astal.WindowAnchor;
-  const notifd = Notifd.get_default();
+  const { notifd, items } = useNotifications();
   const dnd = createBinding(notifd, "dontDisturb");
-  const list = createBinding(notifd, "notifications");
-  // Popups stay silent while DND is on; history lives in NotifCenter.
-  const shown = createComputed(() => (dnd() ? [] : list()));
+
+  // Imperative render: container diffing (For/With) does not remove
+  // children in this stack, so manage the box contents directly.
+  // The window itself hides when empty (also keeps an invisible
+  // overlay from eating clicks in the corner).
+  let listBox: Gtk.Box | null = null;
+  const render = () => {
+    try {
+      if (!listBox) return;
+      let child = listBox.get_first_child();
+      while (child) {
+        const next = child.get_next_sibling();
+        listBox.remove(child);
+        child = next;
+      }
+      const arr = dnd() ? [] : items();
+      console.log(`[onix] render popups: ${arr.length}`);
+      arr.forEach((n) => {
+        listBox!.append(Toast({ n }) as unknown as Gtk.Widget);
+      });
+      const win = app.get_window("onix-notifs");
+      if (win) win.visible = arr.length > 0;
+    } catch (e) {
+      console.error(`[onix] render popups failed: ${e}`);
+    }
+  };
+  items.subscribe(render);
+  dnd.subscribe(render);
 
   return (
     <window
@@ -64,11 +94,15 @@ export default function Notifications() {
       layer={Astal.Layer.OVERLAY}
       application={app}
     >
-      <box orientation={Gtk.Orientation.VERTICAL} spacing={8} class="notifs-inner">
-        <For each={shown}>
-          {(n) => <Toast n={n} />}
-        </For>
-      </box>
+      <box
+        orientation={Gtk.Orientation.VERTICAL}
+        spacing={8}
+        class="notifs-inner"
+        $={(self) => {
+          listBox = self as unknown as Gtk.Box;
+          render();
+        }}
+      />
     </window>
   );
 }

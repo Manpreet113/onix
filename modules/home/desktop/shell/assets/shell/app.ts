@@ -57,6 +57,23 @@ app.start({
         // this just ensures the window exists.
         toggle("onix-osd");
         break;
+      case "state":
+        // Live introspection: `ags request -i onix state` then read the log.
+        (async () => {
+          try {
+            const { default: Network } = await import("gi://AstalNetwork");
+            const { default: Bluetooth } = await import("gi://AstalBluetooth");
+            const { default: Notifd } = await import("gi://AstalNotifd");
+            const wifi = Network.get_default().wifi;
+            console.log(
+              `[onix] state wifi=${wifi && wifi.enabled} bt=${Bluetooth.get_default().isPowered} dnd=${Notifd.get_default().dontDisturb}`,
+            );
+            response("logged");
+          } catch (e) {
+            response(`state failed: ${e}`);
+          }
+        })();
+        break;
       case "lock":
         // Hyprlock stays the source of truth for v1 (see Powermenu).
         // `arg` reserved for future astal-auth lockscreen.

@@ -41,6 +41,17 @@ function Workspaces() {
   );
 }
 
+function WindowTitle() {
+  const hypr = Hyprland.get_default();
+  const client = createBinding(hypr, "focusedClient");
+  const title = createComputed(() => {
+    const t = ((client() as { title?: string } | null)?.title ?? "").trim();
+    if (!t) return "Desktop";
+    return t.length > 44 ? `${t.slice(0, 43)}…` : t;
+  });
+  return <label class="wtitle" label={title} />;
+}
+
 function Clock() {
   const time = createPoll("", 1000, () => {
     const d = new Date();
@@ -168,9 +179,7 @@ export default function Bar(monitor = 0) {
       <centerbox class="bar-inner">
         <box $type="start" spacing={6} class="island">
           <Workspaces />
-          <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request -i onix launcher"])}>
-            <label label="󰀻  Launcher" />
-          </button>
+          <WindowTitle />
         </box>
         <box $type="center" spacing={8} class="island clock-island">
           <Clock />

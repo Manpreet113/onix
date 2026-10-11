@@ -141,6 +141,7 @@ export default function ControlCenter() {
       namespace="onix-control"
       class="Control"
       visible={false}
+      keymode={Astal.Keymode.EXCLUSIVE}
       anchor={TOP | RIGHT}
       widthRequest={360}
       $={escToHide}
