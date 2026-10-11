@@ -1,27 +1,201 @@
 # Basic Hyprland session: compositor settings, core keybinds, floating
 # rules, and the small CLI tools the binds rely on. No custom shell.
+#
+# Binds use the proven lua forms (hl.bind with lua key/dispatcher exprs);
+# single-string forms and hyphenated hl.* calls do not parse.
 {
   lib,
   pkgs,
   ...
 }: let
-  workspaces = lib.concatMap (i: [
-    "SUPER,${toString i},workspace,${toString i}"
-    "SUPER+SHIFT,${toString i},movetoworkspace,${toString i}"
+  raw = lib.generators.mkLuaInline;
+
+  bindDefs = [
+    {
+      keys = ''mod .. " + RETURN"'';
+      run = ''hl.dsp.exec_cmd("ghostty")'';
+    }
+    {
+      keys = ''mod .. " + SPACE"'';
+      run = ''hl.dsp.exec_cmd("wofi --show drun")'';
+    }
+    {
+      keys = ''mod .. " + Q"'';
+      run = ''hl.dsp.window.close()'';
+    }
+    {
+      keys = ''mod .. " + SHIFT + L"'';
+      run = ''hl.dsp.exec_cmd("hyprlock")'';
+    }
+    {
+      keys = ''mod .. " + F"'';
+      run = ''hl.dsp.window.fullscreen()'';
+    }
+    {
+      keys = ''mod .. " + V"'';
+      run = ''hl.dsp.window.float({ action = "toggle" })'';
+    }
+    {
+      keys = ''"Print"'';
+      run = ''hl.dsp.exec_cmd("mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png")'';
+    }
+    {
+      keys = ''mod .. " + SHIFT + S"'';
+      run = ''hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy")'';
+    }
+    {
+      keys = ''mod .. " + left"'';
+      run = ''hl.dsp.focus({ direction = "left" })'';
+    }
+    {
+      keys = ''mod .. " + right"'';
+      run = ''hl.dsp.focus({ direction = "right" })'';
+    }
+    {
+      keys = ''mod .. " + up"'';
+      run = ''hl.dsp.focus({ direction = "up" })'';
+    }
+    {
+      keys = ''mod .. " + down"'';
+      run = ''hl.dsp.focus({ direction = "down" })'';
+    }
+    {
+      keys = ''mod .. " + SHIFT + left"'';
+      run = ''hl.dsp.window.move({ direction = "left" })'';
+    }
+    {
+      keys = ''mod .. " + SHIFT + right"'';
+      run = ''hl.dsp.window.move({ direction = "right" })'';
+    }
+    {
+      keys = ''mod .. " + SHIFT + up"'';
+      run = ''hl.dsp.window.move({ direction = "up" })'';
+    }
+    {
+      keys = ''mod .. " + SHIFT + down"'';
+      run = ''hl.dsp.window.move({ direction = "down" })'';
+    }
+    {
+      keys = ''mod .. " + mouse_down"'';
+      run = ''hl.dsp.focus({ workspace = "e+1" })'';
+    }
+    {
+      keys = ''mod .. " + mouse_up"'';
+      run = ''hl.dsp.focus({ workspace = "e-1" })'';
+    }
+    {
+      keys = ''mod .. " + mouse:272"'';
+      run = ''hl.dsp.window.drag()'';
+      opts = {mouse = true;};
+    }
+    {
+      keys = ''mod .. " + mouse:273"'';
+      run = ''hl.dsp.window.resize()'';
+      opts = {mouse = true;};
+    }
+    {
+      keys = ''"XF86AudioRaiseVolume"'';
+      run = ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")'';
+      opts = {repeating = true;};
+    }
+    {
+      keys = ''"XF86AudioLowerVolume"'';
+      run = ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")'';
+      opts = {repeating = true;};
+    }
+    {
+      keys = ''"XF86AudioMute"'';
+      run = ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")'';
+      opts = {repeating = true;};
+    }
+    {
+      keys = ''"XF86AudioPlay"'';
+      run = ''hl.dsp.exec_cmd("playerctl play-pause")'';
+    }
+    {
+      keys = ''"XF86AudioNext"'';
+      run = ''hl.dsp.exec_cmd("playerctl next")'';
+    }
+    {
+      keys = ''"XF86AudioPrev"'';
+      run = ''hl.dsp.exec_cmd("playerctl previous")'';
+    }
+    {
+      keys = ''"XF86MonBrightnessUp"'';
+      run = ''hl.dsp.exec_cmd("brightnessctl set 5%+")'';
+      opts = {repeating = true;};
+    }
+    {
+      keys = ''"XF86MonBrightnessDown"'';
+      run = ''hl.dsp.exec_cmd("brightnessctl set 5%-")'';
+      opts = {repeating = true;};
+    }
+  ];
+
+  workspaceBindDefs = lib.concatMap (i: [
+    {
+      keys = ''mod .. " + ${toString i}"'';
+      run = ''hl.dsp.focus({ workspace = ${toString i} })'';
+    }
+    {
+      keys = ''mod .. " + SHIFT + ${toString i}"'';
+      run = ''hl.dsp.window.move({ workspace = ${toString i} })'';
+    }
   ]) (lib.range 1 9);
+
+  allBindDefs = bindDefs ++ workspaceBindDefs;
+
+  mkBindEntry = b: {
+    _args = [(raw b.keys) (raw b.run)] ++ lib.optional ((b.opts or null) != null) b.opts;
+  };
 in {
   wayland.windowManager.hyprland = {
     enable = true;
 
     settings = {
-      monitor = [",preferred,auto,1"];
+      mod = {
+        _var = "SUPER";
+      };
+
+      monitor = {
+        # output = "" means every monitor: preferred mode, auto position
+        output = "";
+        mode = "preferred";
+        position = "auto";
+        scale = 1;
+      };
 
       env = [
-        "XCURSOR_THEME,Bibata-Modern-Classic"
-        "XCURSOR_SIZE,24"
-        "HYPRCURSOR_THEME,Bibata-Modern-Classic"
-        "HYPRCURSOR_SIZE,24"
-        "NIXOS_OZONE_WL,1"
+        {
+          _args = [
+            "XCURSOR_THEME"
+            "Bibata-Modern-Classic"
+          ];
+        }
+        {
+          _args = [
+            "XCURSOR_SIZE"
+            "24"
+          ];
+        }
+        {
+          _args = [
+            "HYPRCURSOR_THEME"
+            "Bibata-Modern-Classic"
+          ];
+        }
+        {
+          _args = [
+            "HYPRCURSOR_SIZE"
+            "24"
+          ];
+        }
+        {
+          _args = [
+            "NIXOS_OZONE_WL"
+            "1"
+          ];
+        }
       ];
 
       input = {
@@ -53,43 +227,41 @@ in {
         disable_splash_rendering = true;
       };
 
-      bind =
-        [
-          "SUPER,RETURN,exec,ghostty"
-          "SUPER,SPACE,exec,wofi --show drun"
-          "SUPER,Q,killactive,"
-          "SUPER,SHIFT+L,exec,hyprlock"
-          "SUPER,F,fullscreen,"
-          "SUPER,V,togglefloating,"
-          "SUPER,Print,exec,sh -c 'grim ~/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png'"
-          "SUPER+SHIFT,S,exec,sh -c 'grim -g \"$(slurp)\" - | wl-copy'"
-          "SUPER,mouse_down,workspace,e+1"
-          "SUPER,mouse_up,workspace,e-1"
-          ",XF86AudioPlay,exec,playerctl play-pause"
-          ",XF86AudioNext,exec,playerctl next"
-          ",XF86AudioPrev,exec,playerctl previous"
-        ]
-        ++ workspaces;
+      bind = map mkBindEntry allBindDefs;
 
-      binde = [
-        ",XF86AudioRaiseVolume,exec,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-        ",XF86AudioLowerVolume,exec,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-        ",XF86AudioMute,exec,wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-        ",XF86MonBrightnessUp,exec,brightnessctl set 5%+"
-        ",XF86MonBrightnessDown,exec,brightnessctl set 5%-"
+      window_rule = [
+        {
+          match.class = "^(org.gnome.Nautilus)$";
+          float = true;
+        }
+        {
+          match.class = "^(pavucontrol)$";
+          float = true;
+          size = "800 600";
+          center = true;
+        }
+        {
+          match.class = "^(blueman-manager)$";
+          float = true;
+          size = "800 600";
+          center = true;
+        }
+        {
+          match.title = "^(Picture-in-Picture)$";
+          float = true;
+        }
       ];
+    };
 
-      windowrule = [
-        "float,^(org.gnome.Nautilus)$"
-        "float,^(pavucontrol)$"
-        "float,^(blueman-manager)$"
-        "float,title:^(Picture-in-Picture)$"
-      ];
-
-      exec-once = [
-        "awww-daemon"
-        "awww img /home/manpreet/Pictures/Wallpapers/ronin-shade.png"
-      ];
+    # Wallpaper daemon + initial wallpaper, as a required lua file (raw
+    # lua -- hyphenated hl.* calls like hl.exec-once do not parse).
+    extraLuaFiles = {
+      autostart = ''
+        hl.on("hyprland.start", function()
+          hl.exec_cmd("awww-daemon")
+          hl.exec_cmd("awww img /home/manpreet/Pictures/Wallpapers/ronin-shade.png")
+        end)
+      '';
     };
   };
 
