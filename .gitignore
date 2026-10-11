@@ -16,6 +16,9 @@ result-*
 *.swp
 *~
 
+# Quickshell (managed LSP config, machine-specific)
+.qmlls.ini
+
 # OS
 .DS_Store
 Thumbs.db

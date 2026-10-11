@@ -16,8 +16,8 @@ function themeJsonToCss(raw: string): string {
     const bg = j["background"] ?? "#1a1b26";
     const surface = j["surface"] ?? "#24283b";
     const surface2 = j["surface_variant"] ?? "#2b3048";
-    // EXPERIMENT ember: fixed warm accent over the mono base.
-    const primary = "#d99a5b";
+    // Skein-driven primary (no hardcoded accent).
+    const primary = j["accent"] ?? j["primary"] ?? "#7aa2f7";
     const secondary = j["primary"] ?? "#bb9af7";
     const error = j["error"] ?? "#f7768e";
     const fg = j["text"] ?? "#c0caf5";

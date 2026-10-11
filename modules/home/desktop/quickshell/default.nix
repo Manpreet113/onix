@@ -1,0 +1,17 @@
+# Onix bar in Quickshell (QML) — bar-only milestone.
+# Nix owns the package; QML source lives in assets/qs, symlinked live so
+# edits apply on quickshell reload with no rebuild. Repo must stay at
+# ~/onix (out-of-store symlink, same pattern as hypr/modules).
+{
+  config,
+  pkgs,
+  ...
+}: {
+  home.packages = with pkgs; [
+    quickshell
+  ];
+
+  # Live tree: ~/.config/quickshell/onix -> repo working tree.
+  # `quickshell -c onix` loads shell.qml from there.
+  xdg.configFile."quickshell/onix".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/onix/modules/home/desktop/quickshell/assets/qs";
+}
