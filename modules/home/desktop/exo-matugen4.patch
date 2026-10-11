@@ -1,0 +1,75 @@
+# Exo matugen-4 compat patch (onix maintenance, upstream untouched).
+#
+# matugen 4.x requires an explicit source-color preference when an image
+# yields multiple candidates and no terminal is attached (always the case
+# under ignis), and its default --json shape changed. Without this patch
+# every wallpaper set / scheme switch / preview generation fails.
+# --prefer follows the requested mode; --old-json-output restores the
+# colors shape Exo's preview parser already understands.
+--- a/ignis/scripts/wallpaper.py
++++ b/ignis/scripts/wallpaper.py
+@@ -33,13 +33,13 @@
+         if colorScheme in schemes:
+             asyncio.create_task(
+                 utils.exec_sh_async(
+-                    f"matugen image -t scheme-{colorScheme} '{path}' -m '{mode}'"
++                    f"matugen image -t scheme-{colorScheme} '{path}' -m '{mode}' --prefer {'darkness' if mode == 'dark' else 'lightness'}"
+                 )
+             )
+         else:
+             asyncio.create_task(
+                 utils.exec_sh_async(
+-                    f"matugen image -t scheme-tonal-spot '{path}' -m '{mode}'"
++                    f"matugen image -t scheme-tonal-spot '{path}' -m '{mode}' --prefer {'darkness' if mode == 'dark' else 'lightness'}"
+                 )
+             )
+
+@@ -68,13 +68,13 @@
+         if colorScheme in schemes:
+             asyncio.create_task(
+                 utils.exec_sh_async(
+-                    f"matugen image -t scheme-{colorScheme} '{path}' -m '{mode}'"
++                    f"matugen image -t scheme-{colorScheme} '{path}' -m '{mode}' --prefer {'darkness' if mode == 'dark' else 'lightness'}"
+                 )
+             )
+         else:
+             asyncio.create_task(
+                 utils.exec_sh_async(
+-                    f"matugen image -t scheme-tonal-spot '{path}' -m '{mode}'"
++                    f"matugen image -t scheme-tonal-spot '{path}' -m '{mode}' --prefer {'darkness' if mode == 'dark' else 'lightness'}"
+                 )
+             )
+
+@@ -116,7 +116,7 @@
+         if colorScheme in schemes:
+             asyncio.create_task(
+                 utils.exec_sh_async(
+-                    f"matugen image -t scheme-{colorScheme} '{path}' -m '{mode}'"
++                    f"matugen image -t scheme-{colorScheme} '{path}' -m '{mode}' --prefer {'darkness' if mode == 'dark' else 'lightness'}"
+                 )
+             )
+             asyncio.create_task(
+@@ -127,7 +127,7 @@
+         else:
+             asyncio.create_task(
+                 utils.exec_sh_async(
+-                    f"matugen image -t scheme-tonal-spot '{path}' -m '{mode}'"
++                    f"matugen image -t scheme-tonal-spot '{path}' -m '{mode}' --prefer {'darkness' if mode == 'dark' else 'lightness'}"
+                 )
+             )
+             asyncio.create_task(
+@@ -168,12 +168,12 @@
+
+             tasks_palette = []
+             for scheme in schemes:
+-                command = f"matugen image -t scheme-{scheme} '{path}' -m {current_mode} --json hex --dry-run"
++                command = f"matugen image -t scheme-{scheme} '{path}' -m {current_mode} --prefer {'darkness' if current_mode == 'dark' else 'lightness'} --json hex --dry-run --old-json-output"
+                 tasks_palette.append(utils.exec_sh_async(command))
+
+             tasks_theme = []
+             for mode in ["light", "dark"]:
+-                command = f"matugen image -t scheme-{current_scheme} '{path}' -m {mode} --json hex --dry-run"
++                command = f"matugen image -t scheme-{current_scheme} '{path}' -m {mode} --prefer {'darkness' if mode == 'dark' else 'lightness'} --json hex --dry-run --old-json-output"
+                 tasks_theme.append(utils.exec_sh_async(command))
+
+             all_results = await asyncio.gather(*(tasks_palette + tasks_theme))

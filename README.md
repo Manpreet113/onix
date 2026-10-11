@@ -1,6 +1,6 @@
 # onix — Modular NixOS Flake
 
-Host: `onix`, user `manpreet` — Niri (Wayland) + onix quickshell + PipeWire, Btrfs, systemd-boot, nixpkgs **unstable**.
+Host: `onix`, user `manpreet` — Niri (Wayland) + Exo shell on Ignis + PipeWire, Btrfs, systemd-boot, nixpkgs **unstable**.
 
 ## Structure
 - `flake.nix` — flake-parts; inputs: nixpkgs unstable, home-manager (master), sops-nix, disko, skein, nixvim, nix-index-database, nixcord, opencode
@@ -8,7 +8,7 @@ Host: `onix`, user `manpreet` — Niri (Wayland) + onix quickshell + PipeWire, B
 - `hosts/onix/` — host entry (`onix.*` module toggles) + hardware-configuration.nix
 - `hosts/common/` — shared settings (timezone, locale, stateVersion)
 - `modules/nixos/` — system modules, auto-imported via import-tree; each is an `onix.<name>.enable` toggle
-- `modules/home/` — HM modules (fish+tide, ghostty, nixvim, vscode, git, niri + onix shell) auto-imported via import-tree
+- `modules/home/` — HM modules (fish+tide, ghostty, nixvim, vscode, git, niri + exo/ignis shell) auto-imported via import-tree
 - `homes/manpreet.nix` — HM user entry
 - `disko/` — declarative disk skeleton (not active)
 - `secrets/` + `.sops.yaml` — sops-nix age-encrypted secrets
@@ -47,7 +47,7 @@ sudo btrfs subvolume snapshot /btrbk_snapshots/home.<timestamp> /home
 Safer: do this from a live USB, and keep `/home.broken` until you're sure. btrbk is local-only — copy `/btrbk_snapshots` off-disk for disaster recovery.
 
 ## Theming
-skein (wallpaper-driven) themes: quickshell, ghostty, fish, fzf, btop, discord. Tide prompt is static lean until skein grows a tide template. Static Nord where no live source exists: GTK (adw-gtk3-dark + Papirus + Bibata in `modules/home/desktop/theme.nix`), nixvim (`colorschemes.nord`), vscode (manual Nord extension), Qt (adwaita-dark). No stylix — deliberately removed, one theming system only.
+skein (wallpaper-driven) themes: ghostty, fish, fzf, btop, discord. The Exo shell + hyprlock theme via matugen (see `modules/home/desktop/exo.nix`; one compat patch for matugen 4). Tide prompt is static lean until skein grows a tide template. Static Nord where no live source exists: GTK (adw-gtk3-dark + Papirus + Bibata in `modules/home/desktop/theme.nix`), nixvim (`colorschemes.nord`), vscode (manual Nord extension), Qt (adwaita-dark). No stylix — deliberately removed, one theming system per surface.
 
 ## Disko
 See `disko/onix.nix` — not enabled until you import + set device.

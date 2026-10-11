@@ -103,6 +103,48 @@
         "type": "github"
       }
     },
+    "ignis": {
+      "inputs": {
+        "ignis-gvc": "ignis-gvc",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1767456002,
+        "narHash": "sha256-q+ZYdTMLr0RCfN5qxOl56CbZBj702hYY2H5dOLynW+o=",
+        "owner": "ignis-sh",
+        "repo": "ignis",
+        "rev": "5fd140227c0f2d9d65a98d4af78b95b1558966da",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ignis-sh",
+        "ref": "v0.6.0",
+        "repo": "ignis",
+        "type": "github"
+      }
+    },
+    "ignis-gvc": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1754064086,
+        "narHash": "sha256-ft5KvY2OYrWF+jEsfBL/Zx8Iuo2C10C6COk8wHwZw34=",
+        "owner": "ignis-sh",
+        "repo": "ignis-gvc",
+        "rev": "f2c9f10d8b49cc38106a2f07a51ea959c6aa4e63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ignis-sh",
+        "repo": "ignis-gvc",
+        "type": "github"
+      }
+    },
     "import-tree": {
       "locked": {
         "lastModified": 1788467110,
@@ -274,6 +316,7 @@
         "disko": "disko",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
+        "ignis": "ignis",
         "import-tree": "import-tree",
         "nix-index-database": "nix-index-database",
         "nixcord": "nixcord",

@@ -1,23 +1,21 @@
-# Niri session for the onix shell (replaces modules/home/desktop/hyprland).
+# Niri session for the Exo desktop shell (upstream: github:debuggyo/Exo).
 #
-# Single source of truth for keybinds: `onixBinds` below generates BOTH the
-# niri `binds` section AND ~/.config/quickshell-onix/keybinds.json (read by
-# the OnixKeybinds overlay). Fields per bind: keys (Niri KDL key expr),
-# props (bind properties like hotkey-overlay-title), run (action node),
-# desc, group.
+# Single source of truth for keybinds: `exoBinds` below generates the niri
+# `binds` section (binds reference stock `ignis` commands; window management
+# is native Niri). Fields per bind: keys (Niri KDL key expr), props (bind
+# properties like hotkey-overlay-title), run (action node), desc, group
+# (documentation only now that the overlay cheatsheet is gone).
 {
   lib,
   pkgs,
   ...
 }: let
-  qs = "quickshell --config onix ipc call";
-
   # Shorthand constructors for the KDL action nodes.
   spawn = cmd: {spawn = cmd;};
   act = name: {"${name}" = {};};
   actArg = name: arg: {"${name}" = arg;};
 
-  onixBinds = [
+  exoBinds = [
     {
       keys = "Mod+Return";
       props = {hotkey-overlay-title = "Terminal";};
@@ -56,21 +54,21 @@
     {
       keys = "Mod+Space";
       props = {hotkey-overlay-title = "Launcher";};
-      run = spawn ["sh" "-c" "${qs} onixLauncher toggle"];
+      run = spawn ["ignis" "open-window" "Launcher"];
       desc = "Launcher";
       group = "Apps";
     }
     {
-      keys = "Mod+Slash";
+      keys = "Mod+Shift+Slash";
       props = {};
-      run = spawn ["sh" "-c" "${qs} onixKeybinds toggle"];
-      desc = "Keybind cheatsheet";
+      run = act "show-hotkey-overlay";
+      desc = "Hotkey overlay";
       group = "Apps";
     }
     {
       keys = "Mod+S";
       props = {hotkey-overlay-title = "Settings";};
-      run = spawn ["sh" "-c" "${qs} onixSettings open"];
+      run = spawn ["ignis" "open-window" "Settings"];
       desc = "Settings";
       group = "Apps";
     }
@@ -78,7 +76,7 @@
     {
       keys = "Mod+Shift+Q";
       props = {hotkey-overlay-title = "Power menu";};
-      run = spawn ["sh" "-c" "${qs} onixPower toggle"];
+      run = spawn ["ignis" "open-window" "PowerMenu"];
       desc = "Power menu";
       group = "Shell";
     }
@@ -88,29 +86,15 @@
         hotkey-overlay-title = "Power menu";
         allow-inhibiting = false;
       };
-      run = spawn ["sh" "-c" "${qs} onixPower toggle"];
+      run = spawn ["ignis" "open-window" "PowerMenu"];
       desc = "Power menu (always)";
       group = "Shell";
     }
     {
       keys = "Super+L";
       props = {hotkey-overlay-title = "Lock the Screen";};
-      run = spawn ["sh" "-c" "${qs} onixLock lock"];
+      run = spawn ["hyprlock"];
       desc = "Lock screen";
-      group = "Shell";
-    }
-    {
-      keys = "Mod+N";
-      props = {hotkey-overlay-title = "Quickcenter";};
-      run = spawn ["sh" "-c" "${qs} onixQuickCenter toggle"];
-      desc = "Quickcenter";
-      group = "Shell";
-    }
-    {
-      keys = "Mod+Shift+V";
-      props = {};
-      run = spawn ["sh" "-c" "${qs} onixClipboard toggle"];
-      desc = "Clipboard history";
       group = "Shell";
     }
     {
@@ -145,15 +129,22 @@
     {
       keys = "Mod+Shift+R";
       props = {hotkey-overlay-title = "Record the screen";};
-      run = spawn ["sh" "-c" "${qs} onixRecorder recordScreen"];
+      run = spawn ["ignis" "run-command" "recorder-record-screen"];
       desc = "Record screen";
       group = "Recorder";
     }
     {
       keys = "Mod+Shift+S";
       props = {hotkey-overlay-title = "Record a region";};
-      run = spawn ["sh" "-c" "${qs} onixRecorder recordRegion"];
+      run = spawn ["ignis" "run-command" "recorder-record-region"];
       desc = "Record region";
+      group = "Recorder";
+    }
+    {
+      keys = "Mod+Shift+W";
+      props = {hotkey-overlay-title = "Record a window (portal)";};
+      run = spawn ["ignis" "run-command" "recorder-record-portal"];
+      desc = "Record window";
       group = "Recorder";
     }
 
@@ -437,56 +428,56 @@
     {
       keys = "XF86AudioRaiseVolume";
       props = {allow-when-locked = true;};
-      run = {"spawn-sh" = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.0; ${qs} osd volume";};
+      run = spawn ["wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+" "-l" "1.0"];
       desc = "Volume up";
       group = "Media";
     }
     {
       keys = "XF86AudioLowerVolume";
       props = {allow-when-locked = true;};
-      run = {"spawn-sh" = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-; ${qs} osd volume";};
+      run = spawn ["wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"];
       desc = "Volume down";
       group = "Media";
     }
     {
       keys = "XF86AudioMute";
       props = {allow-when-locked = true;};
-      run = {"spawn-sh" = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; ${qs} osd volume";};
+      run = spawn ["wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"];
       desc = "Mute";
       group = "Media";
     }
     {
       keys = "XF86AudioPlay";
       props = {allow-when-locked = true;};
-      run = {"spawn-sh" = "playerctl play-pause";};
+      run = spawn ["playerctl" "play-pause"];
       desc = "Play / pause";
       group = "Media";
     }
     {
       keys = "XF86AudioNext";
       props = {allow-when-locked = true;};
-      run = {"spawn-sh" = "playerctl next";};
+      run = spawn ["playerctl" "next"];
       desc = "Next track";
       group = "Media";
     }
     {
       keys = "XF86AudioPrev";
       props = {allow-when-locked = true;};
-      run = {"spawn-sh" = "playerctl previous";};
+      run = spawn ["playerctl" "previous"];
       desc = "Previous track";
       group = "Media";
     }
     {
       keys = "XF86MonBrightnessUp";
       props = {allow-when-locked = true;};
-      run = {"spawn-sh" = "brightnessctl --class=backlight set 5%+; ${qs} osd brightness";};
+      run = spawn ["brightnessctl" "--class=backlight" "set" "5%+"];
       desc = "Brightness up";
       group = "Media";
     }
     {
       keys = "XF86MonBrightnessDown";
       props = {allow-when-locked = true;};
-      run = {"spawn-sh" = "brightnessctl --class=backlight set 5%-; ${qs} osd brightness";};
+      run = spawn ["brightnessctl" "--class=backlight" "set" "5%-"];
       desc = "Brightness down";
       group = "Media";
     }
@@ -510,7 +501,7 @@
       }
     ]) (lib.range 1 9);
 
-  allBinds = onixBinds ++ workspaceBinds;
+  allBinds = exoBinds ++ workspaceBinds;
 
   # "Mod+J" -> { _props = {...}; focus-window-down = {}; }
   mkBind = b: {
@@ -520,8 +511,6 @@
   };
 
   bindsAttr = lib.foldl' (acc: b: acc // (mkBind b)) {} allBinds;
-
-  groupNames = lib.unique (map (b: b.group) allBinds);
 in {
   wayland.windowManager.niri = {
     enable = true;
@@ -563,8 +552,11 @@ in {
     };
 
     # Window rules as raw KDL: the settings generator merges same-named
-    # nodes, but niri wants one match per window-rule block.
+    # nodes, but niri wants one match per window-rule block. Same for the
+    # repeated spawn-at-startup nodes below.
     extraConfig = ''
+      spawn-at-startup "swww-daemon"
+      spawn-at-startup "ignis" "init"
       window-rule {
           match app-id="^(org.gnome.Nautilus)$"
           open-floating true
@@ -584,42 +576,15 @@ in {
     '';
   };
 
-  # Tools referenced by binds, widgets, and recorder.
+  # Tools referenced by binds and the Exo recorder.
   home.packages = with pkgs; [
     brightnessctl
     playerctl
     wl-clipboard
-    cliphist
     grim
     slurp
     libnotify
     gpu-screen-recorder
     polkit_gnome
   ];
-
-  # Clipboard history daemons (both session types during the transition).
-  systemd.user.services = {
-    cliphist-text = {
-      Unit.Description = "cliphist text clipboard watcher";
-      Service.ExecStart = "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.cliphist}/bin/cliphist store";
-      Install.WantedBy = ["niri-session.target"];
-    };
-    cliphist-image = {
-      Unit.Description = "cliphist image clipboard watcher";
-      Service.ExecStart = "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store";
-      Install.WantedBy = ["niri-session.target"];
-    };
-  };
-
-  # Machine-readable cheatsheet for the OnixKeybinds overlay.
-  xdg.configFile."quickshell-onix/keybinds.json".text = builtins.toJSON {
-    groups =
-      map (g: {
-        name = g;
-        binds = map (b: {
-          inherit (b) keys desc;
-        }) (lib.filter (b: b.group == g) allBinds);
-      })
-      groupNames;
-  };
 }
