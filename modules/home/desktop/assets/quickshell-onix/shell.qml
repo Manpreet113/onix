@@ -3,8 +3,9 @@
 //
 // Onix shell entry point (Niri session). Singletons (OnixTheme, OnixSettings,
 // OnixNiri) self-register; views instantiate below as they land per phase.
-// The P0 smoke panel below proves theme + settings + Niri-guard load and
-// render — it is removed when the OnixBar lands in P2.
+// The smoke panel below showcases the P1 primitives (M3Button types, M3Slider,
+// M3NavRail) plus theme/settings/Niri status — it is removed when the OnixBar
+// lands in P2.
 import QtQuick
 import Quickshell
 
@@ -16,6 +17,12 @@ Scope {
     property var prefs: OnixSettings
     property var niri: OnixNiri
 
+    OnixOsd {
+    }
+
+    OnixNotifs {
+    }
+
     PanelWindow {
         id: smoke
         anchors {
@@ -26,7 +33,7 @@ Scope {
             left: 16
             bottom: 16
         }
-        implicitWidth: 340
+        implicitWidth: 420
         implicitHeight: col.implicitHeight + 24
 
         color: "transparent"
@@ -50,7 +57,7 @@ Scope {
             spacing: 8
 
             Text {
-                text: "ONIX · P0 scaffold"
+                text: "ONIX · P1 primitives"
                 color: OnixTheme.mOnSurface
                 font.family: OnixTheme.fontFamily
                 font.pixelSize: OnixTheme.fontTitle
@@ -90,27 +97,76 @@ Scope {
                 }
             }
 
-            Text {
-                text: "niri: " + (OnixNiri.available ? OnixNiri.socketPath : "unavailable (expected off-Niri)")
-                color: OnixTheme.mOnSurfaceVariant
-                font.family: OnixTheme.fontFamily
-                font.pixelSize: OnixTheme.fontSmall
-                elide: Text.ElideRight
-                width: col.width
+            Row {
+                spacing: 6
+                M3Button {
+                    btnType: "filled"
+                    size: "s"
+                    icon: "check"
+                    label: "Filled"
+                }
+                M3Button {
+                    btnType: "tonal"
+                    size: "s"
+                    label: "Tonal"
+                }
+                M3Button {
+                    btnType: "outlined"
+                    size: "s"
+                    label: "Lined"
+                }
+                M3Button {
+                    btnType: "text"
+                    size: "s"
+                    icon: "close"
+                }
             }
-            Text {
-                text: "theme: " + (Object.keys(OnixTheme.data).length > 0 ? "skein live" : "Nord fallback")
-                color: OnixTheme.mOnSurfaceVariant
-                font.family: OnixTheme.fontFamily
-                font.pixelSize: OnixTheme.fontSmall
+
+            M3Slider {
+                icon: "volume_up"
+                from: 0
+                to: 100
+                value: 60
+                width: parent.width
             }
-            Text {
-                text: "settings sections: " + Object.keys(OnixSettings.settings).join(", ")
-                color: OnixTheme.mOnSurfaceVariant
-                font.family: OnixTheme.fontFamily
-                font.pixelSize: OnixTheme.fontSmall
-                wrapMode: Text.Wrap
-                width: col.width
+
+            Row {
+                spacing: 6
+                M3NavRail {
+                    property int demo: 0
+                    items: [
+                        { icon: "home", label: "Home" },
+                        { icon: "settings", label: "Set" }
+                    ]
+                    current: demo
+                    onSelected: index => demo = index
+                }
+                Column {
+                    spacing: 2
+                    anchors.verticalCenter: parent.verticalCenter
+                    Text {
+                        text: "niri: " + (OnixNiri.available ? OnixNiri.socketPath : "unavailable (expected off-Niri)")
+                        color: OnixTheme.mOnSurfaceVariant
+                        font.family: OnixTheme.fontFamily
+                        font.pixelSize: OnixTheme.fontSmall
+                        elide: Text.ElideRight
+                        width: 280
+                    }
+                    Text {
+                        text: "theme: " + (Object.keys(OnixTheme.data).length > 0 ? "skein live" : "Nord fallback")
+                        color: OnixTheme.mOnSurfaceVariant
+                        font.family: OnixTheme.fontFamily
+                        font.pixelSize: OnixTheme.fontSmall
+                    }
+                    Text {
+                        text: "settings: " + Object.keys(OnixSettings.settings).join(", ")
+                        color: OnixTheme.mOnSurfaceVariant
+                        font.family: OnixTheme.fontFamily
+                        font.pixelSize: OnixTheme.fontSmall
+                        wrapMode: Text.Wrap
+                        width: 280
+                    }
+                }
             }
         }
     }

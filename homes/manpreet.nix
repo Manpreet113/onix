@@ -32,6 +32,8 @@
     nerd-fonts.jetbrains-mono
     noto-fonts
     noto-fonts-color-emoji
+    # Upstream icon set for the onix shell (Material Symbols ligatures)
+    material-symbols
   ];
 
   # XDG

@@ -49,6 +49,8 @@ Singleton {
     readonly property color mOnPrimaryContainer: root.text
     readonly property color mSecondary: root.accent
     readonly property color mOnSecondary: root.bg
+    readonly property color mSecondaryContainer: Qt.darker(root.accent, 1.7)
+    readonly property color mOnSecondaryContainer: root.accent
     readonly property color mTertiary: root.success
     readonly property color mOnTertiary: root.bg
     readonly property color mSurface: root.bg
@@ -74,6 +76,9 @@ Singleton {
 
     // type
     readonly property string fontFamily: "JetBrainsMono Nerd Font"
+    // Material Symbols ligature icons (upstream icon set; package installed
+    // via home.packages). Labels intentionally use the system default sans.
+    readonly property string iconFont: "Material Symbols Outlined"
     readonly property int fontSmall: 12
     readonly property int fontMed: 13
     readonly property int fontLarge: 15
