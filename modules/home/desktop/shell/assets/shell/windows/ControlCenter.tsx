@@ -157,9 +157,9 @@ export default function ControlCenter() {
         />
         {profiles}
         <box spacing={8}>
-          <button class="cc-btn" label="󰒓 Settings" onClicked={() => execAsync(["bash", "-c", "ags request settings"])} />
-          <button class="cc-btn" label="⏻ Power" onClicked={() => execAsync(["bash", "-c", "ags request powermenu"])} />
-          <button class="cc-btn" label="󰖔 Wallpaper" onClicked={() => execAsync(["bash", "-c", "ags request wallpaper"])} />
+          <button class="cc-btn" label="󰒓 Settings" onClicked={() => execAsync(["bash", "-c", "ags request -i onix settings"])} />
+          <button class="cc-btn" label="⏻ Power" onClicked={() => execAsync(["bash", "-c", "ags request -i onix powermenu"])} />
+          <button class="cc-btn" label="󰖔 Wallpaper" onClicked={() => execAsync(["bash", "-c", "ags request -i onix wallpaper"])} />
         </box>
       </box>
     </window>

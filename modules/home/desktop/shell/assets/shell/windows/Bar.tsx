@@ -2,6 +2,7 @@
 // Lives on monitor 0 for v1 (multi-monitor: duplicate Bar(1)... later).
 import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
+import Gtk from "gi://Gtk?version=4.0";
 import { createBinding, createComputed, For } from "ags";
 import { createPoll } from "ags/time";
 import { execAsync } from "ags/process";
@@ -14,7 +15,9 @@ import Battery from "gi://AstalBattery";
 
 function Workspaces() {
   const hypr = Hyprland.get_default();
-  const workspaces = createBinding(hypr, "workspaces");
+  const workspaces = createBinding(hypr, "workspaces")((list) =>
+    [...list].sort((a, b) => a.id - b.id),
+  );
   const focused = createBinding(hypr, "focusedWorkspace");
 
   return (
@@ -84,7 +87,7 @@ function Audio() {
   return (
     <button
       class="pill"
-      onClicked={() => execAsync(["bash", "-c", "ags request control"])}
+      onClicked={() => execAsync(["bash", "-c", "ags request -i onix control"])}
     >
       <box spacing={6}>
         <label label={icon} class="ico" />
@@ -141,7 +144,7 @@ function Batt() {
 
 function PowerBtn() {
   return (
-    <button class="pill power" onClicked={() => execAsync(["bash", "-c", "ags request powermenu"])}>
+    <button class="pill power" onClicked={() => execAsync(["bash", "-c", "ags request -i onix powermenu"])}>
       <label label="⏻" class="ico" />
     </button>
   );
@@ -164,7 +167,7 @@ export default function Bar(monitor = 0) {
       <centerbox class="bar-inner">
         <box $type="start" spacing={8}>
           <Workspaces />
-          <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request launcher"])}>
+          <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request -i onix launcher"])}>
             <label label="󰀻  Launcher" />
           </button>
         </box>
@@ -176,10 +179,10 @@ export default function Bar(monitor = 0) {
           <Audio />
           <NetBt />
           <Batt />
-          <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request notifications"])}>
+          <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request -i onix notifications"])}>
             <label label="󰂚" class="ico" />
           </button>
-          <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request control"])}>
+          <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request -i onix control"])}>
             <label label="󰒓" class="ico" />
           </button>
           <PowerBtn />

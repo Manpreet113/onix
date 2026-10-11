@@ -6,12 +6,12 @@ import Gtk from "gi://Gtk?version=4.0";
 import { execAsync } from "ags/process";
 
 const rows: { title: string; sub: string; action: string }[] = [
-  { title: "Wallpaper", sub: "Pick + re-theme via skein", action: "ags request wallpaper" },
-  { title: "Quick settings", sub: "Volume, brightness, wifi, bluetooth", action: "ags request control" },
-  { title: "Notifications", sub: "History + do-not-disturb", action: "ags request notifications" },
+  { title: "Wallpaper", sub: "Pick + re-theme via skein", action: "ags request -i onix wallpaper" },
+  { title: "Quick settings", sub: "Volume, brightness, wifi, bluetooth", action: "ags request -i onix control" },
+  { title: "Notifications", sub: "History + do-not-disturb", action: "ags request -i onix notifications" },
   { title: "Audio", sub: "Open pavucontrol", action: "pavucontrol" },
   { title: "Bluetooth", sub: "Open blueman", action: "blueman-manager" },
-  { title: "Power", sub: "Suspend, reboot, shutdown", action: "ags request powermenu" },
+  { title: "Power", sub: "Suspend, reboot, shutdown", action: "ags request -i onix powermenu" },
 ];
 
 export default function Settings() {

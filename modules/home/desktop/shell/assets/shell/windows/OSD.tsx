@@ -1,7 +1,8 @@
 // OSD: volume / mic overlay (bottom-center, auto-hide).
 import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
-import { createState, createComputed, timeout } from "ags";
+import { createState, createComputed } from "ags";
+import { timeout } from "ags/time";
 import { createBinding } from "ags";
 import Wp from "gi://AstalWp";
 
