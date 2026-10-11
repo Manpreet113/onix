@@ -15,8 +15,8 @@ window {
 }
 
 .Bar .bar-inner {
-  background-color: alpha(var(--onix-bg, $bg), 0.92);
-  border-bottom: 1px solid alpha(var(--onix-muted, $muted), 0.6);
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 92%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 60%, transparent);
   padding: 6px 12px;
 }
 
@@ -26,8 +26,8 @@ window {
 }
 
 .pill {
-  background-color: alpha(var(--onix-surface, $surface), 0.95);
-  border: 1px solid alpha(var(--onix-muted, $muted), 0.5);
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 95%, transparent);
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 50%, transparent);
   border-radius: 999px;
   padding: 4px 12px;
 }
@@ -65,8 +65,8 @@ window {
 .Powermenu .power-inner,
 .Wallpaper .wall-inner,
 .Settings .settings-inner {
-  background-color: alpha(var(--onix-bg, $bg), 0.97);
-  border: 1px solid alpha(var(--onix-muted, $muted), 0.7);
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 97%, transparent);
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 70%, transparent);
   border-radius: $radius;
   padding: 16px;
   margin: 12px;
@@ -86,27 +86,27 @@ entry {
 }
 
 .app-row, .wall-row, .settings-row, .nc-row {
-  background-color: alpha(var(--onix-surface, $surface), 0.6);
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 60%, transparent);
   border: 1px solid transparent;
   border-radius: 10px;
   padding: 8px 10px;
 }
 .app-row:hover, .wall-row:hover, .settings-row:hover {
   border-color: var(--onix-primary, $primary);
-  background-color: alpha(var(--onix-surface, $surface), 0.95);
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 95%, transparent);
 }
 .app-name { font-weight: 600; }
 .app-desc { color: var(--onix-muted, $muted); font-size: 12px; }
 
 .cc-toggle {
   background-color: var(--onix-surface, $surface);
-  border: 1px solid alpha(var(--onix-muted, $muted), 0.6);
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 60%, transparent);
   border-radius: 10px;
   padding: 8px 12px;
 }
 .cc-toggle.on {
   border-color: var(--onix-primary, $primary);
-  background-color: alpha(var(--onix-primary, $primary), 0.25);
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 25%, transparent);
 }
 .cc-row { padding: 2px 0; }
 .cc-btn { border-radius: 10px; padding: 8px; }
@@ -130,8 +130,8 @@ slider slider {
 /* Notifications */
 .Notifs .notifs-inner { padding: 10px 10px 0 0; }
 .toast {
-  background-color: alpha(var(--onix-bg, $bg), 0.97);
-  border: 1px solid alpha(var(--onix-primary, $primary), 0.5);
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 97%, transparent);
+  border: 1px solid color-mix(in srgb, var(--onix-primary, $primary) 50%, transparent);
   border-radius: $radius;
   padding: 12px;
 }
@@ -142,8 +142,8 @@ slider slider {
 
 /* OSD */
 .OSD .osd-inner {
-  background-color: alpha(var(--onix-bg, $bg), 0.95);
-  border: 1px solid alpha(var(--onix-muted, $muted), 0.7);
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 95%, transparent);
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 70%, transparent);
   border-radius: 999px;
   padding: 10px 18px;
   margin-bottom: 28px;
