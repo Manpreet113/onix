@@ -36,3 +36,9 @@ changelog. No Exo branding, installer, defaults, or wallpaper ships here.
 - **Terminal**: upstream spawns `kitty`; the port spawns `ghostty -e`.
 - **Dropped**: `exoinstall.py` (Nix is the installer), `matugen/` + `kitty/`
   configs, `exodefaults/`, and the `m3test` playground module.
+- **Beyond upstream**: lock screen, screen corners, clipboard history, and
+  the keybind cheatsheet have no upstream equivalent — they are original
+  onix components (lock + clipboard logic descended from onix's own
+  Hyprland shell, same license). The old per-panel views (sound mixer,
+  calendar, system monitor) were retired with the port; quickcenter covers
+  their ground.
