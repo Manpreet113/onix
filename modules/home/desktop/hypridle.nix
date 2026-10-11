@@ -5,7 +5,7 @@ _: {
       general = {
         lock_cmd = "hyprlock";
         before_sleep_cmd = "hyprlock";
-        after_sleep_cmd = "niri msg action power-on-monitors";
+        after_sleep_cmd = "hyprctl dispatch dpms on";
       };
       listener = [
         {
@@ -14,8 +14,8 @@ _: {
         }
         {
           timeout = 330;
-          on-timeout = "niri msg action power-off-monitors";
-          on-resume = "niri msg action power-on-monitors";
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
         }
       ];
     };

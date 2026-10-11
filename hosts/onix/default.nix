@@ -17,7 +17,7 @@
       autoUpgrade.enable = true;
     };
     desktop = {
-      niri.enable = true;
+      hyprland.enable = true;
       greetd.enable = true;
       nautilus.enable = true;
       audio.enable = true;

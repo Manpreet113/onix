@@ -14,8 +14,8 @@ in {
       enable = true;
       settings = {
         default_session = {
-          # No --cmd: tuigreet offers the wayland-sessions menu (Niri).
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd niri-session";
+          # Straight into Hyprland; --remember keeps the last session.
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd start-hyprland";
           user = "greeter";
         };
       };

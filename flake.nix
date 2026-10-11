@@ -50,12 +50,6 @@
       url = "github:manpreet113/skein";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    ignis = {
-      url = "github:ignis-sh/ignis/v0.6.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.ignis-gvc.inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs @ {flake-parts, ...}:
