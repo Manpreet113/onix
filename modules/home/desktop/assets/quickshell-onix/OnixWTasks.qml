@@ -46,15 +46,73 @@ Item {
 
     property int cycleIdx: 0
 
-    function handleClick(entry): void {
+    function taskMenu(anchor, entry): void {
+        var wins = root.windowsFor(entry.id);
+        var items = [
+            { label: entry.name || "", enabled: false },
+            { separator: true },
+            {
+                label: OnixApps.isPinned(entry.id) ? "Unpin from Dock" : "Pin to Dock",
+                fire: function () {
+                    if (OnixApps.isPinned(entry.id))
+                        OnixApps.unpin(entry.id);
+                    else
+                        OnixApps.pin(entry.id);
+                }
+            }
+        ];
+        var acts = entry.actions || [];
+        if (wins.length > 0 || acts.length > 0)
+            items.push({ separator: true });
+        if (wins.length > 0) {
+            items.push({
+                label: "New Window",
+                fire: function () {
+                    OnixApps.launchEntry(entry);
+                }
+            });
+        }
+        for (var i = 0; i < acts.length; i++) {
+            (function (a) {
+                items.push({
+                    label: a.name || "",
+                    fire: function () {
+                        try {
+                            a.launch();
+                        } catch (e) {
+                            if (a.execute)
+                                a.execute();
+                        }
+                    }
+                });
+            })(acts[i]);
+        }
+        OnixMenu.open(anchor, items);
+    }
+
+    function windowMenu(anchor, wins): void {
+        var items = [];
+        for (var i = 0; i < wins.length; i++) {
+            (function (w) {
+                items.push({
+                    label: w.title || "Untitled Window",
+                    fire: function () {
+                        OnixNiri.focusWindowById(w.id);
+                    }
+                });
+            })(wins[i]);
+        }
+        OnixMenu.open(anchor, items);
+    }
+
+    function handleClick(anchor, entry): void {
         var wins = root.windowsFor(entry.id);
         if (wins.length === 0) {
             OnixApps.launchEntry(entry);
         } else if (wins.length === 1) {
             OnixNiri.focusWindowById(wins[0].id);
         } else {
-            root.cycleIdx = (root.cycleIdx + 1) % wins.length;
-            OnixNiri.focusWindowById(wins[root.cycleIdx].id);
+            root.windowMenu(anchor, wins);
         }
     }
 
@@ -90,6 +148,7 @@ Item {
                 return items;
             }
             delegate: Item {
+                id: taskBtn
                 required property var modelData
                 implicitWidth: root.iconPx + 12
                 implicitHeight: root.iconPx + 12
@@ -130,14 +189,10 @@ Item {
                     cursorShape: Qt.PointingHandCursor
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     onClicked: mouse => {
-                        if (mouse.button === Qt.RightButton) {
-                            if (OnixApps.isPinned(modelData.entry.id))
-                                OnixApps.unpin(modelData.entry.id);
-                            else
-                                OnixApps.pin(modelData.entry.id);
-                        } else {
-                            root.handleClick(modelData.entry);
-                        }
+                        if (mouse.button === Qt.RightButton)
+                            root.taskMenu(taskBtn, modelData.entry);
+                        else
+                            root.handleClick(taskBtn, modelData.entry);
                     }
                 }
             }

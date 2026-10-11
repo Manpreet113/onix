@@ -18,6 +18,7 @@ Scope {
     property var apps: OnixApps
     property var ui: OnixUi
     property var recorder: OnixRecorder
+    property var menu: OnixMenu
 
     OnixBar {
         barId: 0
@@ -31,5 +32,8 @@ Scope {
     }
 
     OnixNotifs {
+    }
+
+    OnixLauncher {
     }
 }
