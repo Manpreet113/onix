@@ -45,14 +45,14 @@ Singleton {
     // Material-3 roles derived from the skein tokens above
     readonly property color mPrimary: root.primary
     readonly property color mOnPrimary: root.bg
-    readonly property color mPrimaryContainer: root.surface
-    readonly property color mOnPrimaryContainer: root.text
-    readonly property color mSecondary: root.accent
-    readonly property color mOnSecondary: root.bg
+    readonly property color mPrimaryContainer: Qt.darker(root.primary, 1.8)
+    readonly property color mOnPrimaryContainer: Qt.lighter(root.primary, 1.25)
     readonly property color mSecondaryContainer: Qt.darker(root.accent, 1.7)
     readonly property color mOnSecondaryContainer: root.accent
-    readonly property color mTertiary: root.success
-    readonly property color mOnTertiary: root.bg
+    readonly property color mTertiaryContainer: Qt.darker(root.success, 1.7)
+    readonly property color mOnTertiaryContainer: root.success
+    readonly property color mErrorContainer: root.failure
+    readonly property color mOnErrorContainer: Qt.lighter(root.error, 1.25)
     readonly property color mSurface: root.bg
     readonly property color mOnSurface: root.text
     readonly property color mOnSurfaceVariant: root.subtext
@@ -65,7 +65,6 @@ Singleton {
     readonly property color mOutlineVariant: root.border
     readonly property color mError: root.error
     readonly property color mOnError: root.bg
-    readonly property color mErrorContainer: root.failure
     readonly property color mScrim: root.backdrop
 
     // shape
