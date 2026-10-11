@@ -16,6 +16,9 @@ PanelWindow {
     readonly property var anchorNames: OnixSettings.get(["interface", "notifications", "anchor"], ["top", "right"])
     readonly property bool compact: OnixSettings.get(["interface", "notifications", "compact_popup"], false)
     readonly property bool newestFirst: OnixSettings.get(["interface", "bar", "side"], "bottom") === "top"
+    readonly property bool dnd: OnixSettings.get(["interface", "notifications", "dnd"], false)
+    readonly property int popupTimeoutMs: OnixSettings.get(["interface", "notifications", "popup_timeout"], 5) * 1000
+    readonly property int maxPopups: OnixSettings.get(["interface", "notifications", "max_popups"], 5)
 
     anchors {
         top: root.anchorNames.indexOf("top") >= 0
@@ -33,7 +36,7 @@ PanelWindow {
     implicitHeight: list.implicitHeight
     WlrLayershell.exclusionMode: ExclusionMode.Ignore
     color: "transparent"
-    visible: server.trackedNotifications.length > 0 || root.closing > 0
+    visible: (server.trackedNotifications.length > 0 || root.closing > 0) && !root.dnd
 
     property int closing: 0
 
@@ -47,6 +50,8 @@ PanelWindow {
         onNotification: notification => {
             notification.tracked = true;
             OnixNotifHistory.push(notification.summary, notification.body, notification.appIcon, notification.appName);
+            while (server.trackedNotifications.length > root.maxPopups)
+                server.trackedNotifications[0].expire();
         }
     }
 
@@ -117,7 +122,7 @@ PanelWindow {
                 }
 
                 Timer {
-                    interval: modelData.expireTimeout > 0 ? modelData.expireTimeout * 1000 : 5000
+                    interval: modelData.expireTimeout > 0 ? modelData.expireTimeout * 1000 : root.popupTimeoutMs
                     running: true
                     repeat: false
                     onTriggered: dismiss()

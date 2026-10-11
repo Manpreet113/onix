@@ -79,7 +79,10 @@
     },
     "notifications": {
       "anchor": ["top", "right"],
-      "compact_popup": false
+      "compact_popup": false,
+      "dnd": false,
+      "popup_timeout": 5,
+      "max_popups": 5
     },
     "launcher": {
       "layout": "grid"

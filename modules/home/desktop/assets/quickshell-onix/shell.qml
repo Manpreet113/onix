@@ -43,4 +43,7 @@ Scope {
 
     OnixPowerMenu {
     }
+
+    OnixSettingsWin {
+    }
 }

@@ -108,7 +108,10 @@ Singleton {
             },
             notifications: {
                 anchor: ["top", "right"],
-                compact_popup: false
+                compact_popup: false,
+                dnd: false,
+                popup_timeout: 5,
+                max_popups: 5
             },
             launcher: {
                 layout: "grid"
@@ -204,5 +207,26 @@ Singleton {
         Quickshell.execDetached(["mkdir", "-p", root.stateDir]);
         if (!root.hydrated)
             root.load();
+    }
+
+    // auto-dark (ports upstream auto_dark): while enabled, the clock owns
+    // dark_mode — evaluated every minute, overnight windows wrap correctly
+    Timer {
+        interval: 60000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: {
+            var ad = root.get(["appearance", "wallcolors", "auto_dark"], null);
+            if (!ad || !ad.enabled)
+                return;
+            var now = new Date();
+            var cur = now.getHours() * 60 + now.getMinutes();
+            var start = (ad.start_hour || 0) * 60 + (ad.start_min || 0);
+            var end = (ad.end_hour || 0) * 60 + (ad.end_min || 0);
+            var wantDark = (start <= end) ? (cur >= start && cur < end) : (cur >= start || cur < end);
+            if (root.get(["appearance", "wallcolors", "dark_mode"], true) !== wantDark)
+                root.set(["appearance", "wallcolors", "dark_mode"], wantDark);
+        }
     }
 }
