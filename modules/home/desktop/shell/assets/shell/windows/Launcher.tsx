@@ -3,6 +3,7 @@ import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
 import { createState, createComputed, For } from "ags";
+import { escToHide } from "../services/keys";
 import Apps from "gi://AstalApps";
 
 export default function Launcher() {
@@ -32,6 +33,7 @@ export default function Launcher() {
       keymode={Astal.Keymode.EXCLUSIVE}
       anchor={CENTER}
       widthRequest={560}
+      $={escToHide}
       application={app}
       onShow={() => setQuery("")}
     >

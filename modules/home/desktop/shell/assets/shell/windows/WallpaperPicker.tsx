@@ -4,6 +4,7 @@ import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
 import { createState, For } from "ags";
 import { execAsync } from "ags/process";
+import { escToHide } from "../services/keys";
 import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
@@ -47,6 +48,7 @@ export default function WallpaperPicker() {
       keymode={Astal.Keymode.EXCLUSIVE}
       anchor={CENTER}
       widthRequest={720}
+      $={escToHide}
       application={app}
       onShow={() => setWalls(listWallpapers())}
     >

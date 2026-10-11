@@ -1,23 +1,25 @@
-// Onix shell theme v2 — deep floating glass over the wallpaper.
-// Nord soul, Tokyo-Night depth. Skein injects --onix-* at runtime via
-// apply_css (see services/skein.ts); values below are boot fallbacks.
-$bg: #1a1b26;
-$surface: #24283b;
-$surface2: #2b3048;
-$primary: #7aa2f7;
-$secondary: #bb9af7;
-$fg: #c0caf5;
-$muted: #565f89;
-$error: #f7768e;
-$on-primary: #1a1b26;
+// Onix shell theme v3 — slim floating islands, hairline borders.
+// Skein injects --onix-* at runtime (services/skein.ts); values below
+// are boot fallbacks for a near-black monochrome setup.
+$bg: #060606;
+$surface: #0f0f0f;
+$surface2: #1b1b1b;
+$primary: #777777;
+$secondary: #929fb8;
+$fg: #f2f2f2;
+$muted: #5d5d5d;
+$error: #b69690;
+$on-primary: #060606;
 $radius: 16px;
-$border: color-mix(in srgb, var(--onix-primary, $primary) 22%, transparent);
+$hairline: var(--onix-border, #2b2b2b);
+$accent-line: color-mix(in srgb, var(--onix-primary, $primary) 45%, transparent);
 $card-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+$island-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
 
 window {
   background-color: transparent;
   font-family: "JetBrainsMono Nerd Font", "Cantarell", sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--onix-fg, $fg);
 }
 
@@ -30,14 +32,14 @@ window {
 tooltip {
   background-color: var(--onix-surface, $surface);
   color: var(--onix-fg, $fg);
-  border: 1px solid $border;
+  border: 1px solid $hairline;
   border-radius: 10px;
   padding: 6px 10px;
 }
 
 popover.contents {
   background-color: color-mix(in srgb, var(--onix-bg, $bg) 96%, transparent);
-  border: 1px solid $border;
+  border: 1px solid $hairline;
   border-radius: 14px;
   padding: 10px;
   box-shadow: $card-shadow;
@@ -53,38 +55,42 @@ scrollbar slider:hover {
   background-color: var(--onix-primary, $primary);
 }
 
-/* ============ BAR (floating) ============ */
+/* ============ BAR: three floating islands ============ */
 .Bar .bar-inner {
-  background-color: color-mix(in srgb, var(--onix-bg, $bg) 82%, transparent);
-  border: 1px solid $border;
-  border-radius: $radius;
-  padding: 8px 14px;
-  margin: 10px 14px 0;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 8px 12px 0;
+}
+
+.island {
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 84%, transparent);
+  border: 1px solid $hairline;
+  border-radius: 999px;
+  padding: 3px 8px;
+  box-shadow: $island-shadow;
 }
 
 .clock {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: 0.03em;
+  padding: 0 8px;
 }
+.clock-island { padding: 5px 10px; }
 
 /* workspace switcher */
-.ws {
-  background-color: color-mix(in srgb, var(--onix-surface, $surface) 80%, transparent);
-  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
-  border-radius: 999px;
-  padding: 3px;
-}
 .ws-btn {
-  min-width: 26px;
-  min-height: 24px;
+  min-width: 24px;
+  min-height: 20px;
   border-radius: 999px;
   background: transparent;
   border: none;
   color: var(--onix-muted, $muted);
-  padding: 0 9px;
+  padding: 0 8px;
   font-weight: 600;
+  font-size: 12px;
 }
 .ws-btn:hover {
   color: var(--onix-fg, $fg);
@@ -93,40 +99,32 @@ scrollbar slider:hover {
 .ws-btn.active {
   background-color: var(--onix-primary, $primary);
   color: var(--onix-on-primary, $on-primary);
-  padding: 0 16px;
+  padding: 0 14px;
 }
 
-/* right-side control cluster */
-.cluster {
-  background-color: color-mix(in srgb, var(--onix-surface, $surface) 80%, transparent);
-  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
-  border-radius: 999px;
-  padding: 3px 5px;
-}
-.cluster .pill {
+/* islands share one flat pill language */
+.island .pill {
   background: transparent;
   border: none;
   border-radius: 999px;
-  padding: 4px 10px;
+  padding: 3px 9px;
   color: var(--onix-fg, $fg);
 }
-.cluster .pill:hover {
-  background-color: color-mix(in srgb, var(--onix-primary, $primary) 22%, transparent);
+.island .pill:hover {
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 25%, transparent);
   color: var(--onix-primary, $primary);
 }
-.cluster .pill.power {
-  color: var(--onix-error, $error);
-}
-.cluster .pill.power:hover {
-  background-color: color-mix(in srgb, var(--onix-error, $error) 22%, transparent);
+.island .pill.power { color: var(--onix-error, $error); }
+.island .pill.power:hover {
+  background-color: color-mix(in srgb, var(--onix-error, $error) 25%, transparent);
   color: var(--onix-error, $error);
 }
 
 .pill {
   background-color: color-mix(in srgb, var(--onix-surface, $surface) 85%, transparent);
-  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
+  border: 1px solid $hairline;
   border-radius: 999px;
-  padding: 5px 14px;
+  padding: 4px 12px;
 }
 button.pill:hover {
   border-color: var(--onix-primary, $primary);
@@ -134,17 +132,17 @@ button.pill:hover {
 }
 .pill .ico, .ico {
   font-family: "Material Symbols Rounded", "JetBrainsMono Nerd Font", sans-serif;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .tray-btn {
-  padding: 2px 6px;
+  padding: 2px 5px;
   border-radius: 999px;
   background: transparent;
   border: none;
 }
 .tray-btn:hover {
-  background-color: color-mix(in srgb, var(--onix-primary, $primary) 22%, transparent);
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 25%, transparent);
 }
 .tray-title { font-weight: 700; }
 
@@ -155,8 +153,8 @@ button.pill:hover {
 .Powermenu .power-inner,
 .Wallpaper .wall-inner,
 .Settings .settings-inner {
-  background-color: color-mix(in srgb, var(--onix-bg, $bg) 90%, transparent);
-  border: 1px solid $border;
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 92%, transparent);
+  border: 1px solid $hairline;
   border-radius: 20px;
   padding: 20px;
   margin: 12px;
@@ -164,7 +162,7 @@ button.pill:hover {
 }
 
 .sheet-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   letter-spacing: 0.02em;
 }
@@ -182,8 +180,8 @@ entry {
   background-color: color-mix(in srgb, var(--onix-surface, $surface) 85%, transparent);
   border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 55%, transparent);
   border-radius: 14px;
-  padding: 12px 16px;
-  font-size: 15px;
+  padding: 11px 15px;
+  font-size: 14px;
   caret-color: var(--onix-primary, $primary);
 }
 entry:focus {
@@ -193,33 +191,34 @@ entry:focus {
 
 /* launcher rows */
 .app-list .app-row:first-child {
-  border-color: var(--onix-primary, $primary);
+  border-color: $accent-line;
   background-color: color-mix(in srgb, var(--onix-primary, $primary) 14%, transparent);
 }
 .app-row, .wall-row, .settings-row, .nc-row {
   background-color: transparent;
   border: 1px solid transparent;
   border-radius: 14px;
-  padding: 9px 12px;
+  padding: 8px 11px;
 }
 .app-row:hover, .wall-row:hover, .settings-row:hover {
-  border-color: color-mix(in srgb, var(--onix-primary, $primary) 55%, transparent);
+  border-color: $accent-line;
   background-color: color-mix(in srgb, var(--onix-surface, $surface) 85%, transparent);
 }
 .app-icon-tile {
-  background-color: color-mix(in srgb, var(--onix-surface, $surface2) 90%, transparent);
+  background-color: var(--onix-surface2, $surface2);
+  border: 1px solid $hairline;
   border-radius: 12px;
   padding: 6px;
 }
-.app-name { font-weight: 700; font-size: 14px; }
+.app-name { font-weight: 700; font-size: 13px; }
 .app-desc { color: var(--onix-muted, $muted); font-size: 12px; }
 
 /* control center */
 .cc-toggle {
   background-color: color-mix(in srgb, var(--onix-surface, $surface) 70%, transparent);
-  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
+  border: 1px solid $hairline;
   border-radius: 14px;
-  padding: 10px 14px;
+  padding: 9px 13px;
 }
 .cc-toggle:hover { border-color: var(--onix-primary, $primary); }
 .cc-toggle.on {
@@ -230,7 +229,7 @@ entry:focus {
 .cc-row { padding: 2px 0; }
 .cc-btn {
   border-radius: 12px;
-  padding: 10px;
+  padding: 9px;
   background-color: color-mix(in srgb, var(--onix-surface, $surface) 70%, transparent);
   border: 1px solid transparent;
 }
@@ -266,17 +265,20 @@ slider slider {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* ============ NOTIFICATIONS ============ */
-.Notifs .notifs-inner { padding: 12px 12px 0 0; }
+/* ============ NOTIFICATIONS (clears the floating bar) ============ */
+.Notifs .notifs-inner {
+  margin-top: 58px;
+  padding: 0 12px 0 0;
+}
 .toast {
-  background-color: color-mix(in srgb, var(--onix-bg, $bg) 92%, transparent);
-  border: 1px solid $border;
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 94%, transparent);
+  border: 1px solid $hairline;
   border-left: 3px solid var(--onix-primary, $primary);
   border-radius: $radius;
-  padding: 14px 16px;
+  padding: 12px 14px;
   box-shadow: $card-shadow;
 }
-.toast-title { font-weight: 800; font-size: 14px; }
+.toast-title { font-weight: 800; font-size: 13px; }
 .toast-body { color: var(--onix-fg, $fg); }
 .toast-app {
   color: var(--onix-muted, $muted);
@@ -288,26 +290,28 @@ slider slider {
   border-radius: 10px;
   padding: 5px 12px;
   background-color: color-mix(in srgb, var(--onix-surface, $surface) 80%, transparent);
+  border: 1px solid $hairline;
 }
 .toast-act:hover {
+  border-color: var(--onix-primary, $primary);
   background-color: color-mix(in srgb, var(--onix-primary, $primary) 25%, transparent);
 }
 
 /* ============ OSD ============ */
 .OSD .osd-inner {
   background-color: color-mix(in srgb, var(--onix-bg, $bg) 88%, transparent);
-  border: 1px solid $border;
+  border: 1px solid $hairline;
   border-radius: 999px;
-  padding: 12px 22px;
+  padding: 10px 20px;
   margin-bottom: 32px;
   box-shadow: $card-shadow;
 }
-.OSD .ico { font-size: 18px; color: var(--onix-primary, $primary); }
+.OSD .ico { font-size: 17px; color: var(--onix-primary, $primary); }
 
 /* ============ POWERMENU ============ */
 .power-btn {
-  min-width: 104px;
-  padding: 18px 12px;
+  min-width: 100px;
+  padding: 16px 10px;
   border-radius: $radius;
   background-color: color-mix(in srgb, var(--onix-surface, $surface) 70%, transparent);
   border: 1px solid transparent;
@@ -326,4 +330,4 @@ slider slider {
   background-color: color-mix(in srgb, var(--onix-secondary, $secondary) 14%, transparent);
   color: var(--onix-secondary, $secondary);
 }
-.power-ico { font-size: 30px; }
+.power-ico { font-size: 28px; }

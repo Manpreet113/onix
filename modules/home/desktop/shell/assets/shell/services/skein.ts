@@ -11,25 +11,29 @@ const GTK_CSS = `${HOME}/.cache/skein/gtk.css`;
 function themeJsonToCss(raw: string): string {
   try {
     const j = JSON.parse(raw) as Record<string, string>;
-    const pick = (k: string, fb: string) => j[k] ?? j[k.replace(/-/g, "_")] ?? fb;
-    const bg = pick("background", "#2e3440");
-    const surface = pick("surface", "#3b4252");
-    const primary = pick("primary", "#88c0d0");
-    const onPrimary = pick("on-primary", "#2e3440");
-    const secondary = pick("secondary", "#81a1c1");
-    const error = pick("error", "#bf616a");
-    const onSurface = pick("on-surface", "#eceff4");
-    const muted = pick("outline", "#4c566a");
+    // Real skein keys (see ~/.cache/skein/theme.json): background, surface,
+    // surface_variant, primary, accent, text, subtext, dim, border, error.
+    const bg = j["background"] ?? "#1a1b26";
+    const surface = j["surface"] ?? "#24283b";
+    const surface2 = j["surface_variant"] ?? "#2b3048";
+    const primary = j["accent"] ?? j["primary"] ?? "#7aa2f7";
+    const secondary = j["primary"] ?? "#bb9af7";
+    const error = j["error"] ?? "#f7768e";
+    const fg = j["text"] ?? "#c0caf5";
+    const muted = j["dim"] ?? j["subtext"] ?? "#565f89";
+    const border = j["border"] ?? "#2b2b2b";
     return `
 :root {
   --onix-bg: ${bg};
   --onix-surface: ${surface};
+  --onix-surface2: ${surface2};
   --onix-primary: ${primary};
-  --onix-on-primary: ${onPrimary};
+  --onix-on-primary: ${bg};
   --onix-secondary: ${secondary};
   --onix-error: ${error};
-  --onix-fg: ${onSurface};
+  --onix-fg: ${fg};
   --onix-muted: ${muted};
+  --onix-border: ${border};
 }`;
   } catch {
     return "";

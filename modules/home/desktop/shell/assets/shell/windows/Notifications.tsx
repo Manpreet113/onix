@@ -30,7 +30,14 @@ function Toast({ n }: { n: Notifd.Notification }) {
           {n.get_actions().map((a) => (
             <button label={a.label} onClicked={() => n.invoke(a.id)} class="toast-act" />
           ))}
-          <button label="Dismiss" onClicked={() => n.dismiss()} class="toast-act" />
+          <button
+            label="Dismiss"
+            onClicked={() => {
+              console.log(`[onix] dismiss clicked id=${n.id}`);
+              n.dismiss();
+            }}
+            class="toast-act"
+          />
         </box>
       </box>
     </box>

@@ -12,6 +12,7 @@ import Wp from "gi://AstalWp";
 import Network from "gi://AstalNetwork";
 import Bluetooth from "gi://AstalBluetooth";
 import Battery from "gi://AstalBattery";
+import Notifd from "gi://AstalNotifd";
 
 function Workspaces() {
   const hypr = Hyprland.get_default();
@@ -165,22 +166,22 @@ export default function Bar(monitor = 0) {
       application={app}
     >
       <centerbox class="bar-inner">
-        <box $type="start" spacing={8}>
+        <box $type="start" spacing={6} class="island">
           <Workspaces />
           <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request -i onix launcher"])}>
             <label label="󰀻  Launcher" />
           </button>
         </box>
-        <box $type="center" spacing={8}>
+        <box $type="center" spacing={8} class="island clock-island">
           <Clock />
         </box>
-        <box $type="end" spacing={6} class="cluster">
+        <box $type="end" spacing={4} class="island cluster">
           <SysTray />
           <Audio />
           <NetBt />
           <Batt />
           <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request -i onix notifications"])}>
-            <label label="󰂚" class="ico" />
+            <label label={createBinding(Notifd.get_default(), "dontDisturb")((d) => (d ? "󰂛" : "󰂚"))} class="ico" />
           </button>
           <button class="pill" onClicked={() => execAsync(["bash", "-c", "ags request -i onix control"])}>
             <label label="󰒓" class="ico" />

@@ -4,6 +4,7 @@ import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
 import { execAsync } from "ags/process";
+import { escToHide } from "../services/keys";
 
 const rows: { title: string; sub: string; action: string }[] = [
   { title: "Wallpaper", sub: "Pick + re-theme via skein", action: "ags request -i onix wallpaper" },
@@ -25,6 +26,7 @@ export default function Settings() {
       keymode={Astal.Keymode.EXCLUSIVE}
       anchor={CENTER}
       widthRequest={520}
+      $={escToHide}
       application={app}
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={10} class="settings-inner">

@@ -4,6 +4,7 @@ import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
 import { createBinding } from "ags";
 import { execAsync } from "ags/process";
+import { escToHide } from "../services/keys";
 import Wp from "gi://AstalWp";
 import Network from "gi://AstalNetwork";
 import Bluetooth from "gi://AstalBluetooth";
@@ -142,6 +143,7 @@ export default function ControlCenter() {
       visible={false}
       anchor={TOP | RIGHT}
       widthRequest={360}
+      $={escToHide}
       application={app}
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={12} class="cc-inner">

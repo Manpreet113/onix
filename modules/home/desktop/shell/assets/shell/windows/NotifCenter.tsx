@@ -3,6 +3,7 @@ import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
 import { createBinding, For } from "ags";
+import { escToHide } from "../services/keys";
 import Notifd from "gi://AstalNotifd";
 
 export default function NotifCenter() {
@@ -19,6 +20,7 @@ export default function NotifCenter() {
       visible={false}
       anchor={TOP | RIGHT | BOTTOM}
       widthRequest={400}
+      $={escToHide}
       application={app}
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={10} class="nc-inner">
@@ -41,7 +43,13 @@ export default function NotifCenter() {
                     <label label={n.summary} class="toast-title" halign={Gtk.Align.START} wrap />
                     {n.body && <label label={n.body} class="toast-body" halign={Gtk.Align.START} wrap />}
                   </box>
-                  <button label="✕" onClicked={() => n.dismiss()} />
+                  <button
+                    label="✕"
+                    onClicked={() => {
+                      console.log(`[onix] nc-dismiss clicked id=${n.id}`);
+                      n.dismiss();
+                    }}
+                  />
                 </box>
               )}
             </For>

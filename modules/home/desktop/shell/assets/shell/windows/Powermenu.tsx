@@ -3,6 +3,7 @@ import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
 import { execAsync } from "ags/process";
+import { escToHide } from "../services/keys";
 
 const actions: { label: string; icon: string; cmd: string }[] = [
   { label: "Lock", icon: "󰌾", cmd: "hyprlock &" },
@@ -22,6 +23,7 @@ export default function Powermenu() {
       visible={false}
       keymode={Astal.Keymode.EXCLUSIVE}
       anchor={CENTER}
+      $={escToHide}
       application={app}
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={12} class="power-inner">
