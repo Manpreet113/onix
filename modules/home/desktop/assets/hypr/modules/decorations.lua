@@ -1,4 +1,6 @@
 -- Window dressing.
-hl.decoration({
-  ["rounding"] = 12,
+hl.config({
+  decoration = {
+    rounding = 12,
+  },
 })

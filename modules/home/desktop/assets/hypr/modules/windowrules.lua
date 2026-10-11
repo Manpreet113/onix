@@ -1,29 +1,33 @@
 -- Floating rules.
 hl.window_rule({
-  ["float"] = true,
-  ["match"] = {
-    ["class"] = "^(org.gnome.Nautilus)$",
+  name = "nautilus-float",
+  match = {
+    class = "^(org.gnome.Nautilus)$",
   },
+  float = true,
 })
 hl.window_rule({
-  ["center"] = true,
-  ["float"] = true,
-  ["match"] = {
-    ["class"] = "^(pavucontrol)$",
+  name = "pavucontrol-float",
+  match = {
+    class = "^(pavucontrol)$",
   },
-  ["size"] = "800 600",
+  float = true,
+  center = true,
+  size = "800 600",
 })
 hl.window_rule({
-  ["center"] = true,
-  ["float"] = true,
-  ["match"] = {
-    ["class"] = "^(blueman-manager)$",
+  name = "blueman-float",
+  match = {
+    class = "^(blueman-manager)$",
   },
-  ["size"] = "800 600",
+  float = true,
+  center = true,
+  size = "800 600",
 })
 hl.window_rule({
-  ["float"] = true,
-  ["match"] = {
-    ["title"] = "^(Picture-in-Picture)$",
+  name = "pip-float",
+  match = {
+    title = "^(Picture-in-Picture)$",
   },
+  float = true,
 })

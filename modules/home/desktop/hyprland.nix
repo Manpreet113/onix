@@ -26,6 +26,7 @@
 
         safe_require("modules.core.monitors")
         safe_require("modules.core.input")
+        safe_require("modules.gestures")
         safe_require("modules.binds")
         safe_require("modules.autostart")
         safe_require("modules.env")
