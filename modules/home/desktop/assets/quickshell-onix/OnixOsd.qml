@@ -51,6 +51,9 @@ PanelWindow {
     property string kind: "volume"
     property real level: 0
     property bool muted: false
+    // set via OnixUi.osdSuppress while quickcenter sliders drag so the OSD
+    // doesn't double up (upstream suppress_osd flag behavior)
+    readonly property bool suppress: OnixUi.osdSuppress
     property real lastVol: -1
     property real lastBright: -1
 
@@ -65,6 +68,8 @@ PanelWindow {
     }
 
     function poke(): void {
+        if (root.suppress)
+            return;
         root.visible = true;
         card.opacity = 1;
         hideTimer.restart();

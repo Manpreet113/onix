@@ -14,34 +14,53 @@ QtObject {
     property bool launcherOpen: false
     property bool quickCenterOpen: false
     property bool settingsOpen: false
+    property bool powerOpen: false
+
+    signal clearPopupsRequested()
+
+    // true while quickcenter sliders drag: the OSD stays quiet (upstream
+    // suppress_osd flag behavior)
+    property bool osdSuppress: false
 
     function toggleLauncher(): void {
         root.launcherOpen = !root.launcherOpen;
-        if (root.launcherOpen) {
-            root.quickCenterOpen = false;
-            root.settingsOpen = false;
-        }
+        if (root.launcherOpen)
+            root.closeOthers("launcher");
     }
 
     function toggleQuickCenter(): void {
         root.quickCenterOpen = !root.quickCenterOpen;
-        if (root.quickCenterOpen) {
-            root.launcherOpen = false;
-            root.settingsOpen = false;
-        }
+        if (root.quickCenterOpen)
+            root.closeOthers("quickCenter");
     }
 
     function toggleSettings(): void {
         root.settingsOpen = !root.settingsOpen;
-        if (root.settingsOpen) {
+        if (root.settingsOpen)
+            root.closeOthers("settings");
+    }
+
+    function togglePower(): void {
+        root.powerOpen = !root.powerOpen;
+        if (root.powerOpen)
+            root.closeOthers("power");
+    }
+
+    function closeOthers(except): void {
+        if (except !== "launcher")
             root.launcherOpen = false;
+        if (except !== "quickCenter")
             root.quickCenterOpen = false;
-        }
+        if (except !== "settings")
+            root.settingsOpen = false;
+        if (except !== "power")
+            root.powerOpen = false;
     }
 
     function closeAll(): void {
         root.launcherOpen = false;
         root.quickCenterOpen = false;
         root.settingsOpen = false;
+        root.powerOpen = false;
     }
 }

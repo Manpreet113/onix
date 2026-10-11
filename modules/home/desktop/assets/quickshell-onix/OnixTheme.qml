@@ -57,6 +57,7 @@ Singleton {
     readonly property color mOnSurface: root.text
     readonly property color mOnSurfaceVariant: root.subtext
     readonly property color mSurfaceContainerLowest: Qt.darker(root.bg, 1.25)
+    readonly property color mSurfaceDim: Qt.darker(root.bg, 1.4)
     readonly property color mSurfaceContainerLow: root.bg
     readonly property color mSurfaceContainer: root.surface
     readonly property color mSurfaceContainerHigh: Qt.lighter(root.surface, 1.1)

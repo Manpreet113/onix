@@ -19,6 +19,7 @@ Item {
     property string icon: ""
 
     signal moved(real value)
+    signal interactionDone()
 
     implicitWidth: root.vertical ? 64 : 220
     implicitHeight: root.vertical ? 220 : 64
@@ -58,6 +59,10 @@ Item {
                 stepSize: root.step
                 value: root.value
                 onMoved: root.moved(slider.value)
+                onPressedChanged: {
+                    if (!pressed)
+                        root.interactionDone();
+                }
 
                 background: Rectangle {
                     radius: 8
