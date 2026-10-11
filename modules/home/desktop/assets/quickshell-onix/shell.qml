@@ -7,6 +7,7 @@
 // quickcenter (P4), and settings (P5) hook into OnixUi state next.
 import QtQuick
 import Quickshell
+import Quickshell.Io
 
 Scope {
     id: root
@@ -45,5 +46,34 @@ Scope {
     }
 
     OnixSettingsWin {
+    }
+
+    OnixLock {
+    }
+
+    OnixCorners {
+    }
+
+    OnixClipboard {
+    }
+
+    OnixKeybinds {
+    }
+
+    // recorder remote (Niri binds): audio follows the recorder settings
+    IpcHandler {
+        target: "onixRecorder"
+        function recordScreen(): void {
+            OnixRecorder.recordScreen(OnixSettings.get(["services", "recorder", "record_audio"], true));
+        }
+        function recordRegion(): void {
+            OnixRecorder.recordRegion(OnixSettings.get(["services", "recorder", "record_audio"], true));
+        }
+        function stop(): void {
+            OnixRecorder.stopRecording();
+        }
+        function togglePause(): void {
+            OnixRecorder.togglePause();
+        }
     }
 }

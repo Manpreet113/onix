@@ -3,9 +3,9 @@ _: {
     enable = true;
     settings = {
       general = {
-        lock_cmd = "quickshell --config shell ipc call lock lock";
-        before_sleep_cmd = "quickshell --config shell ipc call lock lock";
-        after_sleep_cmd = "hyprctl dispatch dpms on";
+        lock_cmd = "quickshell --config onix ipc call onixLock lock";
+        before_sleep_cmd = "quickshell --config onix ipc call onixLock lock";
+        after_sleep_cmd = "niri msg action power-on-monitors";
       };
       listener = [
         {
@@ -14,8 +14,8 @@ _: {
         }
         {
           timeout = 330;
-          on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
+          on-timeout = "niri msg action power-off-monitors";
+          on-resume = "niri msg action power-on-monitors";
         }
       ];
     };

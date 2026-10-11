@@ -183,7 +183,21 @@ Singleton {
         } catch (e) {
             parsed = null;
         }
-        root.settings = merge(root.defaults, parsed);
+        var merged = merge(root.defaults, parsed);
+        // adopt the legacy wallpaper path once (pre-settings state file),
+        // so the appearance tab preview isn't empty after the switch
+        try {
+            var legacy = legacyWallpaper.text().trim();
+            if ((merged.appearance.wallcolors.wallpaper_path || "") === "" && legacy !== "") {
+                merged.appearance.wallcolors.wallpaper_path = legacy;
+                root.settings = merged;
+                root.save();
+                root.hydrated = true;
+                return;
+            }
+        } catch (e) {
+        }
+        root.settings = merged;
         root.hydrated = true;
     }
 
@@ -194,6 +208,14 @@ Singleton {
     property FileView settingsSaver: FileView {
         path: root.statePath
         printErrors: false
+    }
+
+    // legacy wallpaper path (pre-settings era); declared before the loader
+    // so its text is ready when load() runs. Read-only seed, see load().
+    property FileView legacyWallpaper: FileView {
+        path: root.stateDir + "/wallpaper"
+        printErrors: false
+        blockLoading: true
     }
 
     property FileView settingsLoader: FileView {

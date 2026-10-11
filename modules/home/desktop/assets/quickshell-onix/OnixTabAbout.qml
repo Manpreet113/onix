@@ -123,10 +123,21 @@ Column {
         title: "Operating System"
         description: root.osName
         control: Component {
-            IconImage {
-                width: 30
-                height: 30
-                source: Quickshell.iconPath("nix-snowflake", "")
+            Item {
+                implicitWidth: 30
+                implicitHeight: 30
+                Text {
+                    anchors.centerIn: parent
+                    // nerd-font NixOS glyph: shows through if the icon lookup misses
+                    text: ""
+                    color: OnixTheme.mOnSurface
+                    font.family: OnixTheme.fontFamily
+                    font.pixelSize: 24
+                }
+                IconImage {
+                    anchors.fill: parent
+                    source: Quickshell.iconPath("nix-snowflake", "")
+                }
             }
         }
     }

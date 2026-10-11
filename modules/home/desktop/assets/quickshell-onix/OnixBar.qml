@@ -91,11 +91,13 @@ Item {
                         return 0;
                     return 20;
                 }
-                // centered rounding hugs the screen edge only
-                topLeftRadius: radius
-                topRightRadius: radius
-                bottomLeftRadius: radius
-                bottomRightRadius: radius
+                // shell corners: a hugging uncentered bar rounds its two
+                // outer (desktop-facing) corners, like upstream bar corners
+                readonly property bool shellRound: !root.floating && !root.centered && root.barBg && !root.separation && OnixSettings.get(["interface", "misc", "shell_corners"], true)
+                topLeftRadius: (root.side === "bottom" || root.side === "right") && shellRound ? 20 : radius
+                topRightRadius: (root.side === "bottom" || root.side === "left") && shellRound ? 20 : radius
+                bottomLeftRadius: (root.side === "top" || root.side === "right") && shellRound ? 20 : radius
+                bottomRightRadius: (root.side === "top" || root.side === "left") && shellRound ? 20 : radius
                 border.color: (root.floating && root.barBg && !root.separation) ? Qt.rgba(OnixTheme.mOutlineVariant.r, OnixTheme.mOutlineVariant.g, OnixTheme.mOutlineVariant.b, 0.5) : "transparent"
                 border.width: (root.floating && root.barBg && !root.separation) ? 1 : 0
 

@@ -15,6 +15,8 @@ QtObject {
     property bool quickCenterOpen: false
     property bool settingsOpen: false
     property bool powerOpen: false
+    property bool clipboardOpen: false
+    property bool keybindsOpen: false
 
     signal clearPopupsRequested()
 
@@ -46,6 +48,18 @@ QtObject {
             root.closeOthers("power");
     }
 
+    function toggleClipboard(): void {
+        root.clipboardOpen = !root.clipboardOpen;
+        if (root.clipboardOpen)
+            root.closeOthers("clipboard");
+    }
+
+    function toggleKeybinds(): void {
+        root.keybindsOpen = !root.keybindsOpen;
+        if (root.keybindsOpen)
+            root.closeOthers("keybinds");
+    }
+
     function closeOthers(except): void {
         if (except !== "launcher")
             root.launcherOpen = false;
@@ -55,6 +69,10 @@ QtObject {
             root.settingsOpen = false;
         if (except !== "power")
             root.powerOpen = false;
+        if (except !== "clipboard")
+            root.clipboardOpen = false;
+        if (except !== "keybinds")
+            root.keybindsOpen = false;
     }
 
     function closeAll(): void {
@@ -62,5 +80,7 @@ QtObject {
         root.quickCenterOpen = false;
         root.settingsOpen = false;
         root.powerOpen = false;
+        root.clipboardOpen = false;
+        root.keybindsOpen = false;
     }
 }

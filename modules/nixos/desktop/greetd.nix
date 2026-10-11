@@ -7,14 +7,16 @@
 with lib; let
   cfg = config.onix.desktop.greetd;
 in {
-  options.onix.desktop.greetd.enable = mkEnableOption "greetd + tuigreet display manager for Hyprland";
+  options.onix.desktop.greetd.enable = mkEnableOption "greetd + tuigreet display manager";
 
   config = mkIf cfg.enable {
     services.greetd = {
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd start-hyprland";
+          # No --cmd: tuigreet offers the wayland-sessions menu
+          # (Hyprland during the transition, Niri after).
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember";
           user = "greeter";
         };
       };

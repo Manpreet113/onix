@@ -6,7 +6,8 @@
       buildInputs = old.buildInputs ++ [pkgs.qt6.qtmultimedia];
     });
     configs.shell = ./assets/quickshell;
-    activeConfig = "shell";
+    configs.onix = ./assets/quickshell-onix;
+    activeConfig = "onix";
     systemd.enable = true;
     systemd.target = "hyprland-session.target";
   };
