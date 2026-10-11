@@ -7,7 +7,7 @@ import { escToHide } from "../services/keys";
 import Apps from "gi://AstalApps";
 
 export default function Launcher() {
-  const { CENTER } = Astal.WindowAnchor;
+  const { TOP } = Astal.WindowAnchor;
   const apps = new Apps.Apps();
   const [query, setQuery] = createState("");
 
@@ -31,8 +31,8 @@ export default function Launcher() {
       class="Launcher"
       visible={false}
       keymode={Astal.Keymode.EXCLUSIVE}
-      anchor={CENTER}
-      widthRequest={560}
+      anchor={TOP}
+      widthRequest={680}
       $={escToHide}
       application={app}
       onShow={() => setQuery("")}

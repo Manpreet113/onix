@@ -196,6 +196,13 @@ entry:focus {
 }
 
 /* launcher rows */
+.Launcher .launcher-inner {
+  margin-top: 110px;
+}
+.Launcher entry {
+  font-size: 17px;
+  padding: 14px 18px;
+}
 .app-list .app-row:first-child {
   border-color: $accent-line;
   background-color: color-mix(in srgb, var(--onix-primary, $primary) 14%, transparent);
@@ -255,16 +262,16 @@ switch slider {
   min-height: 18px;
 }
 
-slider trough {
+slider trough, scale trough {
   background-color: color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
   border-radius: 999px;
   min-height: 8px;
 }
-slider highlight {
+slider highlight, scale highlight {
   background-color: var(--onix-primary, $primary);
   border-radius: 999px;
 }
-slider slider {
+slider slider, scale slider {
   background-color: white;
   border-radius: 999px;
   min-width: 16px;

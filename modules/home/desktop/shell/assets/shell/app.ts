@@ -100,7 +100,7 @@ app.start({
     }
   },
   main() {
-    initSkein();
+    initSkein(style);
     Bar();
     Launcher();
     ControlCenter();
