@@ -1,9 +1,14 @@
 -- Keybinds. Edit live, then `hyprctl reload` -- no rebuild needed.
 local mod = "SUPER"
 
--- Apps
+-- Apps (onix shell owns launcher/notifications — wofi retired)
 hl.bind((mod .. " + RETURN"), (hl.dsp.exec_cmd("ghostty")))
-hl.bind((mod .. " + SPACE"), (hl.dsp.exec_cmd("wofi --show drun")))
+hl.bind((mod .. " + SPACE"), (hl.dsp.exec_cmd("ags request launcher")))
+hl.bind((mod .. " + COMMA"), (hl.dsp.exec_cmd("ags request control")))
+hl.bind((mod .. " + N"), (hl.dsp.exec_cmd("ags request notifications")))
+hl.bind((mod .. " + P"), (hl.dsp.exec_cmd("ags request powermenu")))
+hl.bind((mod .. " + W"), (hl.dsp.exec_cmd("ags request wallpaper")))
+hl.bind((mod .. " + S"), (hl.dsp.exec_cmd("ags request settings")))
 hl.bind((mod .. " + Q"), (hl.dsp.window.close()))
 hl.bind((mod .. " + SHIFT + L"), (hl.dsp.exec_cmd("hyprlock")))
 hl.bind((mod .. " + F"), (hl.dsp.window.fullscreen()))

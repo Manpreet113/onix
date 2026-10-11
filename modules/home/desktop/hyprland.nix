@@ -34,6 +34,7 @@
         safe_require("modules.layout")
         safe_require("modules.misc")
         safe_require("modules.windowrules")
+        safe_require("modules.shell")
       '';
     };
   };
@@ -41,7 +42,8 @@
   # Live tree: ~/.config/hypr/modules -> repo working tree.
   xdg.configFile."hypr/modules".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/onix/modules/home/desktop/assets/hypr/modules";
 
-  # Tools referenced by the binds above.
+  # Tools referenced by the binds above. Launcher/notifications are owned
+  # by the onix shell (ags); wofi is retired.
   home.packages = with pkgs; [
     brightnessctl
     playerctl
@@ -49,7 +51,6 @@
     grim
     slurp
     libnotify
-    wofi
     awww
   ];
 }
