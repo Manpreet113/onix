@@ -82,12 +82,14 @@ export default function ControlCenter() {
       const enabled = createBinding(wifi, "enabled");
       wifiToggle = (
         <button
+          hexpand
           class={enabled((e) => (e ? "cc-toggle on" : "cc-toggle"))}
           onClicked={() => (wifi.enabled = !wifi.enabled)}
         >
-          <box spacing={8}>
-            <label label="󰖩" class="ico" />
-            <label label="Wi-Fi" />
+          <box orientation={Gtk.Orientation.VERTICAL} spacing={6} class="cc-card">
+            <label label="󰖩" class="cc-card-ico" />
+            <label label="Wi-Fi" class="cc-card-label" />
+            <label label={enabled((e) => (e ? "On" : "Off"))} class="cc-card-state" />
           </box>
         </button>
       );
@@ -102,12 +104,14 @@ export default function ControlCenter() {
     const powered = createBinding(bt, "isPowered");
     btToggle = (
       <button
+        hexpand
         class={powered((p) => (p ? "cc-toggle on" : "cc-toggle"))}
         onClicked={() => bt.toggle()}
       >
-        <box spacing={8}>
-          <label label="󰂯" class="ico" />
-          <label label="Bluetooth" />
+        <box orientation={Gtk.Orientation.VERTICAL} spacing={6} class="cc-card">
+          <label label="󰂯" class="cc-card-ico" />
+          <label label="Bluetooth" class="cc-card-label" />
+          <label label={powered((p) => (p ? "On" : "Off"))} class="cc-card-state" />
         </box>
       </button>
     );
@@ -143,7 +147,7 @@ export default function ControlCenter() {
       visible={false}
       keymode={Astal.Keymode.EXCLUSIVE}
       anchor={TOP | RIGHT}
-      widthRequest={360}
+      widthRequest={384}
       $={escToHide}
       application={app}
     >

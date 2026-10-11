@@ -86,27 +86,27 @@ scrollbar slider:hover {
   padding: 0 8px 0 2px;
 }
 
-/* workspace switcher */
-.ws-btn {
-  min-width: 24px;
-  min-height: 20px;
+/* workspace dots: hollow when empty, filled when occupied, pill when active */
+.ws-dot {
+  min-width: 10px;
+  min-height: 10px;
   border-radius: 999px;
   background: transparent;
-  border: none;
-  color: var(--onix-muted, $muted);
-  padding: 0 8px;
-  font-weight: 600;
-  font-size: 12px;
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 70%, transparent);
+  padding: 0;
+  margin: 4px 1px;
 }
-.ws-btn:hover {
-  color: var(--onix-fg, $fg);
-  background-color: color-mix(in srgb, var(--onix-muted, $muted) 30%, transparent);
+.ws-dot.occupied {
+  background-color: color-mix(in srgb, var(--onix-muted, $muted) 75%, transparent);
+  border-color: transparent;
 }
-.ws-btn.active {
+.ws-dot.active {
+  min-width: 30px;
   background-color: var(--onix-primary, $primary);
-  color: var(--onix-on-primary, $on-primary);
-  padding: 0 14px;
+  border-color: transparent;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--onix-primary, $primary) 45%, transparent);
 }
+.ws-dot:hover { border-color: var(--onix-fg, $fg); }
 
 /* islands share one flat pill language */
 .island .pill {
@@ -203,9 +203,18 @@ entry:focus {
   font-size: 17px;
   padding: 14px 18px;
 }
-.app-list .app-row:first-child {
+/* launcher rows */
+.launcher-head { padding: 2px 4px 0; }
+.launcher-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--onix-muted, $muted);
+}
+.app-list .app-row.selected {
   border-color: $accent-line;
-  background-color: color-mix(in srgb, var(--onix-primary, $primary) 14%, transparent);
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 20%, transparent);
+  box-shadow: inset 3px 0 0 0 var(--onix-primary, $primary);
 }
 .app-row, .wall-row, .settings-row, .nc-row {
   background-color: transparent;
@@ -241,6 +250,16 @@ entry:focus {
   box-shadow: 0 0 14px color-mix(in srgb, var(--onix-primary, $primary) 30%, transparent);
 }
 .cc-row { padding: 2px 0; }
+.cc-card { padding: 12px 8px; }
+.cc-card-ico { font-size: 24px; }
+.cc-card-label { font-weight: 800; font-size: 13px; }
+.cc-card-state {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--onix-muted, $muted);
+}
+.cc-toggle.on .cc-card-state { color: var(--onix-primary, $primary); }
 .cc-btn {
   border-radius: 12px;
   padding: 9px;
@@ -310,6 +329,18 @@ slider slider, scale slider {
   border-color: var(--onix-primary, $primary);
   background-color: color-mix(in srgb, var(--onix-primary, $primary) 25%, transparent);
 }
+.toast-x {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--onix-muted, $muted);
+  padding: 2px 8px;
+  font-weight: 800;
+}
+.toast-x:hover {
+  color: var(--onix-fg, $fg);
+  background-color: color-mix(in srgb, var(--onix-muted, $muted) 30%, transparent);
+}
 
 /* ============ OSD ============ */
 .OSD .osd-inner {
@@ -324,8 +355,8 @@ slider slider, scale slider {
 
 /* ============ POWERMENU ============ */
 .power-btn {
-  min-width: 100px;
-  padding: 16px 10px;
+  min-width: 120px;
+  padding: 22px 12px;
   border-radius: $radius;
   background-color: color-mix(in srgb, var(--onix-surface, $surface) 70%, transparent);
   border: 1px solid transparent;
@@ -345,3 +376,15 @@ slider slider, scale slider {
   color: var(--onix-secondary, $secondary);
 }
 .power-ico { font-size: 28px; }
+
+/* wallpaper grid */
+.wall-cell {
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 60%, transparent);
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 10px;
+}
+.wall-cell:hover {
+  border-color: $accent-line;
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 90%, transparent);
+}

@@ -22,28 +22,32 @@ function Toast({ n }: { n: Notifd.Notification }) {
   return (
     <box class="toast" spacing={10} widthRequest={380}>
       {(n.get_image() || n.appIcon) && (
-        <image iconName={n.appIcon || "dialog-information-symbolic"} pixelSize={32} />
+        <box class="app-icon-tile" valign={Gtk.Align.START}>
+          <image iconName={n.appIcon || "dialog-information-symbolic"} pixelSize={28} />
+        </box>
       )}
-      <box orientation={Gtk.Orientation.VERTICAL} spacing={2} hexpand>
+      <box orientation={Gtk.Orientation.VERTICAL} spacing={3} hexpand>
         <box spacing={8}>
           <label label={n.appName || "Notification"} class="toast-app" halign={Gtk.Align.START} hexpand />
           <label label={new Date(n.time * 1000).toLocaleTimeString()} class="hint" />
-        </box>
-        <label label={n.summary} class="toast-title" halign={Gtk.Align.START} wrap />
-        {n.body && <label label={n.body} class="toast-body" halign={Gtk.Align.START} wrap maxWidthChars={48} />}
-        <box spacing={6}>
-          {n.get_actions().map((a) => (
-            <button label={a.label} onClicked={() => n.invoke(a.id)} class="toast-act" />
-          ))}
           <button
-            label="Dismiss"
+            label="✕"
+            class="toast-x"
             onClicked={() => {
               console.log(`[onix] dismiss clicked id=${n.id}`);
               n.dismiss();
             }}
-            class="toast-act"
           />
         </box>
+        <label label={n.summary} class="toast-title" halign={Gtk.Align.START} wrap />
+        {n.body && <label label={n.body} class="toast-body" halign={Gtk.Align.START} wrap maxWidthChars={48} />}
+        {n.get_actions().length > 0 && (
+          <box spacing={6}>
+            {n.get_actions().map((a) => (
+              <button label={a.label} onClicked={() => n.invoke(a.id)} class="toast-act" />
+            ))}
+          </box>
+        )}
       </box>
     </box>
   );

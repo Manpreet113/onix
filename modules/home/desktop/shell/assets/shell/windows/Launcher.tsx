@@ -3,13 +3,15 @@ import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
 import { createState, createComputed, For } from "ags";
-import { escToHide } from "../services/keys";
+import { escToHide, onKeys, Gdk } from "../services/keys";
 import Apps from "gi://AstalApps";
 
 export default function Launcher() {
   const { TOP } = Astal.WindowAnchor;
   const apps = new Apps.Apps();
   const [query, setQuery] = createState("");
+  const [sel, setSel] = createState(0);
+  query.subscribe(() => setSel(0));
 
   const filtered = createComputed(() => {
     const q = query().toLowerCase().trim();
@@ -21,7 +23,14 @@ export default function Launcher() {
   const launch = (a: Apps.Application) => {
     app.get_window("onix-launcher")?.hide();
     setQuery("");
+    setSel(0);
     a.launch();
+  };
+
+  const launchSelected = () => {
+    const list = filtered();
+    const target = list[sel()] ?? list[0];
+    if (target) launch(target);
   };
 
   return (
@@ -33,24 +42,46 @@ export default function Launcher() {
       keymode={Astal.Keymode.EXCLUSIVE}
       anchor={TOP}
       widthRequest={680}
-      $={escToHide}
+      $={(self) => {
+        escToHide(self);
+        onKeys(self, (keyval) => {
+          if (keyval === Gdk.KEY_Up) {
+            setSel((s) => Math.max(0, s - 1));
+            return true;
+          }
+          if (keyval === Gdk.KEY_Down) {
+            setSel((s) => Math.min(Math.max(0, filtered().length - 1), s + 1));
+            return true;
+          }
+          return false;
+        });
+      }}
       application={app}
-      onShow={() => setQuery("")}
+      onShow={() => {
+        setQuery("");
+        setSel(0);
+      }}
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={8} class="launcher-inner">
+        <box spacing={8} class="launcher-head">
+          <label label="✦ SPOTLIGHT" class="launcher-title" hexpand halign={Gtk.Align.START} />
+          <label label={filtered((l) => `${l.length} results · ↑↓ navigate · ⏎ launch`)} class="hint" />
+        </box>
         <entry
           placeholderText="Type to search apps…"
           text={query}
           onNotifyText={({ text }) => setQuery(text)}
-          onActivate={() => {
-            const first = filtered()[0];
-            if (first) launch(first);
-          }}
+          onActivate={launchSelected}
         />
         <box orientation={Gtk.Orientation.VERTICAL} spacing={4} class="app-list">
           <For each={filtered}>
-            {(a) => (
-              <button class="app-row" onClicked={() => launch(a)}>
+            {(a, index) => (
+              <button
+                class={createComputed(() =>
+                  index() === sel() ? "app-row selected" : "app-row",
+                )}
+                onClicked={() => launch(a)}
+              >
                 <box spacing={10}>
                   <box class="app-icon-tile">
                     <image iconName={a.iconName} pixelSize={28} />

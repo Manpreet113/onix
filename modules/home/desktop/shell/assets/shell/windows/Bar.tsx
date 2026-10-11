@@ -22,17 +22,29 @@ function Workspaces() {
   const focused = createBinding(hypr, "focusedWorkspace");
 
   return (
-    <box class="ws" spacing={4}>
+    <box class="ws" spacing={7}>
       <For each={workspaces}>
         {(ws) => {
           const active = createComputed(
             () => focused()?.id === ws.id && focused() !== null,
           );
+          let occupied: { (): boolean };
+          try {
+            occupied = createBinding(ws, "clients")(
+              (cs) => ((cs as unknown[])?.length ?? 0) > 0,
+            );
+          } catch {
+            occupied = () => false;
+          }
+          const cls = createComputed(
+            () =>
+              `ws-dot${active() ? " active" : ""}${occupied() ? " occupied" : ""}`,
+          );
           return (
             <button
-              class={active((a) => (a ? "ws-btn active" : "ws-btn"))}
+              class={cls}
               onClicked={() => hypr.dispatch("workspace", `${ws.id}`)}
-              label={ws.id.toString()}
+              tooltipText={`Workspace ${ws.id}`}
             />
           );
         }}

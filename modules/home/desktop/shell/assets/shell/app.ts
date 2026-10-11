@@ -101,14 +101,24 @@ app.start({
   },
   main() {
     initSkein(style);
-    Bar();
-    Launcher();
-    ControlCenter();
-    Notifications();
-    NotifCenter();
-    OSD();
-    Powermenu();
-    WallpaperPicker();
-    Settings();
+    // One broken window must never take down the rest of the shell.
+    const shells: [string, () => void][] = [
+      ["Bar", Bar],
+      ["Launcher", Launcher],
+      ["ControlCenter", ControlCenter],
+      ["Notifications", Notifications],
+      ["NotifCenter", NotifCenter],
+      ["OSD", OSD],
+      ["Powermenu", Powermenu],
+      ["WallpaperPicker", WallpaperPicker],
+      ["Settings", Settings],
+    ];
+    shells.forEach(([name, mount]) => {
+      try {
+        mount();
+      } catch (e) {
+        console.error(`[onix] ${name} failed to mount: ${e}`);
+      }
+    });
   },
 });

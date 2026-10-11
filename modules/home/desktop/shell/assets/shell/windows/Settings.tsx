@@ -6,13 +6,13 @@ import Gtk from "gi://Gtk?version=4.0";
 import { execAsync } from "ags/process";
 import { escToHide } from "../services/keys";
 
-const rows: { title: string; sub: string; action: string }[] = [
-  { title: "Wallpaper", sub: "Pick + re-theme via skein", action: "ags request -i onix wallpaper" },
-  { title: "Quick settings", sub: "Volume, brightness, wifi, bluetooth", action: "ags request -i onix control" },
-  { title: "Notifications", sub: "History + do-not-disturb", action: "ags request -i onix notifications" },
-  { title: "Audio", sub: "Open pavucontrol", action: "pavucontrol" },
-  { title: "Bluetooth", sub: "Open blueman", action: "blueman-manager" },
-  { title: "Power", sub: "Suspend, reboot, shutdown", action: "ags request -i onix powermenu" },
+const rows: { icon: string; title: string; sub: string; action: string }[] = [
+  { icon: "󰖔", title: "Wallpaper", sub: "Pick + re-theme via skein", action: "ags request -i onix wallpaper" },
+  { icon: "󰒓", title: "Quick settings", sub: "Volume, brightness, wifi, bluetooth", action: "ags request -i onix control" },
+  { icon: "󰂚", title: "Notifications", sub: "History + do-not-disturb", action: "ags request -i onix notifications" },
+  { icon: "󰕾", title: "Audio", sub: "Open pavucontrol", action: "pavucontrol" },
+  { icon: "󰂯", title: "Bluetooth", sub: "Open blueman", action: "blueman-manager" },
+  { icon: "⏻", title: "Power", sub: "Suspend, reboot, shutdown", action: "ags request -i onix powermenu" },
 ];
 
 export default function Settings() {
@@ -41,6 +41,9 @@ export default function Settings() {
               onClicked={() => execAsync(["bash", "-c", r.action]).catch((e) => console.error(e))}
             >
               <box spacing={10}>
+                <box class="app-icon-tile">
+                  <label label={r.icon} class="ico" />
+                </box>
                 <box orientation={Gtk.Orientation.VERTICAL} hexpand spacing={0}>
                   <label label={r.title} halign={Gtk.Align.START} class="row-title" />
                   <label label={r.sub} halign={Gtk.Align.START} class="hint" />

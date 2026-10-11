@@ -2,7 +2,7 @@
 import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
-import { createState, For } from "ags";
+import { createState, createComputed, For } from "ags";
 import { execAsync } from "ags/process";
 import { escToHide } from "../services/keys";
 import Gio from "gi://Gio?version=2.0";
@@ -30,6 +30,18 @@ function listWallpapers(): string[] {
 export default function WallpaperPicker() {
   const { CENTER } = Astal.WindowAnchor;
   const [walls, setWalls] = createState<string[]>([]);
+  const rows = createComputed(() => {
+    const w = walls();
+    const out: string[][] = [];
+    for (let i = 0; i < w.length; i += 3) out.push(w.slice(i, i + 3));
+    return out;
+  });
+
+  const shortName = (p: string) => {
+    const base = p.split("/").pop() ?? p;
+    const noExt = base.replace(/\.[a-z0-9]+$/i, "");
+    return noExt.length > 18 ? `${noExt.slice(0, 17)}…` : noExt;
+  };
 
   const setWall = (path: string) => {
     const q = path.replace(/'/g, "'\\''");
@@ -47,7 +59,7 @@ export default function WallpaperPicker() {
       visible={false}
       keymode={Astal.Keymode.EXCLUSIVE}
       anchor={CENTER}
-      widthRequest={720}
+      widthRequest={780}
       $={escToHide}
       application={app}
       onShow={() => setWalls(listWallpapers())}
@@ -59,15 +71,18 @@ export default function WallpaperPicker() {
         </box>
         <scrolledwindow maxContentHeight={480} hexpand vexpand>
           <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
-            <For each={walls}>
-              {(w) => (
-                <button class="wall-row" onClicked={() => setWall(w)}>
-                  <box spacing={10}>
-                    <image file={w} pixelSize={64} />
-                    <label label={w.split("/").pop() ?? w} hexpand halign={Gtk.Align.START} />
-                    <label label="Set" class="ico" />
-                  </box>
-                </button>
+            <For each={rows}>
+              {(row) => (
+                <box spacing={8} homogeneous>
+                  {row.map((w) => (
+                    <button class="wall-cell" onClicked={() => setWall(w)}>
+                      <box orientation={Gtk.Orientation.VERTICAL} spacing={6}>
+                        <image file={w} pixelSize={112} />
+                        <label label={shortName(w)} class="hint" />
+                      </box>
+                    </button>
+                  ))}
+                </box>
               )}
             </For>
           </box>
