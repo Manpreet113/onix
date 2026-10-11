@@ -24,7 +24,12 @@ export default function NotifCenter() {
       <box orientation={Gtk.Orientation.VERTICAL} spacing={10} class="nc-inner">
         <box spacing={8}>
           <label label="Notifications" class="sheet-title" hexpand halign={Gtk.Align.START} />
-          <switch active={dnd} onNotifyActive={({ active }) => notifd.set_dont_disturb(active)} />
+          <switch
+            active={dnd}
+            onNotifyActive={({ active }) => {
+              if (notifd.dontDisturb !== active) notifd.set_dont_disturb(active);
+            }}
+          />
           <button label="Clear" onClicked={() => list().forEach((n) => n.dismiss())} />
         </box>
         <scrolledwindow hexpand vexpand maxContentHeight={640}>

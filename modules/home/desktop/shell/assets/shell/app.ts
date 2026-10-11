@@ -19,12 +19,14 @@ app.start({
   instanceName: "onix",
   css: style,
   requestHandler(argv, response) {
+    console.log(`[onix] request: ${JSON.stringify(argv)}`);
     const [cmd = "", arg = "", ...rest] = argv;
     const win = (name: string) => app.get_window(name);
     const toggle = (name: string) => {
       const w = win(name);
       if (w) {
         w.visible = !w.visible;
+        console.log(`[onix] ${name} -> ${w.visible ? "visible" : "hidden"}`);
         response(w.visible ? "visible" : "hidden");
       } else {
         response(`no window: ${name}`);

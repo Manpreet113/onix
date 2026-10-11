@@ -45,12 +45,14 @@ export default function Launcher() {
             if (first) launch(first);
           }}
         />
-        <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
+        <box orientation={Gtk.Orientation.VERTICAL} spacing={4} class="app-list">
           <For each={filtered}>
             {(a) => (
               <button class="app-row" onClicked={() => launch(a)}>
                 <box spacing={10}>
-                  <image iconName={a.iconName} pixelSize={28} />
+                  <box class="app-icon-tile">
+                    <image iconName={a.iconName} pixelSize={28} />
+                  </box>
                   <box orientation={Gtk.Orientation.VERTICAL} spacing={0} hexpand>
                     <label label={a.name} halign={Gtk.Align.START} class="app-name" />
                     <label

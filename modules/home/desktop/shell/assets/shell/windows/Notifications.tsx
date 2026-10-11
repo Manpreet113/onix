@@ -2,7 +2,7 @@
 import app from "ags/gtk4/app";
 import { Astal } from "ags/gtk4";
 import Gtk from "gi://Gtk?version=4.0";
-import { createBinding, For } from "ags";
+import { createBinding, createComputed, For } from "ags";
 import { timeout } from "ags/time";
 import Notifd from "gi://AstalNotifd";
 
@@ -40,7 +40,10 @@ function Toast({ n }: { n: Notifd.Notification }) {
 export default function Notifications() {
   const { TOP, RIGHT } = Astal.WindowAnchor;
   const notifd = Notifd.get_default();
+  const dnd = createBinding(notifd, "dontDisturb");
   const list = createBinding(notifd, "notifications");
+  // Popups stay silent while DND is on; history lives in NotifCenter.
+  const shown = createComputed(() => (dnd() ? [] : list()));
 
   return (
     <window
@@ -55,7 +58,7 @@ export default function Notifications() {
       application={app}
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={8} class="notifs-inner">
-        <For each={list}>
+        <For each={shown}>
           {(n) => <Toast n={n} />}
         </For>
       </box>

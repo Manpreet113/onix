@@ -42,7 +42,17 @@ export default function OSD() {
     >
       <box spacing={12} class="osd-inner">
         <label label={icon} class="ico" />
-        <slider min={0} max={1} value={vol} widthRequest={260} onChangeValue={({ value }) => (speaker.volume = value)} />
+        <slider
+          min={0}
+          max={1}
+          value={vol}
+          widthRequest={260}
+          onChangeValue={({ value }) => {
+            // Guard: programmatic sets re-emit — only write on real change,
+            // otherwise volume-notify → set → notify spins the main loop.
+            if (Math.abs(speaker.volume - value) > 0.0005) speaker.volume = value;
+          }}
+        />
         <label label={vol((v) => `${Math.round(v * 100)}%`)} widthRequest={52} />
       </box>
     </window>

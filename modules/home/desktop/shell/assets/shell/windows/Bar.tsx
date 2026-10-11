@@ -174,7 +174,7 @@ export default function Bar(monitor = 0) {
         <box $type="center" spacing={8}>
           <Clock />
         </box>
-        <box $type="end" spacing={8}>
+        <box $type="end" spacing={6} class="cluster">
           <SysTray />
           <Audio />
           <NetBt />

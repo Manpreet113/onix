@@ -1,11 +1,18 @@
-// Onix shell theme — Nord base, skein vars injected at runtime via apply_css.
-// Skein provides: --onix-bg/surface/primary/on-primary/secondary/error/fg/muted.
-$bg: #2e3440;
-$surface: #3b4252;
-$primary: #88c0d0;
-$fg: #eceff4;
-$muted: #4c566a;
-$radius: 12px;
+// Onix shell theme v2 — deep floating glass over the wallpaper.
+// Nord soul, Tokyo-Night depth. Skein injects --onix-* at runtime via
+// apply_css (see services/skein.ts); values below are boot fallbacks.
+$bg: #1a1b26;
+$surface: #24283b;
+$surface2: #2b3048;
+$primary: #7aa2f7;
+$secondary: #bb9af7;
+$fg: #c0caf5;
+$muted: #565f89;
+$error: #f7768e;
+$on-primary: #1a1b26;
+$radius: 16px;
+$border: color-mix(in srgb, var(--onix-primary, $primary) 22%, transparent);
+$card-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
 
 window {
   background-color: transparent;
@@ -14,149 +21,309 @@ window {
   color: var(--onix-fg, $fg);
 }
 
+* {
+  transition-property: background-color, border-color, color;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+tooltip {
+  background-color: var(--onix-surface, $surface);
+  color: var(--onix-fg, $fg);
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
+popover.contents {
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 96%, transparent);
+  border: 1px solid $border;
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: $card-shadow;
+}
+
+scrollbar slider {
+  min-width: 6px;
+  min-height: 40px;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--onix-muted, $muted) 70%, transparent);
+}
+scrollbar slider:hover {
+  background-color: var(--onix-primary, $primary);
+}
+
+/* ============ BAR (floating) ============ */
 .Bar .bar-inner {
-  background-color: color-mix(in srgb, var(--onix-bg, $bg) 92%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 60%, transparent);
-  padding: 6px 12px;
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 82%, transparent);
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: 8px 14px;
+  margin: 10px 14px 0;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
 }
 
 .clock {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+}
+
+/* workspace switcher */
+.ws {
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
+  border-radius: 999px;
+  padding: 3px;
+}
+.ws-btn {
+  min-width: 26px;
+  min-height: 24px;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+  color: var(--onix-muted, $muted);
+  padding: 0 9px;
   font-weight: 600;
-  letter-spacing: 0.02em;
+}
+.ws-btn:hover {
+  color: var(--onix-fg, $fg);
+  background-color: color-mix(in srgb, var(--onix-muted, $muted) 30%, transparent);
+}
+.ws-btn.active {
+  background-color: var(--onix-primary, $primary);
+  color: var(--onix-on-primary, $on-primary);
+  padding: 0 16px;
+}
+
+/* right-side control cluster */
+.cluster {
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
+  border-radius: 999px;
+  padding: 3px 5px;
+}
+.cluster .pill {
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: var(--onix-fg, $fg);
+}
+.cluster .pill:hover {
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 22%, transparent);
+  color: var(--onix-primary, $primary);
+}
+.cluster .pill.power {
+  color: var(--onix-error, $error);
+}
+.cluster .pill.power:hover {
+  background-color: color-mix(in srgb, var(--onix-error, $error) 22%, transparent);
+  color: var(--onix-error, $error);
 }
 
 .pill {
-  background-color: color-mix(in srgb, var(--onix-surface, $surface) 95%, transparent);
-  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 50%, transparent);
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 85%, transparent);
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
   border-radius: 999px;
-  padding: 4px 12px;
+  padding: 5px 14px;
 }
-.pill:hover {
+button.pill:hover {
   border-color: var(--onix-primary, $primary);
+  color: var(--onix-primary, $primary);
 }
 .pill .ico, .ico {
   font-family: "Material Symbols Rounded", "JetBrainsMono Nerd Font", sans-serif;
   font-size: 15px;
 }
-.power { color: var(--onix-error, #bf616a); }
 
-.ws-btn {
-  min-width: 28px;
-  min-height: 24px;
-  border-radius: 8px;
+.tray-btn {
+  padding: 2px 6px;
+  border-radius: 999px;
   background: transparent;
-  border: 1px solid transparent;
-  padding: 0 8px;
+  border: none;
 }
-.ws-btn.active {
-  background-color: var(--onix-primary, $primary);
-  color: var(--onix-on-primary, $bg);
-  font-weight: 700;
+.tray-btn:hover {
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 22%, transparent);
 }
-.ws-btn:hover { border-color: var(--onix-primary, $primary); }
+.tray-title { font-weight: 700; }
 
-.tray-btn { padding: 2px 6px; border-radius: 8px; }
-.tray-title { font-weight: 600; }
-
-/* Sheets (launcher / control / dialogs) */
+/* ============ SHEETS (shared card) ============ */
 .Launcher .launcher-inner,
 .Control .cc-inner,
 .NotifCenter .nc-inner,
 .Powermenu .power-inner,
 .Wallpaper .wall-inner,
 .Settings .settings-inner {
-  background-color: color-mix(in srgb, var(--onix-bg, $bg) 97%, transparent);
-  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 70%, transparent);
-  border-radius: $radius;
-  padding: 16px;
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 90%, transparent);
+  border: 1px solid $border;
+  border-radius: 20px;
+  padding: 20px;
   margin: 12px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: $card-shadow;
 }
 
-.sheet-title { font-size: 15px; font-weight: 700; }
+.sheet-title {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.cc-section {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--onix-muted, $muted);
+  margin-top: 6px;
+}
 .hint { color: var(--onix-muted, $muted); font-size: 12px; }
-.row-title { font-weight: 600; }
+.row-title { font-weight: 700; }
 
 entry {
-  background-color: var(--onix-surface, $surface);
-  border: 1px solid var(--onix-primary, $primary);
-  border-radius: 10px;
-  padding: 10px 12px;
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 85%, transparent);
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 55%, transparent);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 15px;
   caret-color: var(--onix-primary, $primary);
 }
+entry:focus {
+  border-color: var(--onix-primary, $primary);
+  box-shadow: 0 0 0 1px var(--onix-primary, $primary);
+}
 
+/* launcher rows */
+.app-list .app-row:first-child {
+  border-color: var(--onix-primary, $primary);
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 14%, transparent);
+}
 .app-row, .wall-row, .settings-row, .nc-row {
-  background-color: color-mix(in srgb, var(--onix-surface, $surface) 60%, transparent);
+  background-color: transparent;
   border: 1px solid transparent;
-  border-radius: 10px;
-  padding: 8px 10px;
+  border-radius: 14px;
+  padding: 9px 12px;
 }
 .app-row:hover, .wall-row:hover, .settings-row:hover {
-  border-color: var(--onix-primary, $primary);
-  background-color: color-mix(in srgb, var(--onix-surface, $surface) 95%, transparent);
+  border-color: color-mix(in srgb, var(--onix-primary, $primary) 55%, transparent);
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 85%, transparent);
 }
-.app-name { font-weight: 600; }
+.app-icon-tile {
+  background-color: color-mix(in srgb, var(--onix-surface, $surface2) 90%, transparent);
+  border-radius: 12px;
+  padding: 6px;
+}
+.app-name { font-weight: 700; font-size: 14px; }
 .app-desc { color: var(--onix-muted, $muted); font-size: 12px; }
 
+/* control center */
 .cc-toggle {
-  background-color: var(--onix-surface, $surface);
-  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 60%, transparent);
-  border-radius: 10px;
-  padding: 8px 12px;
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
+  border-radius: 14px;
+  padding: 10px 14px;
 }
+.cc-toggle:hover { border-color: var(--onix-primary, $primary); }
 .cc-toggle.on {
   border-color: var(--onix-primary, $primary);
-  background-color: color-mix(in srgb, var(--onix-primary, $primary) 25%, transparent);
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 20%, transparent);
+  color: var(--onix-primary, $primary);
 }
 .cc-row { padding: 2px 0; }
-.cc-btn { border-radius: 10px; padding: 8px; }
+.cc-btn {
+  border-radius: 12px;
+  padding: 10px;
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 70%, transparent);
+  border: 1px solid transparent;
+}
+.cc-btn:hover { border-color: var(--onix-primary, $primary); }
+
+switch {
+  background-color: color-mix(in srgb, var(--onix-muted, $muted) 55%, transparent);
+  border-radius: 999px;
+  padding: 2px;
+}
+switch:checked { background-color: var(--onix-primary, $primary); }
+switch slider {
+  background-color: var(--onix-fg, $fg);
+  border-radius: 999px;
+  min-width: 18px;
+  min-height: 18px;
+}
 
 slider trough {
-  background-color: var(--onix-surface, $surface);
+  background-color: color-mix(in srgb, var(--onix-muted, $muted) 45%, transparent);
   border-radius: 999px;
-  min-height: 6px;
+  min-height: 8px;
 }
 slider highlight {
   background-color: var(--onix-primary, $primary);
   border-radius: 999px;
 }
 slider slider {
-  background-color: var(--onix-fg, $fg);
+  background-color: white;
   border-radius: 999px;
-  min-width: 14px;
-  min-height: 14px;
+  min-width: 16px;
+  min-height: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* Notifications */
-.Notifs .notifs-inner { padding: 10px 10px 0 0; }
+/* ============ NOTIFICATIONS ============ */
+.Notifs .notifs-inner { padding: 12px 12px 0 0; }
 .toast {
-  background-color: color-mix(in srgb, var(--onix-bg, $bg) 97%, transparent);
-  border: 1px solid color-mix(in srgb, var(--onix-primary, $primary) 50%, transparent);
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 92%, transparent);
+  border: 1px solid $border;
+  border-left: 3px solid var(--onix-primary, $primary);
   border-radius: $radius;
-  padding: 12px;
+  padding: 14px 16px;
+  box-shadow: $card-shadow;
 }
-.toast-title { font-weight: 700; }
+.toast-title { font-weight: 800; font-size: 14px; }
 .toast-body { color: var(--onix-fg, $fg); }
-.toast-app { color: var(--onix-muted, $muted); font-size: 12px; }
-.toast-act { border-radius: 8px; padding: 4px 10px; }
-
-/* OSD */
-.OSD .osd-inner {
-  background-color: color-mix(in srgb, var(--onix-bg, $bg) 95%, transparent);
-  border: 1px solid color-mix(in srgb, var(--onix-muted, $muted) 70%, transparent);
-  border-radius: 999px;
-  padding: 10px 18px;
-  margin-bottom: 28px;
+.toast-app {
+  color: var(--onix-muted, $muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.toast-act {
+  border-radius: 10px;
+  padding: 5px 12px;
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 80%, transparent);
+}
+.toast-act:hover {
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 25%, transparent);
 }
 
-/* Powermenu */
+/* ============ OSD ============ */
+.OSD .osd-inner {
+  background-color: color-mix(in srgb, var(--onix-bg, $bg) 88%, transparent);
+  border: 1px solid $border;
+  border-radius: 999px;
+  padding: 12px 22px;
+  margin-bottom: 32px;
+  box-shadow: $card-shadow;
+}
+.OSD .ico { font-size: 18px; color: var(--onix-primary, $primary); }
+
+/* ============ POWERMENU ============ */
 .power-btn {
-  min-width: 96px;
-  padding: 14px 10px;
+  min-width: 104px;
+  padding: 18px 12px;
   border-radius: $radius;
-  background-color: var(--onix-surface, $surface);
+  background-color: color-mix(in srgb, var(--onix-surface, $surface) 70%, transparent);
   border: 1px solid transparent;
 }
-.power-btn:hover { border-color: var(--onix-primary, $primary); }
-.power-btn.shutdown:hover { border-color: var(--onix-error, #bf616a); }
-.power-ico { font-size: 26px; }
+.power-btn:hover {
+  border-color: var(--onix-primary, $primary);
+  background-color: color-mix(in srgb, var(--onix-primary, $primary) 14%, transparent);
+}
+.power-btn.shutdown:hover {
+  border-color: var(--onix-error, $error);
+  background-color: color-mix(in srgb, var(--onix-error, $error) 14%, transparent);
+  color: var(--onix-error, $error);
+}
+.power-btn.reboot:hover {
+  border-color: var(--onix-secondary, $secondary);
+  background-color: color-mix(in srgb, var(--onix-secondary, $secondary) 14%, transparent);
+  color: var(--onix-secondary, $secondary);
+}
+.power-ico { font-size: 30px; }

@@ -20,7 +20,9 @@ function VolumeSlider() {
         min={0}
         max={1}
         value={createBinding(wp, "volume")}
-        onChangeValue={({ value }) => (wp.volume = value)}
+        onChangeValue={({ value }) => {
+          if (Math.abs(wp.volume - value) > 0.0005) wp.volume = value;
+        }}
       />
       <label label={createBinding(wp, "volume")((v) => `${Math.round(v * 100)}%`)} widthRequest={48} />
     </box>
@@ -38,7 +40,9 @@ function MicSlider() {
           min={0}
           max={1}
           value={createBinding(mic, "volume")}
-          onChangeValue={({ value }) => (mic.volume = value)}
+          onChangeValue={({ value }) => {
+            if (Math.abs(mic.volume - value) > 0.0005) mic.volume = value;
+          }}
         />
       </box>
     );
@@ -65,7 +69,7 @@ function BrightSlider() {
 }
 
 export default function ControlCenter() {
-  const { TOP, RIGHT, BOTTOM } = Astal.WindowAnchor;
+  const { TOP, RIGHT } = Astal.WindowAnchor;
   const notifd = Notifd.get_default();
   const dnd = createBinding(notifd, "dontDisturb");
 
@@ -136,24 +140,31 @@ export default function ControlCenter() {
       namespace="onix-control"
       class="Control"
       visible={false}
-      anchor={TOP | RIGHT | BOTTOM}
+      anchor={TOP | RIGHT}
       widthRequest={360}
       application={app}
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={12} class="cc-inner">
         <label label="Quick settings" class="sheet-title" halign={Gtk.Align.START} />
+        <label label="CONNECTIVITY" class="cc-section" halign={Gtk.Align.START} />
         <box spacing={8}>
           {wifiToggle}
           {btToggle}
         </box>
+        <label label="SOUND" class="cc-section" halign={Gtk.Align.START} />
         <VolumeSlider />
         <MicSlider />
+        <label label="DISPLAY" class="cc-section" halign={Gtk.Align.START} />
         <BrightSlider />
+        <label label="SYSTEM" class="cc-section" halign={Gtk.Align.START} />
         <togglebutton
           class="cc-toggle"
           label={dnd((d) => (d ? "Do not disturb: on" : "Do not disturb: off"))}
           active={dnd}
-          onToggled={({ active }) => (notifd.set_dont_disturb(!active))}
+          onToggled={({ active }) => {
+            // Guard: programmatic sets re-emit — only write on real change.
+            if (notifd.dontDisturb !== active) notifd.set_dont_disturb(active);
+          }}
         />
         {profiles}
         <box spacing={8}>
