@@ -154,7 +154,9 @@ function Batt() {
   try {
     const bat = Battery.get_default();
     const pct = createBinding(bat, "percentage");
-    const isCharging = createBinding(bat, "charging");
+    const chargingProp = createBinding(bat, "charging");
+    // Fully-charged reports charging=false; treat ~full as plugged.
+    const isCharging = createComputed(() => chargingProp() || pct() >= 0.99);
     return (
       <box class="pill" spacing={6}>
         <label label={isCharging((c) => (c ? "󰂄" : "󰁹"))} class="ico" />
