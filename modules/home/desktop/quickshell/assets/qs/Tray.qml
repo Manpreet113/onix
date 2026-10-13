@@ -11,10 +11,8 @@ RowLayout {
     Repeater {
         model: SystemTray.items.values
 
-        delegate: Item {
+        delegate: Pill {
             required property var modelData
-            implicitWidth: 26
-            implicitHeight: 20
 
             IconImage {
                 anchors.centerIn: parent

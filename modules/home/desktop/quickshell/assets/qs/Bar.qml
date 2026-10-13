@@ -22,7 +22,7 @@ PanelWindow {
         left: 12
         right: 12
     }
-    implicitHeight: 38
+    implicitHeight: 44
     color: "transparent"
     WlrLayershell.namespace: "onix-bar"
 
@@ -38,7 +38,7 @@ PanelWindow {
                 anchors.left: parent.left
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                gap: 6
+                padH: 15
                 Workspaces {}
                 WindowTitle {}
             }
@@ -47,14 +47,13 @@ PanelWindow {
         Item {
             Layout.preferredWidth: parent.width * 0.36
             Layout.fillHeight: true
-
             Island {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 gap: 8
                 padV: 5
-                padH: 10
+                padH: 15
                 Clock {}
             }
         }
