@@ -13,7 +13,7 @@ RowLayout {
 
         delegate: Item {
             required property var modelData
-            implicitWidth: 24
+            implicitWidth: 26
             implicitHeight: 20
 
             IconImage {

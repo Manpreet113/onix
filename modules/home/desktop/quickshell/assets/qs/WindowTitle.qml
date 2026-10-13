@@ -3,7 +3,7 @@ import qs.services
 
 Text {
     font.family: "JetBrainsMono Nerd Font"
-    font.pixelSize: 13
+    font.pixelSize: 12
     color: "#5D5D5D"
     text: {
         const t = (Hypr.activeToplevel?.title ?? "").trim();

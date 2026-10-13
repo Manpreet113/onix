@@ -24,7 +24,7 @@ RowLayout {
             Layout.preferredWidth: isActive ? 42 : 10
             // Explicit height: Layout.preferredHeight is ignored on
             // Repeater delegates here; fixed px matches AGS exactly.
-            height: 32
+            height: 30
             radius: 999
             color: isActive ? "#777777" : (isOccupied ? "#BF5D5D5D" : "transparent")
             border.color: isActive ? "transparent" : "#B35D5D5D"

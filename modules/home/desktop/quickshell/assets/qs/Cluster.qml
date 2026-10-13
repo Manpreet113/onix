@@ -15,7 +15,7 @@ RowLayout {
     Pill {
         Text {
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 15
+            font.pixelSize: 14
             color: "#F2F2F2"
             text: "󰂚"
         }
@@ -23,7 +23,7 @@ RowLayout {
     Pill {
         Text {
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 15
+            font.pixelSize: 14
             color: "#F2F2F2"
             text: "󰒓"
         }
@@ -33,7 +33,7 @@ RowLayout {
         hover: "#40B69690"
         Text {
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 15
+            font.pixelSize: 14
             color: "#B69690"
             text: "⏻"
         }

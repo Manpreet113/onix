@@ -3,7 +3,7 @@ import Quickshell
 
 Text {
     font.family: "JetBrainsMono Nerd Font"
-    font.pixelSize: 14
+    font.pixelSize: 13
     font.bold: true
     color: "#F2F2F2"
 

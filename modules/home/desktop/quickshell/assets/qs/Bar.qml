@@ -14,13 +14,15 @@ PanelWindow {
         right: true
     }
     exclusionMode: ExclusionMode.Normal
-    // Reserve space so tiled windows never slide under the bar.
-    exclusiveZone: 40
+    // Geometry mirrors the AGS bar exactly: 8px top margin inside the
+    // window, 38px content, 46px total reservation.
+    exclusiveZone: 46
     margins {
+        top: 8
         left: 12
         right: 12
     }
-    implicitHeight: 52
+    implicitHeight: 38
     color: "transparent"
     WlrLayershell.namespace: "onix-bar"
 
@@ -34,7 +36,9 @@ PanelWindow {
 
             Island {
                 anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                gap: 6
                 Workspaces {}
                 WindowTitle {}
             }
@@ -45,7 +49,12 @@ PanelWindow {
             Layout.fillHeight: true
 
             Island {
-                anchors.centerIn: parent
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                gap: 8
+                padV: 5
+                padH: 10
                 Clock {}
             }
         }
@@ -56,7 +65,9 @@ PanelWindow {
 
             Island {
                 anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                gap: 4
                 Cluster {}
             }
         }
