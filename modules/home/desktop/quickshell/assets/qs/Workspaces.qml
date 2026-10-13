@@ -21,8 +21,10 @@ RowLayout {
 
             // NOTE: size via Layout props (explicit width overflows
             // siblings) and fill the row height like the AGS capsules.
-            Layout.preferredWidth: isActive ? 30 : 10
-            Layout.preferredHeight: 28
+            Layout.preferredWidth: isActive ? 42 : 10
+            // Explicit height: Layout.preferredHeight is ignored on
+            // Repeater delegates here; fixed px matches AGS exactly.
+            height: 32
             radius: 999
             color: isActive ? "#777777" : (isOccupied ? "#BF5D5D5D" : "transparent")
             border.color: isActive ? "transparent" : "#B35D5D5D"
