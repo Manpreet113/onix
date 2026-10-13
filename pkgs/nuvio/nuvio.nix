@@ -87,6 +87,14 @@ in
         wayland
       ];
 
+    # WebKitGTK inside the sandbox needs the host CA bundle for remote
+    # artwork (player posters/backdrops); the FHS rootfs ships an empty
+    # /etc/ssl, so bind the host's over it. Verified supported passthrough
+    # in this nixpkgs' buildFHSEnvBubblewrap (finalAttrs.extraBwrapArgs).
+    extraBwrapArgs = [
+      "--ro-bind /etc/ssl /etc/ssl"
+    ];
+
     # Upstream AppImage ships Nuvio.desktop + icon but wrapType2 does not
     # install them, so copy them from the extracted tree and wire
     # Exec/Icon at the store paths.
