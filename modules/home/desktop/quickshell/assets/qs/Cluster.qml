@@ -1,7 +1,12 @@
 import QtQuick
 import QtQuick.Layouts
 
-Island {
+// NOTE: plain row — Bar.qml already wraps this in an Island.
+// (Nesting an Island here drew a double border.)
+RowLayout {
+    id: root
+    spacing: 4
+
     Tray {}
     Audio {}
     NetBt {}
