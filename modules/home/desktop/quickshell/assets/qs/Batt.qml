@@ -12,13 +12,13 @@ Pill {
 
     Text {
         font.family: "JetBrainsMono Nerd Font"
-        font.pixelSize: 14
+        font.pixelSize: 15
         color: root.fg
         text: root.charging ? "󰂄" : "󰁹"
     }
     Text {
         font.family: "JetBrainsMono Nerd Font"
-        font.pixelSize: 12
+        font.pixelSize: 13
         color: root.fg
         text: Math.round(root.pct) + "%"
     }

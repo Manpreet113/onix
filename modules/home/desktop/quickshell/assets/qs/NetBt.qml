@@ -7,13 +7,13 @@ Pill {
 
     Text {
         font.family: "JetBrainsMono Nerd Font"
-        font.pixelSize: 14
+        font.pixelSize: 15
         color: root.fg
         text: "󰖩"
     }
     Text {
         font.family: "JetBrainsMono Nerd Font"
-        font.pixelSize: 14
+        font.pixelSize: 15
         color: root.fg
         text: root.powered ? "󰂯" : "󰂲"
     }

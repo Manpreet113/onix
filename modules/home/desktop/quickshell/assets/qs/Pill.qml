@@ -13,8 +13,8 @@ Rectangle {
     signal rightClicked
 
     default property alias content: inner.children
-    implicitWidth: inner.implicitWidth + 20
-    implicitHeight: inner.implicitHeight + 6
+    implicitWidth: inner.implicitWidth + 22
+    implicitHeight: inner.implicitHeight + 10
 
     RowLayout {
         id: inner

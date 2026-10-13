@@ -10,7 +10,7 @@ Island {
     Pill {
         Text {
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 14
+            font.pixelSize: 15
             color: "#F2F2F2"
             text: "󰂚"
         }
@@ -18,7 +18,7 @@ Island {
     Pill {
         Text {
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 14
+            font.pixelSize: 15
             color: "#F2F2F2"
             text: "󰒓"
         }
@@ -28,7 +28,7 @@ Island {
         hover: "#40B69690"
         Text {
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 14
+            font.pixelSize: 15
             color: "#B69690"
             text: "⏻"
         }

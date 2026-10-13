@@ -18,10 +18,10 @@ Rectangle {
     RowLayout {
         id: inner
         anchors.fill: parent
-        anchors.leftMargin: 8
-        anchors.rightMargin: 8
-        anchors.topMargin: 4
-        anchors.bottomMargin: 4
-        spacing: 6
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.topMargin: 5
+        anchors.bottomMargin: 5
+        spacing: 7
     }
 }

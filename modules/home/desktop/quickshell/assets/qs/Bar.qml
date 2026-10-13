@@ -14,12 +14,13 @@ PanelWindow {
         right: true
     }
     exclusionMode: ExclusionMode.Normal
+    // Reserve space so tiled windows never slide under the bar.
+    exclusiveZone: 40
     margins {
-        top: 8
         left: 12
         right: 12
     }
-    implicitHeight: 46
+    implicitHeight: 52
     color: "transparent"
     WlrLayershell.namespace: "onix-bar"
 
