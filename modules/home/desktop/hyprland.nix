@@ -43,7 +43,7 @@
   xdg.configFile."hypr/modules".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/onix/modules/home/desktop/assets/hypr/modules";
 
   # Tools referenced by the binds above. Launcher/notifications are owned
-  # by the onix shell (ags); wofi is retired.
+  # by the onix shell (quickshell); wofi is retired.
   home.packages = with pkgs; [
     brightnessctl
     playerctl
