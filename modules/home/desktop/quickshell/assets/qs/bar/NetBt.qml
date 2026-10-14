@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell.Bluetooth
+import qs.components
 
 Pill {
     id: root

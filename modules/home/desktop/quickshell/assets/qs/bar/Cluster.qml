@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import qs.components
 
 // NOTE: plain row — Bar.qml already wraps this in an Island.
 // (Nesting an Island here drew a double border.)
