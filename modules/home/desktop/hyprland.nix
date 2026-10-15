@@ -51,6 +51,5 @@
     grim
     slurp
     libnotify
-    awww
   ];
 }

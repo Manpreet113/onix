@@ -8,7 +8,10 @@
   ...
 }: {
   home.packages = with pkgs; [
-    quickshell
+    # qtmultimedia provides QtMultimedia/Video for live wallpapers.
+    (quickshell.overrideAttrs (old: {
+      buildInputs = old.buildInputs ++ [ qt6.qtmultimedia ];
+    }))
   ];
 
   # Live tree: ~/.config/quickshell/onix -> repo working tree.

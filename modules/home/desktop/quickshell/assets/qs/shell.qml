@@ -4,6 +4,7 @@ import Quickshell.Services.Pipewire
 import Quickshell.Services.Notifications
 import qs.bar
 import qs.chrome
+import qs.wallpaper
 
 // Onix bar in Quickshell — bar-only milestone.
 // Run with: quickshell -c onix
@@ -39,5 +40,11 @@ ShellRoot {
         model: Quickshell.screens
 
         Frame {}
+    }
+
+    Variants {
+        model: Quickshell.screens
+
+        Wallpaper {}
     }
 }
