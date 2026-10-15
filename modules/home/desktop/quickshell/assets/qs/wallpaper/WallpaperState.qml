@@ -16,6 +16,8 @@ Singleton {
     readonly property string stateFile: Quickshell.env("HOME") + "/.local/share/onix-shell/wallpaper"
 
     property string current: ""
+    property bool pickerOpen: false
+    property int wipeDir: 1
 
     // screen name -> file map for future per-monitor wallpapers
     property var perScreen: ({})

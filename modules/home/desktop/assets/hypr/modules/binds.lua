@@ -5,12 +5,12 @@ local mod = "SUPER"
 -- Shell panels are toggled over quickshell ipc; the handler lives in
 -- the quickshell config and grows real panels as they get ported.
 hl.bind((mod .. " + RETURN"), (hl.dsp.exec_cmd("ghostty")))
-hl.bind((mod .. " + SPACE"), (hl.dsp.exec_cmd("quickshell ipc call onix toggle launcher")))
-hl.bind((mod .. " + COMMA"), (hl.dsp.exec_cmd("quickshell ipc call onix toggle control")))
-hl.bind((mod .. " + N"), (hl.dsp.exec_cmd("quickshell ipc call onix toggle notifications")))
-hl.bind((mod .. " + P"), (hl.dsp.exec_cmd("quickshell ipc call onix toggle powermenu")))
-hl.bind((mod .. " + W"), (hl.dsp.exec_cmd("quickshell ipc call onix toggle wallpaper")))
-hl.bind((mod .. " + S"), (hl.dsp.exec_cmd("quickshell ipc call onix toggle settings")))
+hl.bind((mod .. " + SPACE"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle launcher")))
+hl.bind((mod .. " + COMMA"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle control")))
+hl.bind((mod .. " + N"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle notifications")))
+hl.bind((mod .. " + P"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle powermenu")))
+hl.bind((mod .. " + W"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle wallpaper")))
+hl.bind((mod .. " + S"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle settings")))
 hl.bind((mod .. " + Q"), (hl.dsp.window.close()))
 hl.bind((mod .. " + SHIFT + L"), (hl.dsp.exec_cmd("hyprlock")))
 hl.bind((mod .. " + F"), (hl.dsp.window.fullscreen()))

@@ -12,6 +12,8 @@
     (quickshell.overrideAttrs (old: {
       buildInputs = old.buildInputs ++ [ qt6.qtmultimedia ];
     }))
+    # ffmpeg extracts first-frame stills for video picker thumbnails.
+    ffmpeg-headless
   ];
 
   # Live tree: ~/.config/quickshell/onix -> repo working tree.

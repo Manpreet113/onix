@@ -36,6 +36,31 @@ PanelWindow {
         return "";
     }
     property bool isVideoFile: WallpaperState.isVideo(root.wallSource)
+    property string prevSrc: ""
+    property string wipeOld: ""
+    property bool wiping: false
+    property real wipeP: 0
+
+    onWallSourceChanged: {
+        if (WallpaperState.pickerOpen && prevSrc.length > 0 && !isVideoFile && !WallpaperState.isVideo(prevSrc)) {
+            wipeOld = prevSrc;
+            wiping = true;
+            wipeAnim.restart();
+        } else {
+            wiping = false;
+        }
+        prevSrc = wallSource;
+    }
+
+    NumberAnimation {
+        id: wipeAnim
+        target: root
+        property: "wipeP"
+        from: 0
+        to: 1
+        duration: 350
+        onFinished: root.wiping = false
+    }
 
     // Pause the video when a fullscreen window has focus —
     // the wallpaper is invisible anyway.
@@ -55,10 +80,30 @@ PanelWindow {
     Image {
         anchors.fill: parent
         visible: !root.isVideoFile && root.wallSource.length > 0
-        source: visible ? root.wallSource : ""
+        source: visible ? (root.wiping ? root.wipeOld : root.wallSource) : ""
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         cache: true
+    }
+
+    Item {
+        property real fullW: parent.width
+        y: 0
+        height: parent.height
+        width: root.wiping ? root.wipeP * fullW : 0
+        x: WallpaperState.wipeDir > 0 ? 0 : parent.width - width
+        clip: true
+        visible: width > 0.5
+
+                Image {
+                    width: parent.fullW
+                    height: parent.height
+                    x: WallpaperState.wipeDir > 0 ? 0 : parent.width - parent.fullW
+                    source: root.wiping ? root.wallSource : ""
+                    fillMode: Image.PreserveAspectCrop
+                    asynchronous: true
+                    cache: true
+                }
     }
 
     Loader {
