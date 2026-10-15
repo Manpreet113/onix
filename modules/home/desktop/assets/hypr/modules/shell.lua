@@ -19,7 +19,7 @@ hl.layer_rule({
 
 hl.layer_rule({
   name = "onix-overlay-noanim",
-  match = { namespace = "^(onix-notifs|onix-osd)$" },
+  match = { namespace = "^(onix-notifs|onix-osd|onix-frame)$" },
   no_anim = true,
   ignore_alpha = 0.0,
 })
