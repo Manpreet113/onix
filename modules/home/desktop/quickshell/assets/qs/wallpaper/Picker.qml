@@ -8,7 +8,6 @@ import Quickshell.Wayland
 // rotate, Up applies live, Down/Esc restores and retracts.
 PanelWindow {
     id: root
-    focusable: true
 
     anchors {
         top: true
@@ -20,6 +19,7 @@ PanelWindow {
     color: "transparent"
     mask: Region {}
     WlrLayershell.namespace: "onix-picker"
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
 
     property int sel: 0
     property string appliedPath: ""

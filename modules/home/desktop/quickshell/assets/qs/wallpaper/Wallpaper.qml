@@ -42,7 +42,7 @@ PanelWindow {
     property real wipeP: 0
 
     onWallSourceChanged: {
-        if (WallpaperState.pickerOpen && prevSrc.length > 0 && !isVideoFile && !WallpaperState.isVideo(prevSrc)) {
+        if (WallpaperState.pickerOpen && prevSrc.length > 0 && !WallpaperState.isVideo(wallSource) && !WallpaperState.isVideo(prevSrc)) {
             wipeOld = prevSrc;
             wiping = true;
             wipeAnim.restart();
