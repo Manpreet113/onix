@@ -4,13 +4,14 @@
 hl.layer_rule({
   name = "onix-bar-blur",
   match = { namespace = "^onix-bar$" },
-  blur = true,
+  blur = false,
   ignore_alpha = 0.2,
+  no_anim = true,
 })
 
 hl.layer_rule({
   name = "onix-sheets-blur",
-  match = { namespace = "^(onix-control|onix-notif-center|onix-powermenu|onix-settings)$" },
+  match = { namespace = "^(onix-control|onix-notif-center|onix-settings)$" },
   blur = true,
   blur_popups = true,
   ignore_alpha = 0.28,

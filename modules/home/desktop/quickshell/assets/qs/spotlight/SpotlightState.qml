@@ -87,14 +87,25 @@ Singleton {
         }
     }
 
-    function powerItems(q: string): var {
-        var defs = [
-            { name: "Lock", keys: "lock screen sleep", exec: ["hyprlock"], icon: "system-lock-screen" },
-            { name: "Log out", keys: "log out exit quit", lua: "hl.dsp.exit()", icon: "system-log-out" },
-            { name: "Suspend", keys: "suspend sleep", exec: ["systemctl", "suspend"], icon: "system-suspend" },
-            { name: "Reboot", keys: "reboot restart", exec: ["systemctl", "reboot"], icon: "system-reboot" },
-            { name: "Shut down", keys: "shut down power off halt", exec: ["systemctl", "poweroff"], icon: "system-shutdown" }
+    function powerDefs(): var {
+        return [
+            { name: "Lock", keys: "lock screen sleep", exec: ["hyprlock"], icon: "system-lock-screen", glyph: "󰌾" },
+            { name: "Log out", keys: "log out exit quit", lua: "hl.dsp.exit()", icon: "system-log-out", glyph: "󰗽" },
+            { name: "Suspend", keys: "suspend sleep", exec: ["systemctl", "suspend"], icon: "system-suspend", glyph: "󰤄" },
+            { name: "Reboot", keys: "reboot restart", exec: ["systemctl", "reboot"], icon: "system-reboot", glyph: "󰜉", confirm: true },
+            { name: "Shut down", keys: "shut down power off halt", exec: ["systemctl", "poweroff"], icon: "system-shutdown", glyph: "⏻", confirm: true }
         ];
+    }
+
+    function powerActions(): var {
+        var defs = powerDefs();
+        for (var i = 0; i < defs.length; i++)
+            defs[i].icon = Quickshell.iconPath(defs[i].icon, true);
+        return defs;
+    }
+
+    function powerItems(q: string): var {
+        var defs = powerDefs();
         var out = [];
         for (var i = 0; i < defs.length; i++) {
             var s = scoreTargets(q, [defs[i].name.toLowerCase()].concat(defs[i].keys.split(" ")));
@@ -104,7 +115,7 @@ Singleton {
                 kind: "power",
                 title: defs[i].name,
                 sub: "System",
-                icon: Quickshell.iconPath(defs[i].icon, true),
+                icon: Quickshell.iconPath(defs[i].icon, true) || Quickshell.iconPath("application-x-executable"),
                 score: s + 100,
                 ref: defs[i].exec,
                 lua: defs[i].lua || ""

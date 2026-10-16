@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.components
+import qs.powermenu
 
 // NOTE: plain row — Bar.qml already wraps this in an Island.
 // (Nesting an Island here drew a double border.)
@@ -30,6 +31,7 @@ RowLayout {
         }
     }
     Pill {
+        id: powerBtn
         fg: "#B69690"
         hover: "#40B69690"
         Text {
@@ -38,5 +40,6 @@ RowLayout {
             color: "#B69690"
             text: "⏻"
         }
+        onClicked: PowerState.open = !PowerState.open
     }
 }

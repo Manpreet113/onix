@@ -1,3 +1,4 @@
+//@ pragma DefaultEnv QSG_RENDER_LOOP=threaded
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Pipewire
@@ -6,6 +7,7 @@ import QtQuick
 import qs.bar
 import qs.chrome
 import qs.launcher
+import qs.powermenu
 import qs.spotlight
 import qs.wallpaper
 
@@ -39,6 +41,10 @@ ShellRoot {
                     spotlightLoader.item.close();
                 else
                     SpotlightState.open = true;
+                return;
+            }
+            if (name === "powermenu") {
+                PowerState.open = !PowerState.open;
                 return;
             }
             console.log(`[onix] ipc toggle ${name} (no panels yet)`);
