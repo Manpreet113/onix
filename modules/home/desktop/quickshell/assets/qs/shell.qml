@@ -5,6 +5,8 @@ import Quickshell.Services.Notifications
 import QtQuick
 import qs.bar
 import qs.chrome
+import qs.launcher
+import qs.spotlight
 import qs.wallpaper
 
 // Onix bar in Quickshell — bar-only milestone.
@@ -32,6 +34,13 @@ ShellRoot {
                     WallpaperState.pickerOpen = true;
                 return;
             }
+            if (name === "launcher") {
+                if (spotlightLoader.item)
+                    spotlightLoader.item.close();
+                else
+                    SpotlightState.open = true;
+                return;
+            }
             console.log(`[onix] ipc toggle ${name} (no panels yet)`);
         }
 
@@ -44,6 +53,28 @@ ShellRoot {
         sourceComponent: Component {
             Picker {}
         }
+    }
+
+    Loader {
+        id: fanLoader
+        active: LauncherState.open
+        sourceComponent: Component {
+            Fan {}
+        }
+    }
+
+    Loader {
+        id: spotlightLoader
+        active: SpotlightState.open
+        sourceComponent: Component {
+            Spotlight {}
+        }
+    }
+
+    Variants {
+        model: Quickshell.screens
+
+        Edge {}
     }
 
     Variants {

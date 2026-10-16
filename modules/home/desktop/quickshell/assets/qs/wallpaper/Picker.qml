@@ -17,9 +17,16 @@ PanelWindow {
     }
     exclusionMode: ExclusionMode.Ignore
     color: "transparent"
-    mask: Region {}
     WlrLayershell.namespace: "onix-picker"
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+    WlrLayershell.keyboardFocus: root.open ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton
+        hoverEnabled: true
+        onClicked: root.cancel()
+        onWheel: wheel => root.move(wheel.angleDelta.y > 0 ? -1 : 1)
+    }
 
     property int sel: 0
     property string appliedPath: ""
@@ -84,8 +91,21 @@ PanelWindow {
     function move(d: int): void {
         if (count === 0 || !open)
             return;
+        goTo((((sel + d) % count) + count) % count, d);
+    }
+
+    function select(i: int): void {
+        if (count === 0 || !open)
+            return;
+        var t = ((i % count) + count) % count;
+        if (t === sel)
+            return;
+        goTo(t, t > sel ? 1 : -1);
+    }
+
+    function goTo(t: int, d: int): void {
         var oldCenter = fileAt(sel);
-        sel = (((sel + d) % count) + count) % count;
+        sel = t;
         if (wiping)
             wipeOld = wipeNew;
         else
@@ -100,17 +120,17 @@ PanelWindow {
 
     function apply(): void {
         if (!open)
-            return;
+            WallpaperState.pickerOpen = false;
         wiping = false;
         open = false;
         closeTimer.restart();
     }
 
     function cancel(): void {
-        if (!open)
-            return;
         if (appliedPath.length > 0)
             WallpaperState.set(appliedPath);
+        if (!open)
+            WallpaperState.pickerOpen = false;
         wiping = false;
         open = false;
         closeTimer.restart();
@@ -247,6 +267,18 @@ PanelWindow {
                 fillMode: Image.PreserveAspectCrop
                 asynchronous: true
                 cache: true
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: root.select(index)
+                onDoubleClicked: {
+                    root.select(index);
+                    root.apply();
+                }
             }
 
             Item {

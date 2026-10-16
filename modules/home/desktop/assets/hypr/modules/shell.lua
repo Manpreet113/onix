@@ -10,7 +10,7 @@ hl.layer_rule({
 
 hl.layer_rule({
   name = "onix-sheets-blur",
-  match = { namespace = "^(onix-launcher|onix-control|onix-notif-center|onix-powermenu|onix-settings)$" },
+  match = { namespace = "^(onix-control|onix-notif-center|onix-powermenu|onix-settings)$" },
   blur = true,
   blur_popups = true,
   ignore_alpha = 0.28,
@@ -19,7 +19,7 @@ hl.layer_rule({
 
 hl.layer_rule({
   name = "onix-overlay-noanim",
-  match = { namespace = "^(onix-notifs|onix-osd|onix-frame|onix-wallpaper|onix-picker)$" },
+  match = { namespace = "^(onix-notifs|onix-osd|onix-frame|onix-wallpaper|onix-picker|onix-launcher|onix-edge|onix-spotlight)$" },
   no_anim = true,
   ignore_alpha = 0.0,
 })
