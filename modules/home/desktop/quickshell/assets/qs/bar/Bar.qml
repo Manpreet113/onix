@@ -37,7 +37,7 @@ PanelWindow {
             x: powerCard.x
             y: 44
             width: powerCard.width
-            height: menuProg * (powerCard.height - 44)
+            height: powerCard.height - 44
         }
     }
     WlrLayershell.namespace: "onix-bar"
@@ -47,9 +47,9 @@ PanelWindow {
     readonly property real menuFull: 6 + powerList.implicitHeight + 10
 
     Behavior on menuProg {
-        NumberAnimation {
-            duration: Motion.spatial
-            easing.type: Motion.spatialEasing
+        SpringAnimation {
+            spring: Motion.springStiffness
+            damping: Motion.springDamping
         }
     }
 
@@ -145,7 +145,7 @@ PanelWindow {
         anchors.top: parent.top
         anchors.right: parent.right
         width: menuRow.implicitWidth + 16
-        height: 44 + menuFull * menuProg
+        height: 44 + menuFull * Math.max(0, menuProg)
         color: "#D6060606"
         border.color: "#2B2B2B"
         border.width: 1

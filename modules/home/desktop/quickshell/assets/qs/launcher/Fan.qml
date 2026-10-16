@@ -196,10 +196,22 @@ PanelWindow {
                 }
             }
 
+            property string iconSrc: entry && entry.icon ? Quickshell.iconPath(entry.icon, true) : ""
+
             IconImage {
                 anchors.fill: parent
                 anchors.margins: 10
-                source: entry && entry.icon ? Quickshell.iconPath(entry.icon) : ""
+                source: iconSrc
+            }
+
+            Text {
+                anchors.centerIn: parent
+                font.family: "JetBrainsMono Nerd Font"
+                font.pixelSize: 22
+                font.bold: true
+                color: "#F2F2F2"
+                text: entry ? entry.name.charAt(0).toUpperCase() : ""
+                visible: iconSrc === ""
             }
 
             MouseArea {

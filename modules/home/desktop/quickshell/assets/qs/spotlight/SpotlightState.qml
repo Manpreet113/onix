@@ -115,7 +115,7 @@ Singleton {
                 kind: "power",
                 title: defs[i].name,
                 sub: "System",
-                icon: Quickshell.iconPath(defs[i].icon, true) || Quickshell.iconPath("application-x-executable"),
+                icon: Quickshell.iconPath(defs[i].icon, true),
                 score: s + 100,
                 ref: defs[i].exec,
                 lua: defs[i].lua || ""
@@ -140,7 +140,7 @@ Singleton {
                 kind: "window",
                 title: t.title || cls,
                 sub: cls || "Window",
-                icon: Quickshell.iconPath(cls, true) || Quickshell.iconPath("application-x-executable"),
+                icon: Quickshell.iconPath(cls, true),
                 score: s + 50,
                 ref: a
             });

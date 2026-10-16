@@ -16,4 +16,7 @@ Singleton {
 
     readonly property var spatialEasing: Easing.OutCubic
     readonly property var effectsEasing: Easing.OutQuad
+
+    readonly property real springStiffness: 3.0
+    readonly property real springDamping: 0.4
 }
