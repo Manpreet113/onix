@@ -1,26 +1,39 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell.Services.Pipewire
 import qs.components
+import qs.popups
+import qs.theme
 
-Pill {
+GlassChip {
     id: root
 
-    // NOTE: node must be bound via the PwObjectTracker in shell.qml,
-    // otherwise volume/muted read invalid.
     property var sink: Pipewire.defaultAudioSink
     property real vol: sink?.audio.volume ?? 0
     property bool muted: sink?.audio.muted ?? false
 
-    Text {
-        font.family: "JetBrainsMono Nerd Font"
-        font.pixelSize: 14
-        color: root.fg
-        text: root.muted ? "󰝟" : (root.vol > 0.66 ? "󰕾" : (root.vol > 0.33 ? "󰖀" : "󰕿"))
+    active: PopupState.activePopup === "audio"
+    fg: root.muted ? Theme.error : (root.active ? Theme.textOnPrimary : Theme.text)
+    squircleRadius: 13
+    implicitWidth: 28
+    implicitHeight: 28
+
+    onClicked: PopupState.toggle("audio")
+
+    onWheel: wheel => {
+        if (!root.sink?.audio) return;
+        const delta = wheel.angleDelta.y > 0 ? 0.04 : -0.04;
+        const nextVol = Math.max(0.0, Math.min(1.5, root.vol + delta));
+        root.sink.audio.volume = nextVol;
+        if (delta > 0 && root.muted)
+            root.sink.audio.muted = false;
     }
+
     Text {
-        font.family: "JetBrainsMono Nerd Font"
-        font.pixelSize: 12
+        Layout.alignment: Qt.AlignCenter
+        font.family: Theme.fontIcons
+        font.pixelSize: 16
         color: root.fg
-        text: Math.round(root.vol * 100) + "%"
+        text: root.muted ? "volume_off" : (root.vol > 0.5 ? "volume_up" : "volume_down")
     }
 }

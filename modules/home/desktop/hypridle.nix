@@ -3,8 +3,8 @@ _: {
     enable = true;
     settings = {
       general = {
-        lock_cmd = "hyprlock";
-        before_sleep_cmd = "hyprlock";
+        lock_cmd = "quickshell ipc -c onix call lock lock";
+        before_sleep_cmd = "quickshell ipc -c onix call lock lock";
         after_sleep_cmd = "hyprctl dispatch dpms on";
       };
       listener = [

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import qs.theme
 
 // Flat pill button for island interiors. Hover tint only, no chrome.
 Rectangle {
@@ -7,14 +8,21 @@ Rectangle {
     color: "transparent"
     radius: 999
 
-    property color fg: "#F2F2F2"
-    property color hover: "#40777777"
+    property color fg: Theme.text
+    property color hover: Theme.pillHover
     signal clicked
     signal rightClicked
+    signal wheel(var wheel)
+
+    Behavior on color {
+        ColorAnimation {
+            duration: Motion.effects
+        }
+    }
 
     default property alias content: inner.children
-    implicitWidth: inner.implicitWidth + 18
-    implicitHeight: inner.implicitHeight + 6
+    implicitWidth: inner.implicitWidth + 14
+    implicitHeight: inner.implicitHeight + 4
 
     RowLayout {
         id: inner
@@ -33,5 +41,6 @@ Rectangle {
             else
                 root.clicked();
         }
+        onWheel: wheel => root.wheel(wheel)
     }
 }

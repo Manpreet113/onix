@@ -4,23 +4,33 @@
 hl.layer_rule({
   name = "onix-bar-blur",
   match = { namespace = "^onix-bar$" },
-  blur = false,
-  ignore_alpha = 0.2,
+  blur = true,
+  blur_popups = true,
+  ignore_alpha = 0.05,
   no_anim = true,
 })
 
 hl.layer_rule({
-  name = "onix-sheets-blur",
-  match = { namespace = "^(onix-control|onix-notif-center|onix-settings)$" },
+  name = "onix-popups-blur",
+  match = { namespace = "^onix-popups$" },
   blur = true,
   blur_popups = true,
-  ignore_alpha = 0.28,
+  ignore_alpha = 0.05,
+  dim_around = false,
+})
+
+hl.layer_rule({
+  name = "onix-sheets-blur",
+  match = { namespace = "^(onix-control|onix-notif-center|onix-settings|onix-fan|onix-picker|onix-spotlight)$" },
+  blur = true,
+  blur_popups = true,
+  ignore_alpha = 0.1,
   dim_around = true,
 })
 
 hl.layer_rule({
   name = "onix-overlay-noanim",
-  match = { namespace = "^(onix-notifs|onix-osd|onix-frame|onix-wallpaper|onix-picker|onix-launcher|onix-edge|onix-spotlight)$" },
+  match = { namespace = "^(onix-notifs|onix-osd|onix-frame|onix-wallpaper|onix-edge)$" },
   no_anim = true,
   ignore_alpha = 0.0,
 })

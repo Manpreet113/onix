@@ -2,9 +2,8 @@ import QtQuick
 import QtQuick.Layouts
 import qs.powermenu
 import qs.spotlight
+import qs.theme
 
-// Power deeds list for the growing bar island. Up/Down glide,
-// Enter runs (reboot/shutdown ask twice), Esc handled by the bar.
 ColumnLayout {
     id: root
 
@@ -30,7 +29,7 @@ ColumnLayout {
         PowerState.open = false;
     }
 
-    spacing: 2
+    spacing: 4
 
     Repeater {
         model: SpotlightState.powerActions()
@@ -41,20 +40,40 @@ ColumnLayout {
 
             Layout.fillWidth: true
             Layout.preferredHeight: 40
-            color: root.armed === modelData.name ? "#40B69690" : (index === root.sel ? "#40777777" : "transparent")
-            border.color: root.armed === modelData.name ? "#B69690" : "transparent"
-            border.width: root.armed === modelData.name ? 1 : 0
+            color: root.armed === modelData.name
+                ? Theme.powerHover
+                : (index === root.sel ? Theme.chipHover : Theme.chipBg)
+            border.color: root.armed === modelData.name
+                ? Theme.error
+                : (index === root.sel ? Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.4) : Theme.glassBorder)
+            border.width: 1
             radius: 12
 
-            Text {
-                x: 12
-                y: (parent.height - height) / 2
-                width: parent.width - 24
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 13
-                color: root.armed === modelData.name ? "#B69690" : "#F2F2F2"
-                text: (modelData.glyph || "") + "   " + modelData.name
-                elide: Text.ElideRight
+            Behavior on color { ColorAnimation { duration: Motion.effects } }
+            Behavior on border.color { ColorAnimation { duration: Motion.effects } }
+
+            RowLayout {
+                anchors.fill: parent
+                anchors.leftMargin: 12
+                anchors.rightMargin: 12
+                spacing: 12
+
+                Text {
+                    font.family: Theme.fontIcons
+                    font.pixelSize: 20
+                    color: root.armed === modelData.name ? Theme.error : (modelData.confirm ? Theme.error : Theme.accent)
+                    text: modelData.symbol || "power_settings_new"
+                }
+
+                Text {
+                    Layout.fillWidth: true
+                    font.family: Theme.fontPrimary
+                    font.pixelSize: 13
+                    font.weight: Font.Medium
+                    color: root.armed === modelData.name ? Theme.error : Theme.text
+                    text: root.armed === modelData.name ? (modelData.name + " (Click again to confirm)") : modelData.name
+                    elide: Text.ElideRight
+                }
             }
 
             MouseArea {

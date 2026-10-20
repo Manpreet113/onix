@@ -1,45 +1,65 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.components
-import qs.powermenu
+import qs.popups
+import qs.services
+import qs.theme
 
-// NOTE: plain row — Bar.qml already wraps this in an Island.
-// (Nesting an Island here drew a double border.)
 RowLayout {
     id: root
-    spacing: 4
+    spacing: 5
 
     Tray {}
     Audio {}
-    NetBt {}
+    Wifi {}
+    Bt {}
     Batt {}
 
-    Pill {
+    // Notification toast / DND indicator
+    GlassChip {
+        id: notifChip
+        active: Notif.hasToast
+        fg: active ? Theme.textOnPrimary : Theme.text
+        squircleRadius: 13
+        implicitWidth: 28
+        implicitHeight: 28
+
         Text {
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 14
-            color: "#F2F2F2"
-            text: "󰂚"
+            Layout.alignment: Qt.AlignCenter
+            font.family: Theme.fontIcons
+            font.pixelSize: 15
+            color: notifChip.fg
+            text: Sys.dnd ? "notifications_off" : (Notif.hasToast ? "notifications_active" : "notifications")
+        }
+
+        onClicked: {
+            if (Notif.hasToast) {
+                Notif.dismiss();
+            } else {
+                Sys.toggleDnd();
+            }
         }
     }
-    Pill {
+
+    // Session / Power Trigger (Opens PowerPopup)
+    GlassChip {
+        id: powerChip
+        active: PopupState.activePopup === "power"
+        bg: active ? Theme.error : Qt.rgba(Theme.error.r, Theme.error.g, Theme.error.b, 0.12)
+        hoverBg: active ? Theme.error : Qt.rgba(Theme.error.r, Theme.error.g, Theme.error.b, 0.26)
+        fg: active ? "#060606" : Theme.error
+        squircleRadius: 13
+        implicitWidth: 28
+        implicitHeight: 28
+
         Text {
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 14
-            color: "#F2F2F2"
-            text: "󰒓"
+            Layout.alignment: Qt.AlignCenter
+            font.family: Theme.fontIcons
+            font.pixelSize: 15
+            color: powerChip.fg
+            text: "power_settings_new"
         }
-    }
-    Pill {
-        id: powerBtn
-        fg: "#B69690"
-        hover: "#40B69690"
-        Text {
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 14
-            color: "#B69690"
-            text: "⏻"
-        }
-        onClicked: PowerState.open = !PowerState.open
+
+        onClicked: PopupState.toggle("power")
     }
 }

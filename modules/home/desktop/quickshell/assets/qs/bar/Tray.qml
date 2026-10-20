@@ -6,31 +6,25 @@ import qs.components
 
 RowLayout {
     id: root
-    spacing: 2
+    spacing: 4
 
-    // SystemTray is a singleton — no instance, use it directly.
     Repeater {
         model: SystemTray.items.values
 
-        delegate: Pill {
+        delegate: GlassChip {
             required property var modelData
+            squircleRadius: 8
+            implicitWidth: 28
+            implicitHeight: 28
+
+            onClicked: modelData.activate()
+            onRightClicked: modelData.secondaryActivate()
 
             IconImage {
-                anchors.centerIn: parent
-                width: 16
-                height: 16
+                Layout.preferredWidth: 16
+                Layout.preferredHeight: 16
+                Layout.alignment: Qt.AlignCenter
                 source: modelData.icon
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onClicked: mouse => {
-                    if (mouse.button === Qt.RightButton)
-                        modelData.secondaryActivate();
-                    else
-                        modelData.activate();
-                }
             }
         }
     }

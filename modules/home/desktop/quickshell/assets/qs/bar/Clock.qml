@@ -1,11 +1,16 @@
 import QtQuick
 import Quickshell
+import qs.theme
 
 Text {
     font.family: "JetBrainsMono Nerd Font"
     font.pixelSize: 13
     font.bold: true
-    color: "#F2F2F2"
+    color: Theme.text
+
+    Behavior on color {
+        ColorAnimation { duration: Motion.effects }
+    }
 
     SystemClock {
         id: clock

@@ -10,7 +10,7 @@
   home.packages = with pkgs; [
     # qtmultimedia provides QtMultimedia/Video for live wallpapers.
     (quickshell.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ qt6.qtmultimedia ];
+      buildInputs = old.buildInputs ++ [qt6.qtmultimedia];
     }))
     # ffmpeg extracts first-frame stills for video picker thumbnails.
     ffmpeg-headless

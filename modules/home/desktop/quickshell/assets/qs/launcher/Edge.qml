@@ -5,8 +5,8 @@ import Quickshell.Wayland
 // 4px sentinel strip on the right edge: lingering here unfolds the fan.
 PanelWindow {
     id: root
-    required property var modelData
-    screen: modelData
+    property var modelData: null
+    screen: modelData ?? Quickshell.screens[0]
 
     anchors {
         top: true

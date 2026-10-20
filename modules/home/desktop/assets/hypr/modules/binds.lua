@@ -12,13 +12,14 @@ hl.bind((mod .. " + Escape"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix
 hl.bind((mod .. " + W"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle wallpaper")))
 hl.bind((mod .. " + S"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle settings")))
 hl.bind((mod .. " + Q"), (hl.dsp.window.close()))
-hl.bind((mod .. " + SHIFT + L"), (hl.dsp.exec_cmd("hyprlock")))
+hl.bind((mod .. " + SHIFT + L"), (hl.dsp.exec_cmd("quickshell ipc -c onix call lock lock")))
 hl.bind((mod .. " + F"), (hl.dsp.window.fullscreen()))
-hl.bind((mod .. " + V"), (hl.dsp.window.float({ action = "toggle" })))
+hl.bind((mod .. " + V"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle clipboard")))
+hl.bind((mod .. " + SHIFT + V"), (hl.dsp.window.float({ action = "toggle" })))
 
--- Screenshots (~/Pictures/Screenshots, clipboard via wl-copy)
-hl.bind(("Print"), (hl.dsp.exec_cmd("mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png")))
-hl.bind((mod .. " + SHIFT + S"), (hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy")))
+-- Screenshots (Interactive Quickshell Frontend)
+hl.bind(("Print"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle screenshot")))
+hl.bind((mod .. " + SHIFT + S"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix toggle screenshot")))
 
 -- Focus
 hl.bind((mod .. " + left"), (hl.dsp.focus({ direction = "left" })))
@@ -52,13 +53,13 @@ hl.bind(("XF86AudioLowerVolume"), (hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AU
 hl.bind(("XF86AudioMute"), (hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")), {
   ["repeating"] = true,
 })
-hl.bind(("XF86AudioPlay"), (hl.dsp.exec_cmd("playerctl play-pause")))
-hl.bind(("XF86AudioNext"), (hl.dsp.exec_cmd("playerctl next")))
-hl.bind(("XF86AudioPrev"), (hl.dsp.exec_cmd("playerctl previous")))
-hl.bind(("XF86MonBrightnessUp"), (hl.dsp.exec_cmd("brightnessctl set 5%+")), {
+hl.bind(("XF86AudioPlay"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix playPause")))
+hl.bind(("XF86AudioNext"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix nextTrack")))
+hl.bind(("XF86AudioPrev"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix prevTrack")))
+hl.bind(("XF86MonBrightnessUp"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix brightness 5%+")), {
   ["repeating"] = true,
 })
-hl.bind(("XF86MonBrightnessDown"), (hl.dsp.exec_cmd("brightnessctl set 5%-")), {
+hl.bind(("XF86MonBrightnessDown"), (hl.dsp.exec_cmd("quickshell ipc -c onix call onix brightness 5%-")), {
   ["repeating"] = true,
 })
 

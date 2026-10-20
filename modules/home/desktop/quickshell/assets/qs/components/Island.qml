@@ -1,12 +1,13 @@
 import QtQuick
 import QtQuick.Layouts
+import qs.theme
 
 // Floating pill island: translucent card, hairline border, fully round.
 // Sized by content via implicit bindings (no anchors.fill circularity).
 Rectangle {
     id: root
-    color: "#D6060606"
-    border.color: "#2B2B2B"
+    color: Theme.islandBg
+    border.color: Theme.border
     border.width: 1
     radius: 999
 
@@ -16,6 +17,17 @@ Rectangle {
     property int padH: 8
     property int padV: 3
     property int gap: 6
+
+    Behavior on color {
+        ColorAnimation {
+            duration: Motion.effects
+        }
+    }
+    Behavior on border.color {
+        ColorAnimation {
+            duration: Motion.effects
+        }
+    }
 
     default property alias content: inner.children
 

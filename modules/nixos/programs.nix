@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 with lib; let
@@ -20,6 +21,7 @@ in {
       alejandra
       nixd
       nil
+      inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
     programs.gnupg.agent = {

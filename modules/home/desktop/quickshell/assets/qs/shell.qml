@@ -4,29 +4,46 @@ import Quickshell.Io
 import Quickshell.Services.Pipewire
 import Quickshell.Services.Notifications
 import QtQuick
+import qs.theme
+import qs.services
 import qs.bar
 import qs.chrome
 import qs.launcher
 import qs.powermenu
 import qs.spotlight
 import qs.wallpaper
+import qs.popups
+import qs.lock
+import qs.screenshot
 
-// Onix bar in Quickshell — bar-only milestone.
-// Run with: quickshell -c onix
 ShellRoot {
+    FontLoader {
+        id: pjsBold
+        source: "./assets/fonts/PlusJakartaSans-Bold.ttf"
+    }
+    FontLoader {
+        id: pjsExtraBold
+        source: "./assets/fonts/PlusJakartaSans-ExtraBold.ttf"
+    }
+    FontLoader {
+        id: outfitFont
+        source: "./assets/fonts/Outfit-Variable.ttf"
+    }
+
     // Pipewire audio props are invalid unless bound through a tracker.
     PwObjectTracker {
         objects: [Pipewire.defaultAudioSink]
     }
 
-    // Owns org.freedesktop.Notifications so notify-send keeps working
-    // now that AstalNotifd is gone. No UI yet — toasts land with panels.
+    // Owns org.freedesktop.Notifications and feeds the morphing center island toast
     NotificationServer {
         id: notifd
+        onNotification: notif => {
+            Notif.push(notif);
+        }
     }
 
     // Binds (SUPER+Space etc.) call `quickshell ipc call onix toggle X`.
-    // Stub until panels land: acknowledged, no UI yet.
     IpcHandler {
         function toggle(name: string): void {
             if (name === "wallpaper") {
@@ -36,21 +53,90 @@ ShellRoot {
                     WallpaperState.pickerOpen = true;
                 return;
             }
-            if (name === "launcher") {
-                if (spotlightLoader.item)
-                    spotlightLoader.item.close();
+            if (name === "launcher" || name === "spotlight") {
+                if (SpotlightState.open && SpotlightState.mode === "all")
+                    SpotlightState.open = false;
                 else
-                    SpotlightState.open = true;
+                    SpotlightState.openWithMode("all");
                 return;
             }
-            if (name === "powermenu") {
-                PowerState.open = !PowerState.open;
+            if (name === "clipboard" || name === "clip") {
+                if (SpotlightState.open && SpotlightState.mode === "clipboard")
+                    SpotlightState.open = false;
+                else
+                    SpotlightState.openWithMode("clipboard");
                 return;
             }
-            console.log(`[onix] ipc toggle ${name} (no panels yet)`);
+            if (name === "notifications" || name === "notif") {
+                if (SpotlightState.open && SpotlightState.mode === "notifications")
+                    SpotlightState.open = false;
+                else
+                    SpotlightState.openWithMode("notifications");
+                return;
+            }
+            if (name === "audio" || name === "network" || name === "wifi" || name === "bluetooth" || name === "battery" || name === "calendar" || name === "media" || name === "power" || name === "powermenu") {
+                PopupState.toggle(name === "powermenu" ? "power" : name);
+                return;
+            }
+            if (name === "lock") {
+                sessionLock.engage();
+                return;
+            }
+            if (name === "fan" || name === "drawer" || name === "apps") {
+                PopupState.toggle("apps");
+                return;
+            }
+            if (name === "screenshot" || name === "snip" || name === "shot") {
+                ScreenshotState.toggle();
+                return;
+            }
+            console.log(`[onix] ipc toggle ${name}`);
+        }
+
+        function screenshot(): void {
+            ScreenshotState.toggle();
+        }
+
+        function setSnipRegion(x: real, y: real, w: real, h: real): void {
+            ScreenshotState.selX = x;
+            ScreenshotState.selY = y;
+            ScreenshotState.selW = w;
+            ScreenshotState.selH = h;
+        }
+
+        function capture(): void {
+            ScreenshotState.captureSelection();
+        }
+
+        function cancelScreenshot(): void {
+            ScreenshotState.cancel();
+        }
+
+        function lock(): void {
+            sessionLock.engage();
+        }
+
+        function brightness(step: string): void {
+            Sys.adjustBrightness(step);
+        }
+
+        function playPause(): void {
+            Media.togglePlay();
+        }
+
+        function nextTrack(): void {
+            Media.next();
+        }
+
+        function prevTrack(): void {
+            Media.previous();
         }
 
         target: "onix"
+    }
+
+    Lock {
+        id: sessionLock
     }
 
     Loader {
@@ -62,14 +148,6 @@ ShellRoot {
     }
 
     Loader {
-        id: fanLoader
-        active: LauncherState.open
-        sourceComponent: Component {
-            Fan {}
-        }
-    }
-
-    Loader {
         id: spotlightLoader
         active: SpotlightState.open
         sourceComponent: Component {
@@ -77,27 +155,10 @@ ShellRoot {
         }
     }
 
-    Variants {
-        model: Quickshell.screens
+    ScreenshotOverlay {}
+    ScreenshotToast {}
 
-        Edge {}
-    }
-
-    Variants {
-        model: Quickshell.screens
-
-        Bar {}
-    }
-
-    Variants {
-        model: Quickshell.screens
-
-        Frame {}
-    }
-
-    Variants {
-        model: Quickshell.screens
-
-        Wallpaper {}
-    }
+    // Single cohesive top bar dock
+    Bar {}
+    Wallpaper {}
 }

@@ -50,6 +50,7 @@
     wl-clipboard
     grim
     slurp
+    satty
     libnotify
   ];
 }

@@ -4,8 +4,8 @@ import Quickshell.Wayland
 
 PanelWindow {
     id: root
-    required property var modelData
-    screen: modelData
+    property var modelData: null
+    screen: modelData ?? Quickshell.screens[0]
 
     property int radius: 20
 
