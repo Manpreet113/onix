@@ -1,0 +1,4 @@
+singleton ScreenshotState 1.0 ScreenshotState.qml
+ScreenshotOverlay 1.0 ScreenshotOverlay.qml
+ScreenshotHud 1.0 ScreenshotHud.qml
+ScreenshotToast 1.0 ScreenshotToast.qml

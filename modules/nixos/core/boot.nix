@@ -12,8 +12,16 @@ in {
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     boot.loader.systemd-boot.configurationLimit = 10;
-    boot.loader.systemd-boot.editor = false;
-    boot.kernelParams = ["i915.enable_guc=2"];
+    boot.kernelParams = [
+      "i915.enable_guc=2"
+      "quiet"
+      "loglevel=3"
+      "systemd.show_status=false"
+      "rd.udev.log_level=3"
+      "vt.global_cursor_default=0"
+    ];
+    boot.consoleLogLevel = 3;
+    boot.initrd.verbose = false;
     zramSwap.enable = true;
   };
 }
